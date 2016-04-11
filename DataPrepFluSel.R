@@ -21,6 +21,8 @@ for (i in 1:nrow(RawPheno))
 }
 RawPheno$RelativeJulian<-RawPheno$Julian-min(RawPheno$Julian)
 
+
+
 #### Year*Ind based data ####
 Ind_unique <- unique(as.character(RawPheno$ID_Individual))
 Year_unique <- unique(RawPheno$Calendar_year)
@@ -75,7 +77,7 @@ summary(glmer(Rho ~ 1 + as.factor(Year) + StMass + Sex +(0+Mass|Year), data=Year
 
 summary(glm(Fitness ~ 1 + StMass + Sex +Age , data=YearPheno, family=poisson))
 summary(glmer(Fitness ~ 1 + as.factor(Year) + StMass + Sex +(0+Mass|Year), data=YearPheno, family=poisson))
-summary(glmer(Fitness ~ 1 + StMass + Sex + Age +(1+Mass|Year), data=YearPheno, family=poisson))
+summary(glmer(Fitness ~ 1 + StMass + Sex + Age +(1+Mass|Year), data=YearPheno[!is.na(YearPheno$StMass),], family=poisson))
 
 prior0 <- list(G=list(G1= list(V=0.00001*diag(2), nu=2)), R=list(V=diag(1),nu=1))
 m0 <- MCMCglmm(fixed = Fitness ~ 1 + Sex + Age + StMass,
