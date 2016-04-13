@@ -65,7 +65,7 @@
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= SelByYear}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{SeSelByYear,}
        \hlkwc{y1} \hlstd{= SelByYear}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{SeSelByYear,} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
 \hlstd{m0all} \hlkwb{<-} \hlkwd{glm}\hlstd{(Fitness} \hlopt{~} \hlnum{1} \hlopt{+} \hlstd{StMass} \hlopt{+} \hlstd{Sex} \hlopt{+}\hlstd{Age ,} \hlkwc{data}\hlstd{=YearPheno,} \hlkwc{family}\hlstd{=poisson)}
-\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
 \hlstd{sm0all} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0all)}
 \hlstd{lowm0all} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
 \hlstd{highm0all} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
