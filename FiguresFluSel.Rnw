@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\begin{document}
+
+<<load data, echo=FALSE>>=
+load(file = "FluSelenv.RData")
+@
+
+<<Plot Options, echo=FALSE>>=
+#### GENERAL SETTINGS
+szgr <- 2
+szax <- 1.3
+marr <- c(6, 7, 1, 1) + 0.1
+setPar<-function(){
+par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax )
+}
+@
+
+
+<<SelByYear,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+plot(SelByYear, x=2006:2015, ylim=c(-1.5,0.8), xlab="Year", ylab = "Selection gradient",pch=16, las=1)
+abline(h=0)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = SelByYear+1.96*SeSelByYear,
+       y1 = SelByYear-1.96*SeSelByYear, angle = 90,length = 0.1)
+m0all <- glm(Fitness ~ 1 + StMass + Sex +Age , data=YearPheno, family=poisson)
+abline(h=coefficients(m0all)[2], lty=2)
+sm0all <- summary(m0all)
+lowm0all <- coefficients(m0all)[2]+1.96*sm0all$coefficients[2,2]
+highm0all <- coefficients(m0all)[2]-1.96*sm0all$coefficients[2,2]
+polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
+        fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
+
+@
+
+
+
+\end{document}
