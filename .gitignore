@@ -1,3 +1,7 @@
 *.xls
 *.xlsx
 *.Rhistory
+.Rproj.user*
+*.log
+*.aux
+*.gz
