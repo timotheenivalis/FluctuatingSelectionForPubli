@@ -12,21 +12,17 @@ szgr <- 2
 szax <- 1.3
 marr <- c(4, 4, 1, 1) + 0.1
 setPar<-function(){
-par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 )
+par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1)
 }
 @
 
 
 <<SelByYear,dev="tikz",fig.height=7,fig.width=10>>=
-sd(SelByYear)
-coefficients(m0all)[2]
-mean(SeSelByYear)
-
 setPar()
-plot(SelByYear, x=2006:2015, ylim=c(-1.5,0.8), xlab="Year", ylab = "Selection gradient",pch=16, las=1)
+plot(SelByYear, x=2006:2015, ylim=c(min( CISelByYear), max( CISelByYear)), xlab="Year", ylab = "Selection gradient")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = SelByYear+1.96*SeSelByYear,
-       y1 = SelByYear-1.96*SeSelByYear, angle = 90,length = 0.1)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYear[1,],
+       y1 = CISelByYear[2,], angle = 90,length = 0.1)
 m0all <- glm(Fitness ~ 1 + StMass + Sex +Age , data=YearPheno, family=poisson)
 abline(h=coefficients(m0all)[2], lty=2, lwd=5)
 sm0all <- summary(m0all)
@@ -34,9 +30,61 @@ lowm0all <- coefficients(m0all)[2]+1.96*sm0all$coefficients[2,2]
 highm0all <- coefficients(m0all)[2]-1.96*sm0all$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
+#points(x=2006:2015,y=unlist(coefficients(mmRnoCorfitness)$Year["StMass"]), pch=17)
 
 @
 
+<<SelByYearRho,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+plot(SelByYearRho, x=2006:2015, ylim=c(min( CISelByYearRho), max( CISelByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$")
+abline(h=0)
+sd(SelByYearRho)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearRho[1,],
+       y1 = CISelByYearRho[2,], angle = 90,length = 0.1)
+m0allRho <- glm(Rho ~ 1 + StMass + Sex , data=YearPheno[YearPheno$Age=="A",], family=quasipoisson)
+abline(h=coefficients(m0allRho)[2], lty=2)
+sm0allRho <- summary(m0allRho)
+lowm0allRho <- coefficients(m0allRho)[2]+1.96*sm0allRho$coefficients[2,2]
+highm0allRho <- coefficients(m0allRho)[2]-1.96*sm0allRho$coefficients[2,2]
+polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),
+        fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2)
+@
+
+
+<<SelByYearPhi,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+plot(SelByYearPhi, x=2006:2015, ylim=c(min( CISelByYearPhi, na.rm=TRUE), max( CISelByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$")
+abline(h=0)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearPhi[1,],
+       y1 = CISelByYearPhi[2,], angle = 90,length = 0.1)
+m0allphi <- glm(Phi ~ 1 + StMass + Sex +Age , data=YearPheno[YearPheno$Year<2015,], family=binomial)
+abline(h=coefficients(m0allphi)[2], lty=2)
+sm0allphi <- summary(m0allphi)
+lowm0allphi <- coefficients(m0allphi)[2]+1.96*sm0allphi$coefficients[2,2]
+highm0allphi <- coefficients(m0allphi)[2]-1.96*sm0allphi$coefficients[2,2]
+polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
+        fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
+
+@
+Correlation fertility viability
+<<>>=
+cor.test(YearPheno$Phi,YearPheno$Rho)
+@
+
+<<>>=
+sd(SelByYear)
+coefficients(m0all)[2]
+mean(SeSelByYear)
+
+sm0all
+@
+
+Test of fluctuation of selection on fitness.
+<<>>=
+logLik(mmRRfitness)
+logLik(mmRIfitness)
+anova(mmRIfitness,mmRRfitness)
+@
 
 
 \end{document}

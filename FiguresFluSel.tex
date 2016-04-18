@@ -60,10 +60,10 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{setPar}\hlstd{()}
-\hlkwd{plot}\hlstd{(SelByYear,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{0.8}\hlstd{),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient"}\hlstd{,}\hlkwc{pch}\hlstd{=}\hlnum{16}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{)}
+\hlkwd{plot}\hlstd{(SelByYear,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelByYear),} \hlkwd{max}\hlstd{( CISelByYear)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient"}\hlstd{)}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
-\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= SelByYear}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{SeSelByYear,}
-       \hlkwc{y1} \hlstd{= SelByYear}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{SeSelByYear,} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelByYear[}\hlnum{1}\hlstd{,],}
+       \hlkwc{y1} \hlstd{= CISelByYear[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
 \hlstd{m0all} \hlkwb{<-} \hlkwd{glm}\hlstd{(Fitness} \hlopt{~} \hlnum{1} \hlopt{+} \hlstd{StMass} \hlopt{+} \hlstd{Sex} \hlopt{+}\hlstd{Age ,} \hlkwc{data}\hlstd{=YearPheno,} \hlkwc{family}\hlstd{=poisson)}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
 \hlstd{sm0all} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0all)}
@@ -74,9 +74,168 @@
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/SelByYear-1} 
+\begin{kframe}\begin{alltt}
+\hlcom{#points(x=2006:2015,y=unlist(coefficients(mmRnoCorfitness)$Year["StMass"]), pch=17)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setPar}\hlstd{()}
+\hlkwd{plot}\hlstd{(SelByYearRho,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelByYearRho),} \hlkwd{max}\hlstd{( CISelByYearRho)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient on $\textbackslash{}\textbackslash{}rho$"}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{sd}\hlstd{(SelByYearRho)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.3521055
+\end{verbatim}
+\begin{alltt}
+\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelByYearRho[}\hlnum{1}\hlstd{,],}
+       \hlkwc{y1} \hlstd{= CISelByYearRho[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\hlstd{m0allRho} \hlkwb{<-} \hlkwd{glm}\hlstd{(Rho} \hlopt{~} \hlnum{1} \hlopt{+} \hlstd{StMass} \hlopt{+} \hlstd{Sex ,} \hlkwc{data}\hlstd{=YearPheno[YearPheno}\hlopt{$}\hlstd{Age}\hlopt{==}\hlstr{"A"}\hlstd{,],} \hlkwc{family}\hlstd{=quasipoisson)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\hlstd{sm0allRho} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0allRho)}
+\hlstd{lowm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\hlstd{highm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),}
+        \hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.5}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/SelByYearRho-1} 
 
 \end{knitrout}
 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setPar}\hlstd{()}
+\hlkwd{plot}\hlstd{(SelByYearPhi,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{),} \hlkwd{max}\hlstd{( CISelByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient on $\textbackslash{}\textbackslash{}phi$"}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelByYearPhi[}\hlnum{1}\hlstd{,],}
+       \hlkwc{y1} \hlstd{= CISelByYearPhi[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\hlstd{m0allphi} \hlkwb{<-} \hlkwd{glm}\hlstd{(Phi} \hlopt{~} \hlnum{1} \hlopt{+} \hlstd{StMass} \hlopt{+} \hlstd{Sex} \hlopt{+}\hlstd{Age ,} \hlkwc{data}\hlstd{=YearPheno[YearPheno}\hlopt{$}\hlstd{Year}\hlopt{<}\hlnum{2015}\hlstd{,],} \hlkwc{family}\hlstd{=binomial)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\hlstd{sm0allphi} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0allphi)}
+\hlstd{lowm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\hlstd{highm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),}
+        \hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.5}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2} \hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/SelByYearPhi-1} 
+
+\end{knitrout}
+Correlation fertility viability
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{cor.test}\hlstd{(YearPheno}\hlopt{$}\hlstd{Phi,YearPheno}\hlopt{$}\hlstd{Rho)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  YearPheno$Phi and YearPheno$Rho
+## t = -1.9473, df = 1292, p-value = 0.05171
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.1082724891  0.0003989614
+## sample estimates:
+##         cor 
+## -0.05409695
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sd}\hlstd{(SelByYear)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.3689205
+\end{verbatim}
+\begin{alltt}
+\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}
+\end{alltt}
+\begin{verbatim}
+##    StMass 
+## 0.2663751
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{(SeSelByYear)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.2129145
+\end{verbatim}
+\begin{alltt}
+\hlstd{sm0all}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = Fitness ~ 1 + StMass + Sex + Age, family = poisson, 
+##     data = YearPheno)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.0411  -1.0989  -0.9829   0.8946   4.6194  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  0.80415    0.05341  15.055  < 2e-16 ***
+## StMass       0.26638    0.04373   6.091 1.12e-09 ***
+## SexMale     -0.06913    0.04788  -1.444    0.149    
+## AgeJ        -1.15530    0.09571 -12.070  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 3572.2  on 1267  degrees of freedom
+## Residual deviance: 2440.6  on 1264  degrees of freedom
+##   (26 observations deleted due to missingness)
+## AIC: 4220.8
+## 
+## Number of Fisher Scoring iterations: 6
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Test of fluctuation of selection on fitness.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{logLik}\hlstd{(mmRRfitness)}
+\end{alltt}
+\begin{verbatim}
+## 'log Lik.' -1986.242 (df=7)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{logLik}\hlstd{(mmRIfitness)}
+\end{alltt}
+\begin{verbatim}
+## 'log Lik.' -1990.887 (df=5)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{anova}\hlstd{(mmRIfitness,mmRRfitness)}
+\end{alltt}
+\begin{verbatim}
+## Data: YearPheno[!is.na(YearPheno$StMass), ]
+## Models:
+## mmRIfitness: Fitness ~ 1 + StMass + Sex + Age + (1 | Year)
+## mmRRfitness: Fitness ~ 1 + StMass + Sex + Age + (1 + Mass | Year)
+##             Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)   
+## mmRIfitness  5 3991.8 4017.5 -1990.9   3981.8                            
+## mmRRfitness  7 3986.5 4022.5 -1986.2   3972.5 9.2891      2   0.009614 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 \end{document}
