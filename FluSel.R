@@ -131,3 +131,5 @@ var(SelByYearRho)+var(SelByYearPhi)+2*cov(SelByYearRho,SelByYearPhi)
 var(SelByYear)
 var(SelByYearRho+SelByYearPhi)
 cor(SelByYearRho,SelByYearPhi)
+
+

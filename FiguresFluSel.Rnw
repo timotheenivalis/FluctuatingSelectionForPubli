@@ -19,7 +19,7 @@ par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1
 
 <<SelByYear,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYear, x=2006:2015, ylim=c(min( CISelByYear), max( CISelByYear)), xlab="Year", ylab = "Selection gradient")
+plot(SelByYear, x=2006:2015, ylim=c(min( CISelByYear), max( CISelByYear)), xlab="Year", ylab = "Selection gradient", main = "\\textbf{(A)} Total selection")
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYear[1,],
        y1 = CISelByYear[2,], angle = 90,length = 0.1)
@@ -36,7 +36,7 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
 
 <<SelByYearRho,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYearRho, x=2006:2015, ylim=c(min( CISelByYearRho), max( CISelByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$")
+plot(SelByYearRho, x=2006:2015, ylim=c(min( CISelByYearRho), max( CISelByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$", main = "\\textbf{(B)} Fertility selection")
 abline(h=0)
 sd(SelByYearRho)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearRho[1,],
@@ -53,7 +53,7 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, high
 
 <<SelByYearPhi,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYearPhi, x=2006:2015, ylim=c(min( CISelByYearPhi, na.rm=TRUE), max( CISelByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$")
+plot(SelByYearPhi, x=2006:2015, ylim=c(min( CISelByYearPhi, na.rm=TRUE), max( CISelByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$", main = "\\textbf{(C)} Viability selection")
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearPhi[1,],
        y1 = CISelByYearPhi[2,], angle = 90,length = 0.1)
@@ -77,13 +77,20 @@ coefficients(m0all)[2]
 mean(SeSelByYear)
 
 sm0all
+m0allRho 
+
+sd(SelByYearPhi,na.rm=T)
+mean(SeSelByYearPhi,na.rm=T)
+sd(SelByYearRho)
+mean(SeSelByYearRho)
+
 @
 
 Test of fluctuation of selection on fitness.
 <<>>=
-logLik(mmRRfitness)
+logLik(mmRnoCorfitness)
 logLik(mmRIfitness)
-anova(mmRIfitness,mmRRfitness)
+anova(mmRIfitness,mmRnoCorfitness)
 @
 
 

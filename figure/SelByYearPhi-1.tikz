@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.10.1 on 2016-04-18 17:05:47
+% Created by tikzDevice version 0.10.1 on 2016-04-18 17:29:49
 % !TEX encoding = UTF-8 Unicode
 \documentclass{article}
 \nonstopmode
@@ -110,6 +110,8 @@
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (722.70,505.89);
 \definecolor{drawColor}{RGB}{0,0,0}
+
+\node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  2.40] at (397.35,484.41) {\bfseries \textbf{(C)} Viability selection};
 
 \node[text=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  2.60] at (397.35,  7.20) {Year};
 
