@@ -77,7 +77,8 @@ coefficients(m0all)[2]
 mean(SeSelByYear)
 
 sm0all
-m0allRho 
+sm0allRho
+sm0allphi
 
 sd(SelByYearPhi,na.rm=T)
 mean(SeSelByYearPhi,na.rm=T)
@@ -87,6 +88,13 @@ mean(SeSelByYearRho)
 @
 
 Test of fluctuation of selection on fitness.
+<<>>=
+logLik(mmRnoCorfitness)
+logLik(mmRIfitness)
+anova(mmRIfitness,mmRnoCorfitness)
+@
+
+Test of fluctuation of selection on fecundity.
 <<>>=
 logLik(mmRnoCorfitness)
 logLik(mmRIfitness)

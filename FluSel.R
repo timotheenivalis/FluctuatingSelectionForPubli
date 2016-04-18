@@ -124,8 +124,8 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, high
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2)
 
 summary(glm(Rho ~ 1 + StMass + Sex  , data=YearPheno[YearPheno$Age=="A",], family=poisson))
-summary(glmer(Rho ~ 1  + StMass + Sex  +(1|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson))
-summary(glmer(Rho ~ 1  + StMass + Sex  +(1|Year)+(0+StMass|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson))
+mmRIrho <- glmer(Rho ~ 1  + StMass + Sex  +(1|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson)
+mmRnoCorrho <- glmer(Rho ~ 1  + StMass + Sex  +(1|Year)+(0+StMass|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson)
 
 var(SelByYearRho)+var(SelByYearPhi)+2*cov(SelByYearRho,SelByYearPhi)
 var(SelByYear)
