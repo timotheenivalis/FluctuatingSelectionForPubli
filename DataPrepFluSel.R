@@ -9,7 +9,7 @@ RawPheno <- read.table(file = "ForFluctuatingSelectionRaw.txt",header=TRUE )
 pedRaw <- read.table(file="Pedigree.txt",header=TRUE)
 
 #### Edit data ####
-names(pedRaw)<-c("id","dam","sire")
+names(pedRaw)<-c("animal","dam","sire")
 ped<-orderPed(pedRaw)
 ped[ped==0]<-NA
 
@@ -68,6 +68,11 @@ YearPheno$Fitness <- YearPheno$Rho + YearPheno$Phi * 2
 
 YearPheno$StMass <- (YearPheno$Mass - mean(YearPheno$Mass, na.rm=TRUE))/sd(YearPheno$Mass, na.rm=TRUE)
 
+YearPheno$Mother <- NA
+for (i in as.character(ped$animal[!is.na(ped$dam)]))
+{
+  YearPheno$Mother[YearPheno$ID==i] <- as.character(ped$dam[ped$animal==i])
+}
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 

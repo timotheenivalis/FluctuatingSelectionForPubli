@@ -1,9 +1,4 @@
 library(MASS)
-
-m0<-glm(Fitness ~ 1 +Age , data=YearPheno[YearPheno$Year==2015,], family = quasipoisson)
-summary(m0)
-tapply(YearPheno[YearPheno$Year==2015,"Fitness"], YearPheno[YearPheno$Year==2015,"Age"], mean)
-confint(object = m0, method="boot")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
 
 SelByYear <- vector(length = 2015-2006)
@@ -143,10 +138,40 @@ library(pedantics)
 ped <- read.table(file = "ped.txt", header=TRUE)
 
 YearPheno$animal <- YearPheno$ID
-priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001)),R=list(V=0.1, nu=0.0001))
-mcmcBLUPS0 <- MCMCglmm(StMass ~Sex+Age,
-          random=~animal,
+priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001),G4=list(V=0.1, nu=0.0001)),
+                  R=list(V=0.1, nu=0.0001))
+mcmcBLUPS0 <- MCMCglmm(Mass ~Sex+Age,
+          random=~animal+ID+Mother+Year,
           rcov=~units,
           prior=priorBLUPS0,
-          pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1200,burnin=200,thin=10)
+          pedigree=ped,data=YearPheno,verbose=TRUE,nitt=12000,burnin=2000,thin=10,pr=TRUE)
 summary(mcmcBLUPS0)
+
+
+BV<-mcmcBLUPS0$Sol[,grep(pattern = "animal*",x = colnames(mcmcBLUPS0$Sol))]
+animalID<-substr(x = colnames(BV),start = 8,stop=nchar(colnames(BV)))
+colnames(BV) <- animalID
+
+pmBV<-data.frame(animalID,posterior.mode(BV))
+names(pmBV)<-c("ID","pBV")
+mpmBV<-merge(x = pmBV,y = YearPheno,by="ID",all.y=TRUE, all.x = FALSE)
+plot(mpmBV$Year,mpmBV$pBV)
+
+BVextend <- BV[,mpmBV$ID]# duplicates posterior distribution for ind present in multiple years
+
+lmBV<-as.mcmc(apply(BVextend,MARGIN = 1,function(x){coef(lm(x~1+mpmBV$Year))[2]}))
+
+library(mgcv)
+
+bvplotlist <- list()
+for (i in 1:nrow(BVextend))
+  {
+    damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+    gm0 <- gam(bv~1+s(t),data=damdat)
+    plotgm0 <- plot.gam(gm0,n = 20)
+    bvplotlist[[i]] <- cbind(plotgm0[[1]]$x,plotgm0[[1]]$fit)
+}
+plot(x=0,xlim=c(2006,2015),ylim=c(-2,2),type="n")
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+summary(gm0)
+smo
