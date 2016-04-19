@@ -93,9 +93,10 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, high
 summary(glm(Phi ~ 1 + Mass + Sex , data=YearPheno[YearPheno$Age=="A" & YearPheno$Year<max(YearPheno$Year),], family=binomial))
 summary(glmer(Phi ~ 1 + as.factor(Year) + Mass + Sex +(0+Mass|Year), data=YearPheno[YearPheno$Age=="A"& YearPheno$Year<max(YearPheno$Year),], family=binomial))
 
-summary(glmer(Phi ~ 1 + StMass + Sex + Age +(1|Year)+(0+StMass|Year), data=YearPheno, family=binomial))
-summary(glmer(Phi ~ 1 + StMass + Sex + Age + (1|Year) + (0+StMass|Year), data=YearPheno, family=binomial))
-
+mmRIphi <- glmer(Phi ~ 1 + StMass + Sex + Age +(1|Year)+(0+StMass|Year), data=YearPheno, family=binomial)
+mmRnoCorphi <- glmer(Phi ~ 1 + StMass + Sex + Age + (1|Year) + (0+StMass|Year), data=YearPheno, family=binomial)
+summary(mmRnoCorphi)
+CImmRnoCorphi <- confint(mmRnoCorphi)
 
 #####☻ RHO ######
 
@@ -132,4 +133,20 @@ var(SelByYear)
 var(SelByYearRho+SelByYearPhi)
 cor(SelByYearRho,SelByYearPhi)
 
+CImmRnoCorrho <- confint(mmRnoCorrho)
 
+###########################################
+##################  QG ####################
+
+library(MCMCglmm)
+library(pedantics)
+ped <- read.table(file = "ped.txt", header=TRUE)
+
+YearPheno$animal <- YearPheno$ID
+priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001)),R=list(V=0.1, nu=0.0001))
+mcmcBLUPS0 <- MCMCglmm(StMass ~Sex+Age,
+          random=~animal,
+          rcov=~units,
+          prior=priorBLUPS0,
+          pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1200,burnin=200,thin=10)
+summary(mcmcBLUPS0)

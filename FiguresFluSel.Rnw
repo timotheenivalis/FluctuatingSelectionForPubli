@@ -89,16 +89,30 @@ mean(SeSelByYearRho)
 
 Test of fluctuation of selection on fitness.
 <<>>=
+summary(mmRnoCorfitness)
 logLik(mmRnoCorfitness)
 logLik(mmRIfitness)
 anova(mmRIfitness,mmRnoCorfitness)
+CImmRnoCorfitness
+sqrt(VarCorr(mmRnoCorfitness)[[2]][1])/summary(mmRnoCorfitness)$coef[2,1]
+
 @
 
 Test of fluctuation of selection on fecundity.
 <<>>=
-logLik(mmRnoCorfitness)
-logLik(mmRIfitness)
-anova(mmRIfitness,mmRnoCorfitness)
+summary(mmRnoCorrho)
+logLik(mmRnoCorrho)
+logLik(mmRIrho)
+anova(mmRIphi,mmRnoCorphi)
+CImmRnoCorrho 
+sqrt(VarCorr(mmRnoCorrho)[[2]][1])/summary(mmRnoCorrho)$coef[2,1]
+@
+
+Test of fluctuation of selection on viability.
+<<>>=
+summary(mmRnoCorphi)
+anova(mmRIphi,mmRnoCorphi)
+CImmRnoCorphi 
 @
 
 
