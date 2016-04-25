@@ -188,3 +188,35 @@ for (i in 1:nrow(BVextend))
 
 boxplot(bvpairwise)
 abline(h=0)
+
+#### BIV ANIMAL MODEL ALL YEARS #### (SCARY)
+YearPheno$M2006 <- NA
+YearPheno$M2007 <- NA
+YearPheno$M2008 <- NA
+YearPheno$M2009 <- NA
+YearPheno$M2010 <- NA
+YearPheno$M2011 <- NA
+YearPheno$M2012 <- NA
+YearPheno$M2013 <- NA
+YearPheno$M2014 <- NA
+YearPheno$M2015 <- NA
+
+for (i in 1:nrow(YearPheno))
+{
+  YearPheno[i, paste("M",YearPheno$Year[i],sep="")] <- YearPheno$Mass[i]
+}
+
+YearPheno$animal <- YearPheno$ID
+
+priorAllYears <- list(G=list(G1=list(V=diag(11), nu=11, alpha.mu=rep(0,11), alpha.V=diag(11)*1000),
+                             G2=list(V=diag(11), nu=11, alpha.mu=rep(0,11), alpha.V=diag(11)*1000),
+                             G3=list(V=diag(11), nu=11, alpha.mu=rep(0,11), alpha.V=diag(11)*1000),
+                             G4=list(V=diag(1), nu=0.001)),
+                      R=list(V=diag(11), nu=11))
+
+mcmcBivAllYears <- MCMCglmm(cbind(M2006,M2007,M2008,M2009,M2010,M2011,M2012,M2013,M2014,M2015,Fitness) ~ trait-1+trait:(Sex+Age),
+                       random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(11))):Year,
+                       rcov=~us(trait):units, family=rep("gaussian",11),
+                       prior=priorAllYears,
+                       pedigree=ped,data=YearPheno,verbose=TRUE,nitt=12,burnin=2,thin=1)
+summary(mcmcBivAllYears)
