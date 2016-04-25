@@ -114,11 +114,25 @@ summary(mmRnoCorphi)
 anova(mmRIphi,mmRnoCorphi)
 CImmRnoCorphi 
 @
+%' 
+%' <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
+%' setPar()
+%' plot(x=0,xlim=c(2006,2015),ylim=c(-1,1),type="n", xlab="Year",ylab="Breeding values for mass (g)")
+%' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+%' @
+%' 
 
-<<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
-setPar()
-plot(x=0,xlim=c(2006,2015),ylim=c(-1,1),type="n", xlab="Year",ylab="Breeding values for mass (g)")
-trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+<<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
+szgr <- 2
+szax <- 1.3
+marr <- c(4, 4, 1, 1) + 0.1
+par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
 
+bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
+bbv$stats
+bbv$group
+abline(h=0)
+density(bvpairwise[,1])
 @
+
 \end{document}

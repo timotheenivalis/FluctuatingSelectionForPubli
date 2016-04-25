@@ -524,16 +524,81 @@ Test of fluctuation of selection on viability.
 
 {\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objet 'CImmRnoCorphi' introuvable}}\end{kframe}
 \end{knitrout}
+%' 
+%' <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
+%' setPar()
+%' plot(x=0,xlim=c(2006,2015),ylim=c(-1,1),type="n", xlab="Year",ylab="Breeding values for mass (g)")
+%' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+%' @
+%' 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{setPar}\hlstd{()}
-\hlkwd{plot}\hlstd{(}\hlkwc{x}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{xlim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2006}\hlstd{,}\hlnum{2015}\hlstd{),}\hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{),}\hlkwc{type}\hlstd{=}\hlstr{"n"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"Breeding values for mass (g)"}\hlstd{)}
-\hlstd{trashidontwantyou}\hlkwb{<-}\hlkwd{lapply}\hlstd{(bvplotlist,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{}\hlkwd{lines}\hlstd{(x[,}\hlnum{1}\hlstd{],x[,}\hlnum{2}\hlstd{],} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlkwc{alpha} \hlstd{=} \hlnum{0.1}\hlstd{))\})}
+\hlstd{szgr} \hlkwb{<-} \hlnum{2}
+\hlstd{szax} \hlkwb{<-} \hlnum{1.3}
+\hlstd{marr} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}
+\hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{mar}\hlstd{=marr,} \hlkwc{cex}\hlstd{=szgr,} \hlkwc{cex.lab}\hlstd{=szax ,} \hlkwc{cex.axis}\hlstd{=szax,} \hlkwc{lwd}\hlstd{=}\hlnum{2} \hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{)}
+
+\hlstd{bbv} \hlkwb{<-} \hlkwd{boxplot}\hlstd{(bvpairwise,}\hlkwc{ylab}\hlstd{=}\hlstr{"Change in breeding values (g)"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{range} \hlstd{=} \hlnum{1}\hlstd{,}\hlkwc{cex}\hlstd{=}\hlnum{1}\hlstd{)}
+\hlstd{bbv}\hlopt{$}\hlstd{stats}
+\end{alltt}
+\begin{verbatim}
+##             [,1]        [,2]        [,3]        [,4]          [,5]
+## [1,] -0.39224727 -0.65714962 -0.50221466 -0.49603438 -0.5134840868
+## [2,] -0.17729042 -0.41320927 -0.25308444 -0.22964742 -0.1759667587
+## [3,] -0.07363437 -0.28595989 -0.12321288 -0.10290919  0.0003913384
+## [4,]  0.04172930 -0.16534692 -0.00372188  0.03905851  0.1665550481
+## [5,]  0.25430471  0.08043945  0.24540363  0.30630488  0.5031657817
+##             [,6]        [,7]        [,8]        [,9]
+## [1,] -0.69391746 -0.65902266 -0.55279675 -0.26306933
+## [2,] -0.25143849 -0.32766184 -0.17110007  0.07084517
+## [3,] -0.03407662 -0.14976231  0.01359224  0.22736977
+## [4,]  0.19413170  0.01882124  0.21150820  0.40477645
+## [5,]  0.63459378  0.35733537  0.58948734  0.73784216
+\end{verbatim}
+\begin{alltt}
+\hlstd{bbv}\hlopt{$}\hlstd{group}
+\end{alltt}
+\begin{verbatim}
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [36] 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [71] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3
+## [106] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4
+## [141] 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+## [176] 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+## [211] 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6
+## [246] 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+## [281] 6 6 6 6 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+## [316] 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 8 8 8 8
+## [351] 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8
+## [386] 8 8 8 8 8 8 8 8 8 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+## [421] 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+\end{verbatim}
+\begin{alltt}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/EvolSmooth-1} 
-
+\includegraphics[width=\maxwidth]{figure/EvolDiff-1} 
+\begin{kframe}\begin{alltt}
+\hlkwd{density}\hlstd{(bvpairwise[,}\hlnum{1}\hlstd{])}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## 	density.default(x = bvpairwise[, 1])
+## 
+## Data: bvpairwise[, 1] (1000 obs.);	Bandwidth 'bw' = 0.03693
+## 
+##        x                  y            
+##  Min.   :-0.68532   Min.   :0.0001228  
+##  1st Qu.:-0.35020   1st Qu.:0.0240826  
+##  Median :-0.01507   Median :0.3064489  
+##  Mean   :-0.01507   Mean   :0.7452531  
+##  3rd Qu.: 0.32006   3rd Qu.:1.4556310  
+##  Max.   : 0.65519   Max.   :2.3864365
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
+
 \end{document}

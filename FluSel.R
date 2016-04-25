@@ -173,5 +173,18 @@ for (i in 1:nrow(BVextend))
 }
 plot(x=0,xlim=c(2006,2015),ylim=c(-2,2),type="n")
 trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
-summary(gm0)
-smo
+
+
+bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 2015-2006))
+names(bvpairwise) <- 2007:2015
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  lm(bv~1+t,data=damdat[damdat$t==2006 | damdat$t==2007,])
+  mean(damdat$bv[damdat$t==2007])-mean(damdat$bv[damdat$t==2006])
+  tmeanbv <- tapply(damdat$bv,damdat$t,mean)
+  bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-10]
+}
+
+boxplot(bvpairwise)
+abline(h=0)
