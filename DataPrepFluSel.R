@@ -1,5 +1,7 @@
 #### Pre instructions ####
 setwd(dir = "~/thesis/Mass/FluctuatingSelectionForPubli/")
+setwd(dir = "D:/Documents/GitHub/FluctuatingSelectionForPubli/")
+
 library("pedantics")
 library('lme4')
 library('tidyr')
@@ -51,7 +53,7 @@ for (i in 1:length(Ind_unique))
       YearPheno[count,"Age"] <- as.character(RawPheno$Age[which(RawPheno$ID_Individual==Ind_unique[i] &
                                                                   RawPheno$Calendar_year==  yearsind[j])][1])
       YearPheno[count,"Mass"] <- mean(RawPheno$Weight[which(RawPheno$ID_Individual==Ind_unique[i] &
-                                                                  RawPheno$Calendar_year==  yearsind[j])][1], na.rm=TRUE)
+                                                                  RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
       YearPheno[count,"Rho"] <- sum(as.character(offsprings) %in% as.character(RawPheno$ID_Individual[RawPheno$Cohort==yearsind[j]]))
       count <- count +1
     }#end for (j in 1:length(Year_unique))
@@ -73,6 +75,11 @@ for (i in as.character(ped$animal[!is.na(ped$dam)]))
 {
   YearPheno$Mother[YearPheno$ID==i] <- as.character(ped$dam[ped$animal==i])
 }
+
+################## Must include age-corrected mass
+
+
+
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 

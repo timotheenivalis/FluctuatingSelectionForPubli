@@ -1,0 +1,25 @@
+
+    model {
+    ######priors and constraints
+    #growth
+
+    mA~dunif(25,45)  
+    mk~dunif(0.01,0.08)
+
+
+    tau<-pow(sdMass,-2)
+    sdMass<-2.05
+    
+    ######likelihood
+    for (obs in 1:nobs)
+      {
+        M[obs]~dnorm(mf[obs],tau)
+        mf[obs]<-mA*(1-exp(-mk*(date[obs])))
+        date[obs]<-t[obs]-bd[whichind[obs]]
+      }
+    for (i in 1:nind)
+      {
+        bd[i]~dunif(-30,maxbd)
+      }    
+    }
+    

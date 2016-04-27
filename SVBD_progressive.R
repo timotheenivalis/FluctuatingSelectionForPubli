@@ -1,14 +1,24 @@
 #setwd(dir = "thesis/BirthDates/")
 library(R2jags)
 source(file = "functionsForBirthDates.R")
-AllM<-read.table(file="AllM.txt",header=T,stringsAsFactors=F)
+AllM<-read.table(file="ForFluctuatingSelectionRaw.txt",header=T,stringsAsFactors=F)
+names(AllM)[1] <- "id"
+#add julian date
+AllM$Origin=as.POSIXct(paste(paste(rep("01/01/",nrow(AllM))),AllM$Calendar_year,sep=""),format="%d/%m/%Y",tz="GMT")
+AllM$Julian<-0
+for (i in 1:nrow(AllM))
+{
+  AllM$Julian[i]<-round(julian(as.POSIXct(AllM$Date[i],format="%d/%m/%Y"),origin=as.POSIXct(RawPheno$Origin[i],format="%Y/%m/%d")),digit=0)
+}
+AllM$RelativeJulian<-AllM$Julian-min(AllM$Julian)
+
 AllMj<-AllM[which(AllM$Age=="J"),]
 
 ### looking for oldest juv of each female # ordering by mothers and by juv within mothers
 k<-0.039 
 A<-31.8
 
-AllMj$A0<-sapply(X = AllMj$Weight,FUN = function(x){max(x,A)})
+AllMj$A0<-sapply(X = AllMj$Weight,FUN = function(x){max(x,A,na.rm=TRUE)})
 AllMj$bd0<-AllMj$RelativeJulian+(1/k)*log(1-AllMj$Weight/(AllMj$A0+1))
 
 orphans<-AllMj$id[which(AllMj$Mother==0)]
@@ -40,12 +50,10 @@ for (i in 1:length(motherlist))
     count<-count+length(ord)
   }
 }
-rm(count,offsp,meanbd0)
 
 AllMj<-AllMj[order(AllMj$ord),]#data frame ready
 
-mass<-AllMj[which(!is.na(AllMj$Weight) & !is.na(AllMj$Phi)),]
-phis<-tapply(X = mass$Phi,INDEX = mass$id,mean)
+mass<-AllMj[which(!is.na(AllMj$Weight)),]
 
 maxbd<-max(mass$RelativeJulian)-14
 
@@ -73,10 +81,9 @@ whichind<-as.integer(as.factor(whichind))
 
 idmum<-(c(1:mothernb)-1)*MaxLitter
 
-endSeason<-c(305,305,276,286,292,261,288,282)-min(AllM$Julian)
 IndCohort<-tapply(mass$Cohort,mass$id,function(x){mean(x)-2005})
 
-Aobs<-sapply(X = MumsPups,FUN = function(x){mean(AllM$Weight[which(AllM$id==x & AllM$Age3==1)])})
+Aobs<-sapply(X = MumsPups,FUN = function(x){mean(AllM$Weight[which(AllM$id==x & AllM$Age=="A")])})
 Aobs[which(is.nan(Aobs))]<-NA
 initA<-sapply(Aobs,FUN = function(x){ifelse(is.na(x),rnorm(n = 1,mean = 33,sd = 2),no=NA)})
 
