@@ -195,7 +195,7 @@ load(file = "GrowthAKY")
 
 Ai<-GrowthAK$BUGSoutput$mean$A
 ki<-GrowthAK$BUGSoutput$mean$k
-ki[434]<-0.0249
+ki[444]<-0.0249
 bdi<-GrowthAK$BUGSoutput$mean$bd
 mA<-GrowthAKY$BUGSoutput$mean$mA
 mk<-GrowthAKY$BUGSoutput$mean$mk
@@ -276,13 +276,14 @@ plot(GrowthAKl$BUGSoutput$mean$A)
 plot(GrowthAKl$BUGSoutput$sd$A)
 plot(GrowthAKl$BUGSoutput$mean$litter)
 
+save(GrowthAKl,file="GrowthAKl")
 
-sd(runif(n = 10000,min = 0,max = 20))
-
-hist(Aobs)
+plot(GrowthAK$BUGSoutput$mean$A,GrowthAKl$BUGSoutput$mean$A)
+cor.test(GrowthAK$BUGSoutput$mean$A,GrowthAKl$BUGSoutput$mean$A)
+#Hopefully GrowthAKl is closer to reality, but in any case, correlation of 78% with and without litters!!!
 
 ### put back Aobs
-sink("models/GrowthAKlphi")
+sink("models/GrowthAKlAobs")
 cat("
     model {
     ######priors and constraints
@@ -341,16 +342,48 @@ sparceinitPl<-F_initPlsparse(MaxLitter = MaxLitter,mums = mums,mother = mother)
 pld<-sparceinitPl$pld
 pli<-sparceinitPl$pli
 initmeanLB<-sparceinitPl$initmeanLB
-dataGrowthAKlphi<-list(mothernb=mothernb,M=mass$Weight,endSeason=endSeason,
+dataGrowthAKlphi<-list(mothernb=mothernb,M=mass$Weight,
                     t=mass$RelativeJulian,IndCohort=IndCohort,
                     nind=length(unique(mass$id)),nobs=length(mass$Weight),
                     pl=pld,idmum=idmum,MaxLitter=MaxLitter,mother=mother,
-                    whichind=whichind,maxbd=maxbd,mA=mA,mk=mk,phi=phis,phi2=phi2,A=Aobs)
-initsGAKlphi <- function() list(A=initA,k=ki,pl=pli,meanLB=initmeanLB,BetaA=0,BetaD=0,BetaAD=0,BetaS=0,meanmu=0)
+                    whichind=whichind,maxbd=maxbd,mA=mA,mk=mk,A=Aobs)
+initsGAKlphi <- function() list(A=initA,k=ki,pl=pli,meanLB=initmeanLB)
 
-paramsGAKlphi <- c("A","k","litter","meanLB","BetaA","BetaD","BetaAD","meanmu","covAPhi","BetaS")
+paramsGAKlphi <- c("A","k","litter","meanLB")
 # MCMC settings
 ni <- 13000 ; nt <- 20 ; nb <- 3000 ; nc <- 3
-GrowthAKlphi<-jags(dataGrowthAKlphi,initsGAKlphi,paramsGAKlphi,"models/GrowthAKlphi",
+GrowthAKlAobs<-jags(dataGrowthAKlphi,initsGAKlphi,paramsGAKlphi,"models/GrowthAKlAobs",
                 n.chains = nc, n.thin = nt, n.iter = ni, n.burnin = nb, working.directory = getwd())
-print(GrowthAKlphi)
+print(GrowthAKlAobs)
+
+plot(GrowthAK$BUGSoutput$mean$A,GrowthAKlAobs$BUGSoutput$mean$A)
+plot(GrowthAKlAobs$BUGSoutput$mean$A,GrowthAKl$BUGSoutput$mean$A,pch=16)
+
+cor.test(GrowthAK$BUGSoutput$mean$A,GrowthAKl$BUGSoutput$mean$A)
+cor.test(GrowthAKlAobs$BUGSoutput$mean$A,GrowthAKl$BUGSoutput$mean$A)
+cor.test(GrowthAKlAobs$BUGSoutput$mean$A,GrowthAK$BUGSoutput$mean$A)
+points(y=GrowthAKl$BUGSoutput$mean$A,x=Aobs,col="red")
+
+cor.test(GrowthAK$BUGSoutput$mean$A,Aobs)
+
+cov(GrowthAK$BUGSoutput$mean$A,Aobs, use = "complete.obs")/sqrt(var(GrowthAK$BUGSoutput$mean$A)*(var(Aobs, na.rm=T)-2.05^2))
+
+cor.test(GrowthAKl$BUGSoutput$median$A,Aobs)
+
+
+Aestimates <- data.frame(id= names(Aobs), A=GrowthAK$BUGSoutput$mean$A)
+head(Aestimates)
+
+testmerge <- merge(x=YearPheno, y=Aestimates,by.x = "ID", by.y="id",all.x = TRUE)
+dim(testmerge)
+dim(YearPheno)
+
+testmerge$A[testmerge$Age=="A"] <- testmerge$Mass[testmerge$Age=="A"]
+
+plot(testmerge$A,testmerge$Mass)
+
+summary(glm(data=testmerge, Phi ~1+Sex+Age*A, family=binomial))
+summary(glm(data=testmerge, Fitness ~1+Sex+Age+Mass))
+
+
+write.table(x = Aestimates , file = "AtoMerge.txt",quote = FALSE, row.names = FALSE)

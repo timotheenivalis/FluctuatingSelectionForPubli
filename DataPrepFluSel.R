@@ -25,7 +25,12 @@ for (i in 1:nrow(RawPheno))
 }
 RawPheno$RelativeJulian<-RawPheno$Julian-min(RawPheno$Julian)
 
+m0 <- lm(Weight ~ 1+RelativeJulian+I(RelativeJulian^2), data=RawPheno[which(RawPheno$Age=="A" & !is.na(RawPheno$Weight)),])
+summary(m0)
 
+plot(RawPheno$Weight[which(RawPheno$Age=="A"& !is.na(RawPheno$Weight))],residuals(m0)+m0$coefficients[1])
+
+RawPheno$Weight[which(RawPheno$Age=="A" & !is.na(RawPheno$Weight))] <- residuals(m0)+m0$coefficients[1]
 
 #### Year*Ind based data ####
 Ind_unique <- unique(as.character(RawPheno$ID_Individual))
@@ -36,6 +41,7 @@ YearPheno <- data.frame(ID=as.character(Ind_unique[1]),
                         Sex="Female",
                         Age="A",
                         Mass=0,
+                        RelativeJulian=0,
                         Phi=0,
                         Rho=0,
                         Fitness=0,
@@ -53,13 +59,18 @@ for (i in 1:length(Ind_unique))
       YearPheno[count,"Age"] <- as.character(RawPheno$Age[which(RawPheno$ID_Individual==Ind_unique[i] &
                                                                   RawPheno$Calendar_year==  yearsind[j])][1])
       YearPheno[count,"Mass"] <- mean(RawPheno$Weight[which(RawPheno$ID_Individual==Ind_unique[i] &
-                                                                  RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
+                                                              RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
+      YearPheno[count,"RelativeJulian"] <- mean(RawPheno$RelativeJulian[which(RawPheno$ID_Individual==Ind_unique[i] &
+                                                             RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
       YearPheno[count,"Rho"] <- sum(as.character(offsprings) %in% as.character(RawPheno$ID_Individual[RawPheno$Cohort==yearsind[j]]))
       count <- count +1
     }#end for (j in 1:length(Year_unique))
   YearPheno[YearPheno$ID==Ind_unique[i],"Sex"] <- as.character(RawPheno$Sex[RawPheno$ID_Individual==Ind_unique[i]][1])
   
 }# end for (i in 1:length(Ind_unique))
+
+# correct adult mass for time
+
 
 # Survival to the next year
 YearPheno$Phi <- c(as.numeric(YearPheno$ID[-1] == YearPheno$ID[-length(YearPheno$ID)]),0)
@@ -76,9 +87,54 @@ for (i in as.character(ped$animal[!is.na(ped$dam)]))
   YearPheno$Mother[YearPheno$ID==i] <- as.character(ped$dam[ped$animal==i])
 }
 
+YearPhenoIntermediate <- YearPheno
 ################## Must include age-corrected mass
 
+AtoMerge <- read.table(file="AtoMerge.txt", header = TRUE)
 
+YearPheno<- merge(x=YearPhenoIntermediate, y=AtoMerge,by.x = "ID", by.y="id",all.x = TRUE)
+
+YearPheno$A[YearPheno$Age=="A"] <- YearPheno$Mass[YearPheno$Age=="A"]
+
+YearPheno$animal <- YearPheno$ID
+
+
+YearPheno$M2006 <- NA
+YearPheno$M2007 <- NA
+YearPheno$M2008 <- NA
+YearPheno$M2009 <- NA
+YearPheno$M2010 <- NA
+YearPheno$M2011 <- NA
+YearPheno$M2012 <- NA
+YearPheno$M2013 <- NA
+YearPheno$M2014 <- NA
+YearPheno$M2015 <- NA
+
+for (i in 1:nrow(YearPheno))
+{
+  YearPheno[i, paste("M",YearPheno$Year[i],sep="")] <- YearPheno$Mass[i]
+}
+
+YearPheno$A2006 <- NA
+YearPheno$A2007 <- NA
+YearPheno$A2008 <- NA
+YearPheno$A2009 <- NA
+YearPheno$A2010 <- NA
+YearPheno$A2011 <- NA
+YearPheno$A2012 <- NA
+YearPheno$A2013 <- NA
+YearPheno$A2014 <- NA
+YearPheno$A2015 <- NA
+
+for (i in 1:nrow(YearPheno))
+{
+  YearPheno[i, paste("A",YearPheno$Year[i],sep="")] <- YearPheno$A[i]
+}
+
+YearPheno$RJst <- (YearPheno$RelativeJulian - mean(YearPheno$RelativeJulian))/sd(YearPheno$RelativeJulian)
+YearPheno$RJ2st <- (YearPheno$RelativeJulian^2 - mean(YearPheno$RelativeJulian^2))/sd(YearPheno$RelativeJulian^2)
+
+YearPheno$Ast <- (YearPheno$A - mean(YearPheno$A, na.rm=T))/sd(YearPheno$A, na.rm=T)
 
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)

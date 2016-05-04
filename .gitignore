@@ -8,3 +8,12 @@
 FiguresFluSel-concordance.tex
 FiguresFluSel-tikzDictionary
 GrowthAK
+GrowthAKY
+FiguresFluSel-tikzDictionary
+*.bbl
+GrowthAKl
+*concordance.tex
+*tikzDictionary
+*.RData
+FiguresFluSel.pdf
+*.tikz

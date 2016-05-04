@@ -1,0 +1,48 @@
+
+    model {
+    ######priors and constraints
+    #growth
+    for (i in 1:nind)
+      {
+          A[i]~dunif(mA-5,mA+16)
+          k[i]~dnorm(mk,tauk)T(0.01,0.025)
+      }
+    tauk<-pow(sdk,-2)
+    sdk~dunif(0,0.001)
+    
+    tau<-pow(sdMass,-2)
+    sdMass<-2.05
+    
+    ## Birth dates
+    for (mum in 1:mothernb)
+      {
+        #first litter
+        meanLB[mum,1]~dunif(-30,maxbd)       
+        for (i in 2:MaxLitter)
+          {
+            meanLB[mum,i]~dunif(gbegin[mum,i],gend[mum,i])
+            gbegin[mum,i]<-meanLB[mum,i-1]+20
+            gend[mum,i]<-meanLB[mum,i-1]+120
+          }
+      }
+    for (i in 1:nind)
+      {
+        for(j in 1:MaxLitter)
+          {
+            pl[i,j]~dgamma(1,1)
+            plG[i,j]<-pl[i,j]/sum(pl[i,])
+          }
+      }
+    ######likelihood
+    for (obs in 1:nobs)
+      {
+        M[obs]~dnorm(mf[obs],tau)
+        mf[obs]<-A[whichind[obs]]*(1-exp(-k[whichind[obs]]*(date[obs])))
+        date[obs]<-t[obs]-meanLB[mother[whichind[obs]],litter[whichind[obs]]]
+      }
+    for (i in 1:nind)
+      {
+        litter[i] ~ dcat(plG[i,])
+      }    
+    }
+    

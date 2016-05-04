@@ -1,9 +1,12 @@
 \documentclass{article}
 
+\usepackage{booktabs}
+
 \begin{document}
 
 <<load data, echo=FALSE>>=
-load(file = "FluSelenv.RData")
+load(file = "EnvSelFluA.RData")
+library(xtable)
 @
 
 <<Plot Options, echo=FALSE>>=
@@ -19,29 +22,24 @@ par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1
 
 <<SelByYear,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYear, x=2006:2015, ylim=c(min( CISelByYear), max( CISelByYear)), xlab="Year", ylab = "Selection gradient", main = "\\textbf{(A)} Total selection")
+plot(SelAByYear, x=2006:2015, ylim=c(min( CISelAByYear), max( CISelAByYear)), xlab="Year", ylab = "Selection gradient", main = "\\textbf{(A)} Total selection")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYear[1,],
-       y1 = CISelByYear[2,], angle = 90,length = 0.1)
-m0all <- glm(Fitness ~ 1 + StMass + Sex +Age , data=YearPheno, family=poisson)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYear[1,],
+       y1 = CISelAByYear[2,], angle = 90,length = 0.1)
 abline(h=coefficients(m0all)[2], lty=2, lwd=5)
-sm0all <- summary(m0all)
 lowm0all <- coefficients(m0all)[2]+1.96*sm0all$coefficients[2,2]
 highm0all <- coefficients(m0all)[2]-1.96*sm0all$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
 #points(x=2006:2015,y=unlist(coefficients(mmRnoCorfitness)$Year["StMass"]), pch=17)
-
 @
 
 <<SelByYearRho,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYearRho, x=2006:2015, ylim=c(min( CISelByYearRho), max( CISelByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$", main = "\\textbf{(B)} Fertility selection")
+plot(SelAByYearRho, x=2006:2015, ylim=c(min( CISelAByYearRho), max( CISelAByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$", main = "\\textbf{(B)} Fertility selection")
 abline(h=0)
-sd(SelByYearRho)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearRho[1,],
-       y1 = CISelByYearRho[2,], angle = 90,length = 0.1)
-m0allRho <- glm(Rho ~ 1 + StMass + Sex , data=YearPheno[YearPheno$Age=="A",], family=quasipoisson)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearRho[1,],
+       y1 = CISelAByYearRho[2,], angle = 90,length = 0.1)
 abline(h=coefficients(m0allRho)[2], lty=2)
 sm0allRho <- summary(m0allRho)
 lowm0allRho <- coefficients(m0allRho)[2]+1.96*sm0allRho$coefficients[2,2]
@@ -53,13 +51,11 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, high
 
 <<SelByYearPhi,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelByYearPhi, x=2006:2015, ylim=c(min( CISelByYearPhi, na.rm=TRUE), max( CISelByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$", main = "\\textbf{(C)} Viability selection")
+plot(SelAByYearPhi, x=2006:2015, ylim=c(min( CISelAByYearPhi, na.rm=TRUE), max( CISelAByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$", main = "\\textbf{(C)} Viability selection")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelByYearPhi[1,],
-       y1 = CISelByYearPhi[2,], angle = 90,length = 0.1)
-m0allphi <- glm(Phi ~ 1 + StMass + Sex +Age , data=YearPheno[YearPheno$Year<2015,], family=binomial)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhi[1,],
+       y1 = CISelAByYearPhi[2,], angle = 90,length = 0.1)
 abline(h=coefficients(m0allphi)[2], lty=2)
-sm0allphi <- summary(m0allphi)
 lowm0allphi <- coefficients(m0allphi)[2]+1.96*sm0allphi$coefficients[2,2]
 highm0allphi <- coefficients(m0allphi)[2]-1.96*sm0allphi$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
@@ -72,20 +68,43 @@ cor.test(YearPheno$Phi,YearPheno$Rho)
 @
 
 <<>>=
+
 sd(SelByYear)
 coefficients(m0all)[2]
-mean(SeSelByYear)
-
-sm0all
-sm0allRho
-sm0allphi
-
-sd(SelByYearPhi,na.rm=T)
-mean(SeSelByYearPhi,na.rm=T)
+summary(m0all)[2]
 sd(SelByYearRho)
-mean(SeSelByYearRho)
 
+rounding <- 3
+
+BetaGlm<- c(paste(round(sm0all$coefficients[2,1],rounding)," (",round(sm0all$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(sm0allRho$coefficients[2,1],rounding)," (",round(sm0allRho$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(sm0allphi$coefficients[2,1],rounding)," (",round(sm0allphi$coefficients[2,2],rounding ),")",sep=""))
+
+SDyears <- c(sd(SelAByYear),sd(SelAByYearRho),sd(SelAByYearPhi, na.rm=TRUE))
+SEyears <- c(mean(SeSelAByYear), mean(SeSelAByYearRho),mean(SeSelAByYearPhi,na.rm=T))
+BetaGLMM <- c(paste(round(smmARnoCorfitness$coefficients[2,1],rounding)," (",round(smmARnoCorfitness$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(smmRnoCorrho$coefficients[2,1],rounding)," (",round(smmRnoCorrho$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(smmRnoCorphi$coefficients[2,1],rounding)," (",round(smmRnoCorphi$coefficients[2,2],rounding ),")",sep=""))
+
+smmRnoCorrho$coefficients[2,1]
+TabSel <- data.frame(BetaGLM = BetaGlm, B=SDyears, C=SEyears , D=BetaGLMM , E=c(2,3,2), F=c(2,3,2))
 @
+
+<<tableMt, results='asis', echo=FALSE>>=
+strCaption <- paste0("")
+print(xtable(TabSel, digits=3, caption=strCaption, label="Test_table"),
+size="footnotesize", #Change size; useful for bigger tables
+include.rownames=FALSE, #Don't print rownames
+include.colnames=FALSE, #We create them ourselves
+caption.placement="top",
+hline.after=NULL#, #We don't need hline; we use booktabs
+#add.to.row = list(pos = list(-1,
+#nrow(TabSel)),
+#command = c(paste("\\toprule \n",	" & $\\beta_z$ (SE)	&	SD$_\\text{year}$&	$\\overline{\\text{SE}_\\text{year}}$ & $\\beta_z'$ (SE) & $\\sigma_{\\zeta}$ & $\\sigma_{\\zeta}/\\beta_z'$\\\\\n","\\midrule \n"),"\\bottomrule \n")
+#)
+)
+@
+
 
 Test of fluctuation of selection on fitness.
 <<>>=
@@ -121,18 +140,18 @@ CImmRnoCorphi
 %' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
 %' @
 %' 
-
-<<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
-szgr <- 2
-szax <- 1.3
-marr <- c(4, 4, 1, 1) + 0.1
-par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
-
-bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
-bbv$stats
-bbv$group
-abline(h=0)
-density(bvpairwise[,1])
-@
+%' 
+%' <<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
+%' szgr <- 2
+%' szax <- 1.3
+%' marr <- c(4, 4, 1, 1) + 0.1
+%' par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
+%' 
+%' bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
+%' bbv$stats
+%' bbv$group
+%' abline(h=0)
+%' density(bvpairwise[,1])
+%' @
 
 \end{document}
