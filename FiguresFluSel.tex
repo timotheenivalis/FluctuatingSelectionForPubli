@@ -88,7 +88,7 @@
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelAByYearRho[}\hlnum{1}\hlstd{,],}
        \hlkwc{y1} \hlstd{= CISelAByYearRho[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
-\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
 \hlstd{sm0allRho} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0allRho)}
 \hlstd{lowm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
 \hlstd{highm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
@@ -109,7 +109,7 @@
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelAByYearPhi[}\hlnum{1}\hlstd{,],}
        \hlkwc{y1} \hlstd{= CISelAByYearPhi[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
-\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
 \hlstd{lowm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
 \hlstd{highm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
 \hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),}
@@ -144,380 +144,50 @@ Correlation fertility viability
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{sd}\hlstd{(SelByYear)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): objet 'SelByYear' introuvable}}\begin{alltt}
-\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}
-\end{alltt}
-\begin{verbatim}
-##        Ast 
-## 0.08200326
-\end{verbatim}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}
-\end{alltt}
-\begin{verbatim}
-## $terms
-## Fitness ~ 1 + Ast + Sex + Age
-## attr(,"variables")
-## list(Fitness, Ast, Sex, Age)
-## attr(,"factors")
-##         Ast Sex Age
-## Fitness   0   0   0
-## Ast       1   0   0
-## Sex       0   1   0
-## Age       0   0   1
-## attr(,"term.labels")
-## [1] "Ast" "Sex" "Age"
-## attr(,"order")
-## [1] 1 1 1
-## attr(,"intercept")
-## [1] 1
-## attr(,"response")
-## [1] 1
-## attr(,".Environment")
-## <environment: R_GlobalEnv>
-## attr(,"predvars")
-## list(Fitness, Ast, Sex, Age)
-## attr(,"dataClasses")
-##   Fitness       Ast       Sex       Age 
-## "numeric" "numeric"  "factor"  "factor"
-\end{verbatim}
-\begin{alltt}
-\hlkwd{mean}\hlstd{(SeSelByYear)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean(SeSelByYear): objet 'SeSelByYear' introuvable}}\begin{alltt}
-\hlstd{sm0all}
-\end{alltt}
-\begin{verbatim}
-## 
-## Call:
-## glm(formula = Fitness ~ 1 + Ast + Sex + Age, family = quasipoisson, 
-##     data = YearPheno)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.8453  -1.0854  -1.0421   0.8231   4.7406  
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  1.05005    0.04408  23.822  < 2e-16 ***
-## Ast          0.08200    0.02837   2.890  0.00391 ** 
-## SexMale     -0.06908    0.06832  -1.011  0.31213    
-## AgeJ        -1.56364    0.08072 -19.372  < 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for quasipoisson family taken to be 1.951902)
-## 
-##     Null deviance: 3597.2  on 1275  degrees of freedom
-## Residual deviance: 2479.2  on 1272  degrees of freedom
-##   (18 observations deleted due to missingness)
-## AIC: NA
-## 
-## Number of Fisher Scoring iterations: 6
-\end{verbatim}
-\begin{alltt}
-\hlstd{sm0allRho}
-\end{alltt}
-\begin{verbatim}
-## 
-## Call:
-## glm(formula = Rho ~ 1 + Ast + Sex, family = quasipoisson, data = YearPheno[YearPheno$Age == 
-##     "A", ])
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -3.0090  -1.4100  -0.3091   0.7326   4.5163  
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  0.83126    0.05606  14.827  < 2e-16 ***
-## Ast          0.09956    0.03412   2.918  0.00367 ** 
-## SexMale      0.19760    0.08857   2.231  0.02610 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for quasipoisson family taken to be 2.335516)
-## 
-##     Null deviance: 1347.1  on 527  degrees of freedom
-## Residual deviance: 1298.4  on 525  degrees of freedom
-##   (2 observations deleted due to missingness)
-## AIC: NA
-## 
-## Number of Fisher Scoring iterations: 5
-\end{verbatim}
-\begin{alltt}
-\hlstd{sm0allphi}
-\end{alltt}
-\begin{verbatim}
-## 
-## Call:
-## glm(formula = Phi ~ 1 + Ast + Sex + Age, family = binomial, data = YearPheno[YearPheno$Year < 
-##     2015, ])
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.1564  -0.7142  -0.6403  -0.3219   2.5591  
-## 
-## Coefficients:
-##             Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.40121    0.13670 -10.250  < 2e-16 ***
-## Ast         -0.24836    0.08896  -2.792  0.00524 ** 
-## SexMale     -0.92314    0.15545  -5.939 2.88e-09 ***
-## AgeJ         0.88925    0.16501   5.389 7.09e-08 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 1265.4  on 1158  degrees of freedom
-## Residual deviance: 1175.3  on 1155  degrees of freedom
-##   (18 observations deleted due to missingness)
-## AIC: 1183.3
-## 
-## Number of Fisher Scoring iterations: 4
-\end{verbatim}
-\begin{alltt}
-\hlkwd{sd}\hlstd{(SelByYearPhi,}\hlkwc{na.rm}\hlstd{=T)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): objet 'SelByYearPhi' introuvable}}\begin{alltt}
-\hlkwd{mean}\hlstd{(SeSelByYearPhi,}\hlkwc{na.rm}\hlstd{=T)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean(SeSelByYearPhi, na.rm = T): objet 'SeSelByYearPhi' introuvable}}\begin{alltt}
-\hlkwd{sd}\hlstd{(SelByYearRho)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): objet 'SelByYearRho' introuvable}}\begin{alltt}
-\hlkwd{mean}\hlstd{(SeSelByYearRho)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean(SeSelByYearRho): objet 'SeSelByYearRho' introuvable}}\begin{alltt}
 \hlstd{rounding} \hlkwb{<-} \hlnum{3}
 
 \hlstd{BetaGlm}\hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
 
+\hlstd{SDyears} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sd}\hlstd{(SelAByYear),}\hlkwd{sd}\hlstd{(SelAByYearRho),}\hlkwd{sd}\hlstd{(SelAByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\hlstd{SEyears} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{mean}\hlstd{(SeSelAByYear),} \hlkwd{mean}\hlstd{(SeSelAByYearRho),}\hlkwd{mean}\hlstd{(SeSelAByYearPhi,}\hlkwc{na.rm}\hlstd{=T))}
+\hlstd{BetaGLMM} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
+            \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
+            \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
+\hlstd{SigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
+            \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
+\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)))}
+\hlstd{SigRat} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],}
+            \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],}
+\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{])}
 
+\hlstd{psigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(fitnessAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, RhoAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, PhiAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{)}
+\hlstd{confsigma} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
+               \hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorrho[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorrho[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
+               \hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorphi[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorphi[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
 
-\hlstd{TabSel} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{BetaGLM} \hlstd{= BetaGlm,} \hlkwc{B}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{C}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{D}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{E}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{F}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{))}
+\hlstd{TabSel} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{BetaGlm} \hlstd{= BetaGlm,} \hlkwc{B}\hlstd{=SDyears,} \hlkwc{C}\hlstd{=SEyears ,} \hlkwc{D}\hlstd{=BetaGLMM ,} \hlkwc{E}\hlstd{=SigmaA,} \hlkwc{DD} \hlstd{=confsigma,} \hlkwc{EE} \hlstd{=psigmaA,} \hlkwc{FF}\hlstd{=SigRat)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Tue May 03 17:27:56 2016
+% Wed May 04 15:45:58 2016
 \begin{table}[ht]
 \centering
 \caption{} 
 \label{Test_table}
 \begingroup\footnotesize
-\begin{tabular}{lrrrrr}
-  0.082 (0.028) & 2.000 & 2.000 & 2.000 & 2.000 & 2.000 \\ 
-  0.1 (0.034) & 3.000 & 3.000 & 3.000 & 3.000 & 3.000 \\ 
-  -0.248 (0.089) & 2.000 & 2.000 & 2.000 & 2.000 & 2.000 \\ 
+\begin{tabular}{lrrlrlrr}
+  0.082 (0.028) & 0.167 & 0.097 & 0.036 (0.044) & 0.117 & [0.063;0.218] & 8.1E-06 & 3.241 \\ 
+  0.1 (0.034) & 0.160 & 0.117 & 0.052 (0.044) & 0.111 & [0.053;0.212] & 2.5E-04 & 2.145 \\ 
+  -0.248 (0.089) & 0.484 & 0.319 & -0.217 (0.098) & 0.109 & [0;0.425] & 3.6E-01 & -0.501 \\ 
   \end{tabular}
 \endgroup
 \end{table}
 
 
-
-Test of fluctuation of selection on fitness.
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(mmRnoCorfitness)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in summary(mmRnoCorfitness): objet 'mmRnoCorfitness' introuvable}}\begin{alltt}
-\hlkwd{logLik}\hlstd{(mmRnoCorfitness)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in logLik(mmRnoCorfitness): objet 'mmRnoCorfitness' introuvable}}\begin{alltt}
-\hlkwd{logLik}\hlstd{(mmRIfitness)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in logLik(mmRIfitness): objet 'mmRIfitness' introuvable}}\begin{alltt}
-\hlkwd{anova}\hlstd{(mmRIfitness,mmRnoCorfitness)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in anova(mmRIfitness, mmRnoCorfitness): objet 'mmRIfitness' introuvable}}\begin{alltt}
-\hlstd{CImmRnoCorfitness}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objet 'CImmRnoCorfitness' introuvable}}\begin{alltt}
-\hlkwd{sqrt}\hlstd{(}\hlkwd{VarCorr}\hlstd{(mmRnoCorfitness)[[}\hlnum{2}\hlstd{]][}\hlnum{1}\hlstd{])}\hlopt{/}\hlkwd{summary}\hlstd{(mmRnoCorfitness)}\hlopt{$}\hlstd{coef[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): impossible de trouver la fonction "{}VarCorr"{}}}\end{kframe}
-\end{knitrout}
-
-Test of fluctuation of selection on fecundity.
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(mmRnoCorrho)}
-\end{alltt}
-\begin{verbatim}
-## Generalized linear mixed model fit by maximum likelihood (Laplace
-##   Approximation) [glmerMod]
-##  Family: poisson  ( log )
-## Formula: Rho ~ 1 + Ast + Sex + (1 | Year) + (0 + Ast | Year)
-##    Data: YearPheno[YearPheno$Age == "A", ]
-## 
-##      AIC      BIC   logLik deviance df.resid 
-##   2321.0   2342.3  -1155.5   2311.0      523 
-## 
-## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -2.4085 -1.1024 -0.1962  0.7370  4.9242 
-## 
-## Random effects:
-##  Groups Name        Variance Std.Dev.
-##  Year   (Intercept) 0.14129  0.3759  
-##  Year.1 Ast         0.01221  0.1105  
-## Number of obs: 528, groups:  Year, 10
-## 
-## Fixed effects:
-##             Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)  0.75905    0.12524   6.061 1.35e-09 ***
-## Ast          0.05152    0.04389   1.174 0.240515    
-## SexMale      0.20347    0.05954   3.418 0.000632 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Correlation of Fixed Effects:
-##         (Intr) Ast   
-## Ast     -0.004       
-## SexMale -0.179 -0.221
-\end{verbatim}
-\begin{alltt}
-\hlkwd{logLik}\hlstd{(mmRnoCorrho)}
-\end{alltt}
-\begin{verbatim}
-## 'log Lik.' -1155.497 (df=5)
-\end{verbatim}
-\begin{alltt}
-\hlkwd{logLik}\hlstd{(mmRIrho)}
-\end{alltt}
-\begin{verbatim}
-## 'log Lik.' -1161.562 (df=4)
-\end{verbatim}
-\begin{alltt}
-\hlkwd{anova}\hlstd{(mmRIphi,mmRnoCorphi)}
-\end{alltt}
-\begin{verbatim}
-## Data: YearPheno
-## Models:
-## mmRIphi: Phi ~ 1 + Ast + Sex + Age + (1 | Year) + (0 + Ast | Year)
-## mmRnoCorphi: Phi ~ 1 + Ast + Sex + Age + (1 | Year) + (0 + Ast | Year)
-##             Df  AIC    BIC logLik deviance Chisq Chi Df Pr(>Chisq)
-## mmRIphi      6 1209 1239.9 -598.5     1197                        
-## mmRnoCorphi  6 1209 1239.9 -598.5     1197     0      0          1
-\end{verbatim}
-\begin{alltt}
-\hlstd{CImmRnoCorrho}
-\end{alltt}
-\begin{verbatim}
-##                   2.5 %    97.5 %
-## .sig01       0.24332230 0.6454177
-## .sig02       0.05308922 0.2122699
-## (Intercept)  0.48580883 1.0262357
-## Ast         -0.04783283 0.1405825
-## SexMale      0.08633032 0.3203719
-\end{verbatim}
-\begin{alltt}
-\hlkwd{sqrt}\hlstd{(}\hlkwd{VarCorr}\hlstd{(mmRnoCorrho)[[}\hlnum{2}\hlstd{]][}\hlnum{1}\hlstd{])}\hlopt{/}\hlkwd{summary}\hlstd{(mmRnoCorrho)}\hlopt{$}\hlstd{coef[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): impossible de trouver la fonction "{}VarCorr"{}}}\end{kframe}
-\end{knitrout}
-
-Test of fluctuation of selection on viability.
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(mmRnoCorphi)}
-\end{alltt}
-\begin{verbatim}
-## Generalized linear mixed model fit by maximum likelihood (Laplace
-##   Approximation) [glmerMod]
-##  Family: binomial  ( logit )
-## Formula: Phi ~ 1 + Ast + Sex + Age + (1 | Year) + (0 + Ast | Year)
-##    Data: YearPheno
-## 
-##      AIC      BIC   logLik deviance df.resid 
-##   1209.0   1239.9   -598.5   1197.0     1270 
-## 
-## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -1.1810 -0.5474 -0.3842 -0.1338  5.6394 
-## 
-## Random effects:
-##  Groups Name        Variance Std.Dev.
-##  Year   (Intercept) 0.81303  0.9017  
-##  Year.1 Ast         0.01181  0.1087  
-## Number of obs: 1276, groups:  Year, 10
-## 
-## Fixed effects:
-##             Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.68988    0.32345  -5.225 1.75e-07 ***
-## Ast         -0.21713    0.09799  -2.216   0.0267 *  
-## SexMale     -0.94408    0.15738  -5.999 1.99e-09 ***
-## AgeJ         0.86170    0.16900   5.099 3.42e-07 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Correlation of Fixed Effects:
-##         (Intr) Ast    SexMal
-## Ast      0.016              
-## SexMale -0.101 -0.197       
-## AgeJ    -0.295  0.218 -0.225
-\end{verbatim}
-\begin{alltt}
-\hlkwd{anova}\hlstd{(mmRIphi,mmRnoCorphi)}
-\end{alltt}
-\begin{verbatim}
-## Data: YearPheno
-## Models:
-## mmRIphi: Phi ~ 1 + Ast + Sex + Age + (1 | Year) + (0 + Ast | Year)
-## mmRnoCorphi: Phi ~ 1 + Ast + Sex + Age + (1 | Year) + (0 + Ast | Year)
-##             Df  AIC    BIC logLik deviance Chisq Chi Df Pr(>Chisq)
-## mmRIphi      6 1209 1239.9 -598.5     1197                        
-## mmRnoCorphi  6 1209 1239.9 -598.5     1197     0      0          1
-\end{verbatim}
-\begin{alltt}
-\hlstd{CImmRnoCorphi}
-\end{alltt}
-\begin{verbatim}
-##                  2.5 %      97.5 %
-## .sig01       0.4886831  1.81146590
-## .sig02       0.0000000  0.42541526
-## (Intercept) -2.4701443 -1.01000454
-## Ast         -0.4434752 -0.01369907
-## SexMale     -1.2570573 -0.63742576
-## AgeJ         0.5334759  1.19940105
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
 %' 
 %' <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
 %' setPar()

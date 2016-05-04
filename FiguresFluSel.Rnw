@@ -6,6 +6,7 @@
 
 <<load data, echo=FALSE>>=
 load(file = "EnvSelFluA.RData")
+load(file = "EnvQGA.RData")
 library(xtable)
 @
 
@@ -40,7 +41,7 @@ plot(SelAByYearRho, x=2006:2015, ylim=c(min( CISelAByYearRho), max( CISelAByYear
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearRho[1,],
        y1 = CISelAByYearRho[2,], angle = 90,length = 0.1)
-abline(h=coefficients(m0allRho)[2], lty=2)
+abline(h=coefficients(m0allRho)[2], lty=2, lwd=5)
 sm0allRho <- summary(m0allRho)
 lowm0allRho <- coefficients(m0allRho)[2]+1.96*sm0allRho$coefficients[2,2]
 highm0allRho <- coefficients(m0allRho)[2]-1.96*sm0allRho$coefficients[2,2]
@@ -55,7 +56,7 @@ plot(SelAByYearPhi, x=2006:2015, ylim=c(min( CISelAByYearPhi, na.rm=TRUE), max( 
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhi[1,],
        y1 = CISelAByYearPhi[2,], angle = 90,length = 0.1)
-abline(h=coefficients(m0allphi)[2], lty=2)
+abline(h=coefficients(m0allphi)[2], lty=2, lwd=5)
 lowm0allphi <- coefficients(m0allphi)[2]+1.96*sm0allphi$coefficients[2,2]
 highm0allphi <- coefficients(m0allphi)[2]-1.96*sm0allphi$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
@@ -69,11 +70,6 @@ cor.test(YearPheno$Phi,YearPheno$Rho)
 
 <<>>=
 
-sd(SelByYear)
-coefficients(m0all)[2]
-summary(m0all)[2]
-sd(SelByYearRho)
-
 rounding <- 3
 
 BetaGlm<- c(paste(round(sm0all$coefficients[2,1],rounding)," (",round(sm0all$coefficients[2,2],rounding ),")",sep=""),
@@ -85,14 +81,24 @@ SEyears <- c(mean(SeSelAByYear), mean(SeSelAByYearRho),mean(SeSelAByYearPhi,na.r
 BetaGLMM <- c(paste(round(smmARnoCorfitness$coefficients[2,1],rounding)," (",round(smmARnoCorfitness$coefficients[2,2],rounding ),")",sep=""),
             paste(round(smmRnoCorrho$coefficients[2,1],rounding)," (",round(smmRnoCorrho$coefficients[2,2],rounding ),")",sep=""),
             paste(round(smmRnoCorphi$coefficients[2,1],rounding)," (",round(smmRnoCorphi$coefficients[2,2],rounding ),")",sep=""))
+SigmaA <- c(sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1)),
+            sqrt(as.numeric(smmRnoCorrho$varcor$Year.1)),
+sqrt(as.numeric(smmRnoCorphi$varcor$Year.1)))
+SigRat <- c(sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1))/smmARnoCorfitness$coefficients[2,1],
+            sqrt(as.numeric(smmRnoCorrho$varcor$Year.1))/smmRnoCorrho$coefficients[2,1],
+sqrt(as.numeric(smmRnoCorphi$varcor$Year.1))/smmRnoCorphi$coefficients[2,1])
 
-smmRnoCorrho$coefficients[2,1]
-TabSel <- data.frame(BetaGLM = BetaGlm, B=SDyears, C=SEyears , D=BetaGLMM , E=c(2,3,2), F=c(2,3,2))
+psigmaA <- c(fitnessAanova$`Pr(>Chisq)`[2]/2, RhoAanova$`Pr(>Chisq)`[2]/2, PhiAanova$`Pr(>Chisq)`[2]/2)
+confsigma <- c(paste("[",round(CImmARnoCorfitness[2,1],rounding),";",round(CImmARnoCorfitness[2,2],rounding),"]",sep=""),
+               paste("[",round(CImmRnoCorrho[2,1],rounding),";",round(CImmRnoCorrho[2,2],rounding),"]",sep=""),
+               paste("[",round(CImmRnoCorphi[2,1],rounding),";",round(CImmRnoCorphi[2,2],rounding),"]",sep=""))
+
+TabSel <- data.frame(BetaGlm = BetaGlm, B=SDyears, C=SEyears , D=BetaGLMM , E=SigmaA, DD =confsigma, EE =psigmaA, FF=SigRat)
 @
 
 <<tableMt, results='asis', echo=FALSE>>=
 strCaption <- paste0("")
-print(xtable(TabSel, digits=3, caption=strCaption, label="Test_table"),
+print(xtable(TabSel,digits=c(rep(3,7),-1,3),caption=strCaption, label="Test_table"),
 size="footnotesize", #Change size; useful for bigger tables
 include.rownames=FALSE, #Don't print rownames
 include.colnames=FALSE, #We create them ourselves
@@ -105,34 +111,6 @@ hline.after=NULL#, #We don't need hline; we use booktabs
 )
 @
 
-
-Test of fluctuation of selection on fitness.
-<<>>=
-summary(mmRnoCorfitness)
-logLik(mmRnoCorfitness)
-logLik(mmRIfitness)
-anova(mmRIfitness,mmRnoCorfitness)
-CImmRnoCorfitness
-sqrt(VarCorr(mmRnoCorfitness)[[2]][1])/summary(mmRnoCorfitness)$coef[2,1]
-
-@
-
-Test of fluctuation of selection on fecundity.
-<<>>=
-summary(mmRnoCorrho)
-logLik(mmRnoCorrho)
-logLik(mmRIrho)
-anova(mmRIphi,mmRnoCorphi)
-CImmRnoCorrho 
-sqrt(VarCorr(mmRnoCorrho)[[2]][1])/summary(mmRnoCorrho)$coef[2,1]
-@
-
-Test of fluctuation of selection on viability.
-<<>>=
-summary(mmRnoCorphi)
-anova(mmRIphi,mmRnoCorphi)
-CImmRnoCorphi 
-@
 %' 
 %' <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
 %' setPar()

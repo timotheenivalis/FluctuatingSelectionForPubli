@@ -136,6 +136,12 @@ YearPheno$RJ2st <- (YearPheno$RelativeJulian^2 - mean(YearPheno$RelativeJulian^2
 
 YearPheno$Ast <- (YearPheno$A - mean(YearPheno$A, na.rm=T))/sd(YearPheno$A, na.rm=T)
 
+yearmeanfit <- tapply(YearPheno$Fitness,YearPheno$Year,mean)
+yearmeanfit["2006"]
+for (i in names(yearmeanfit))
+{
+  YearPheno$FitnessYear[YearPheno$Year==i] <- YearPheno$Fitness[YearPheno$Year==i]/ yearmeanfit[i]
+}
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 

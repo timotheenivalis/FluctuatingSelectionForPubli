@@ -263,13 +263,14 @@ mmARnoCorfitness <- glmer(Fitness ~ 1 + Ast + Sex +  Age  +(1|Year) + (0+Ast|Yea
                           data=YearPheno, family=poisson, na.action = "na.omit")
 
 summary(mmARRfitness)
+anova(mmARRfitness,mmARnoCorfitness)
 smmARnoCorfitness <- summary(mmARnoCorfitness)
-anova(mmARIfitness,mmARnoCorfitness)
+fitnessAanova <- anova(mmARIfitness,mmARnoCorfitness)
 
 CImmARnoCorfitness <- confint(mmARnoCorfitness)
                          
 ##### Fitness components ####
-
+### AD + Juv
 SelAByYearPhi <- vector(length = 2015-2005)
 SeSelAByYearPhi <- vector(length = 2015-2005)
 CISelAByYearPhi <- matrix(NA,nrow=2,ncol=2015-2005)
@@ -299,12 +300,81 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, high
 summary(glm(Phi ~ 1 + A + Sex , data=YearPheno[YearPheno$Age=="A" & YearPheno$Year<max(YearPheno$Year),], family=binomial))
 summary(glmer(Phi ~ 1 + as.factor(Year) + A + Sex +(0+A|Year), data=YearPheno[YearPheno$Age=="A"& YearPheno$Year<max(YearPheno$Year),], family=binomial))
 
-mmRIphi <- glmer(Phi ~ 1 + Ast + Sex + Age +(1|Year)+(0+Ast|Year), data=YearPheno, family=binomial)
+mmRIphi <- glmer(Phi ~ 1 + Ast + Sex + Age +(1|Year), data=YearPheno, family=binomial)
 mmRnoCorphi <- glmer(Phi ~ 1 + Ast + Sex + Age + (1|Year) + (0+Ast|Year), data=YearPheno, family=binomial)
   smmRnoCorphi <- summary(mmRnoCorphi)
 CImmRnoCorphi <- confint(mmRnoCorphi)
 
-anova(mmRIphi,mmRnoCorphi)
+PhiAanova <- anova(mmRIphi,mmRnoCorphi)
+
+#### Ad only
+SelAByYearPhiAd <- vector(length = 2015-2005)
+SeSelAByYearPhiAd <- vector(length = 2015-2005)
+CISelAByYearPhiAd <- matrix(NA,nrow=2,ncol=2015-2005)
+
+for (t in 2006:2014)
+{
+  m0 <- glm(Phi ~ 1 + Ast + Sex , data=YearPheno[YearPheno$Year==t & YearPheno$Age=="A",], family=binomial)
+  SelAByYearPhiAd[t-2005] <- coefficients(m0)[2]
+  CISelAByYearPhiAd[,t-2005]<-as.numeric(confint(m0,parm="Ast"))
+  sm0<-summary(m0)
+  SeSelAByYearPhiAd[t-2005] <- sm0$coefficients[2,2]
+}
+SelAByYearPhiAd[10] <- NA
+SeSelAByYearPhiAd[10] <- NA
+plot(SelAByYearPhiAd, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
+abline(h=0)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhiAd[1,],
+       y1 = CISelAByYearPhiAd[2,], angle = 90,length = 0.1)
+m0allphiAd <- glm(Phi ~ 1 + Ast + Sex , data=YearPheno[YearPheno$Year<2015 & YearPheno$Age=="A",], family=binomial)
+abline(h=coefficients(m0allphiAd)[2], lty=2)
+sm0allphiAd <- summary(m0allphiAd)
+lowm0allphiAd <- coefficients(m0allphiAd)[2]+1.96*sm0allphiAd$coefficients[2,2]
+highm0allphiAd <- coefficients(m0allphiAd)[2]-1.96*sm0allphiAd$coefficients[2,2]
+polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphiAd,lowm0allphiAd, highm0allphiAd, highm0allphiAd),
+        fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
+
+mmRIphiAd <- glmer(Phi ~ 1 + Ast + Sex +(1|Year), data=YearPheno[YearPheno$Age=="A",], family=binomial)
+mmRnoCorphiAd <- glmer(Phi ~ 1 + Ast + Sex + (1|Year) + (0+Ast|Year), data=YearPheno[YearPheno$Age=="A",], family=binomial)
+smmRnoCorphiAd <- summary(mmRnoCorphiAd)
+CImmRnoCorphiAd <- confint(mmRnoCorphiAd)
+
+anova(mmRIphiAd,mmRnoCorphiAd)
+
+### Juvenile only
+SelAByYearPhiJuv <- vector(length = 2015-2005)
+SeSelAByYearPhiJuv <- vector(length = 2015-2005)
+CISelAByYearPhiJuv <- matrix(NA,nrow=2,ncol=2015-2005)
+
+for (t in 2006:2014)
+{
+  m0 <- glm(Phi ~ 1 + Ast + Sex , data=YearPheno[YearPheno$Year==t & YearPheno$Age=="J",], family=binomial)
+  SelAByYearPhiJuv[t-2005] <- coefficients(m0)[2]
+  CISelAByYearPhiJuv[,t-2005]<-as.numeric(confint(m0,parm="Ast"))
+  sm0<-summary(m0)
+  SeSelAByYearPhiJuv[t-2005] <- sm0$coefficients[2,2]
+}
+SelAByYearPhiJuv[10] <- NA
+SeSelAByYearPhiJuv[10] <- NA
+plot(SelAByYearPhiJuv, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
+abline(h=0)
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhiJuv[1,],
+       y1 = CISelAByYearPhiJuv[2,], angle = 90,length = 0.1)
+m0allphiJuv <- glm(Phi ~ 1 + Ast + Sex , data=YearPheno[YearPheno$Year<2015 & YearPheno$Age=="J",], family=binomial)
+abline(h=coefficients(m0allphiJuv)[2], lty=2)
+sm0allphiJuv <- summary(m0allphiJuv)
+lowm0allphiJuv <- coefficients(m0allphiJuv)[2]+1.96*sm0allphiJuv$coefficients[2,2]
+highm0allphiJuv <- coefficients(m0allphiJuv)[2]-1.96*sm0allphiJuv$coefficients[2,2]
+polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphiJuv,lowm0allphiJuv, highm0allphiJuv, highm0allphiJuv),
+        fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
+
+mmRIphiJuv <- glmer(Phi ~ 1 + Ast + Sex +(1|Year), data=YearPheno[YearPheno$Age=="J",], family=binomial)
+mmRnoCorphiJuv <- glmer(Phi ~ 1 + Ast + Sex + (1|Year) + (0+Ast|Year), data=YearPheno[YearPheno$Age=="J",], family=binomial)
+smmRnoCorphiJuv <- summary(mmRnoCorphiJuv)
+CImmRnoCorphiJuv <- confint(mmRnoCorphiJuv)
+
+anova(mmRIphiJuv,mmRnoCorphiJuv)
+
 
 #####  RHO ######
 
@@ -339,7 +409,7 @@ var(SelAByYear)
 var(SelAByYearRho+SelAByYearPhi, na.rm = T)
 cor.test(SelAByYearRho,SelAByYearPhi)
 smmRnoCorrho <- summary(mmRnoCorrho)
-anova(mmRIrho,mmRnoCorrho)
+RhoAanova <- anova(mmRIrho,mmRnoCorrho)
 
 CImmRnoCorrho <- confint(mmRnoCorrho)
 
