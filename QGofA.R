@@ -84,6 +84,9 @@ plot(as.mcmc(SelToG))
 posterior.mode(as.mcmc(SelToG))
 HPDinterval(as.mcmc(SelToG))
 mean(SelToG<0)
+
+SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {coefficients(lm(x~1+SelGRAByYear[-10]))[2]})
+
 #### BIV ANIMAL MODEL ALL YEARS #### (SCARY) # For A ####
 
 nuVM <- 0.001
@@ -127,4 +130,111 @@ mcmcBivAllYears <- MCMCglmm(cbind(Fitness,A2006,A2007,A2008,A2009,A2010,A2011,A2
 summary(mcmcBivAllYears)
 save(mcmcBivAllYears,file = "mcmcBivAllYearsA0")
 
+nuVM <- 0.001
+nuVF <- 0.001
+nucovMF <- 0.001
+spePriornu <- diag(11)*(nuVM-nuVF)+nuVF
+spePriornu[1,] <- nucovMF
+spePriornu[,1] <- nucovMF
 
+vAF <- 0.1
+vAM <- posterior.mode(mcmcBLUPSA0$VCV[,"animal"])
+Gcovvar <- diag(11)*(vAM)
+Gcovvar[1,1] <- vAF
+
+vIF <- 0.1
+vIM <- ifelse(posterior.mode(mcmcBLUPSA0$VCV[,"ID"])>=0, posterior.mode(mcmcBLUPSA0$VCV[,"ID"]),mean(mcmcBLUPSA0$VCV[,"ID"]))
+Icovvar <- diag(11)*(vIM)
+Icovvar[1,1] <- vIF
+
+vMF <- 0.1
+vMM <- posterior.mode(mcmcBLUPSA0$VCV[,"Mother"])
+Mcovvar <- diag(11)*(vMM)
+Mcovvar[1,1] <- vMF
+
+vRF <- 0.1
+vRM <- posterior.mode(mcmcBLUPSA0$VCV[,"units"])
+Rcovvar <- diag(11)*(vRM)
+Rcovvar[1,1] <- vRF
+
+priorAllYearsA <- list(G=list(G1=list(V=Gcovvar, nu=spePriornu, fix =2 ),
+                              G2=list(V=Mcovvar, nu=11),
+                              G3=list(V=diag(1), nu=0.001)),
+                       R=list(V=Rcovvar, nu=spePriornu, fix =2))
+
+mcmcBivAllYears <- MCMCglmm(cbind(Fitness,A2006,A2007,A2008,A2009,A2010,A2011,A2012,A2013,A2014,A2015) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
+                            random=~us(trait):animal+idh(trait):Mother+us(at.level(trait,c(1))):Year,
+                            rcov=~us(trait):units, family=c("poisson",rep("gaussian",10)),
+                            prior=priorAllYearsA,
+                            pedigree=ped,data=YearPheno,verbose=TRUE,nitt=130000,burnin=30000,thin=100)
+summary(mcmcBivAllYears)
+save(mcmcBivAllYears,file = "mcmcBivAllYearsA0")
+plot(mcmcBivAllYears)
+
+## unstructured
+nuVM <- 10^8
+nuVF <- 1
+nucovMF <- 1
+spePriornu <- diag(11)*(nuVM-nuVF)+nuVF
+spePriornu[1,-1] <- nucovMF
+spePriornu[-1,1] <- nucovMF
+
+priorAllYearsAexp <- list(G=list(G1=list(V=Gcovvar, nu=spePriornu, fix =2, alpha.mu =diag(x = Gcovvar), alpha.V = Gcovvar*1000),
+                                 G2=list(V=Mcovvar, nu=1, alpha.mu = diag(x = Mcovvar), alpha.V = Mcovvar*1000),
+                                 G3=list(V=diag(1), nu=0.001)),
+                          R=list(V=Rcovvar, nu=spePriornu, fix =2))
+
+mcmcBivAllYears2 <- MCMCglmm(cbind(Fitness,A2006,A2007,A2008,A2009,A2010,A2011,A2012,A2013,A2014,A2015) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
+                             random=~us(trait):animal+idh(trait):Mother+us(at.level(trait,c(1))):Year,
+                             rcov=~us(trait):units, family=c("poisson",rep("gaussian",10)),
+                             prior=priorAllYearsAexp,
+                             pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1300000,burnin=300000,thin=1000)
+
+save(mcmcBivAllYears2,file = "mcmcBivAllYearsA2")
+summary(mcmcBivAllYears2)
+plot(mcmcBivAllYears2$VCV)
+
+load("mcmcBivAllYearsA2")
+colnames(mcmcBivAllYears2$VCV)
+sg <- (mcmcBivAllYears2$VCV[,2:11])
+sr <- (mcmcBivAllYears2$VCV[,135:144])
+
+vg <- (mcmcBivAllYears2$VCV[,c(13,25,37,49,61,73,85,97,109,121)])
+vr <- (mcmcBivAllYears2$VCV[,c(146,158,170,182,194,206,218,230,242,254)])
+ 
+bg <- sg/vg                           
+be <- (sr+sg)/(vr+vg)
+
+diffb <- bg - be
+plot(diffb)
+
+
+priorAllYearsAexpnoG <- list(G=list(G1=list(V=diag(11), nu=1, fix=2),
+                                    G2=list(V=diag(11), nu=1),
+                                 G2=list(V=diag(1), nu=0.001)),
+                          R=list(V=diag(11), nu=1, fix =2))
+
+mcmcBivAllYearsNoG <- MCMCglmm(cbind(Fitness,A2006,A2007,A2008,A2009,A2010,A2011,A2012,A2013,A2014,A2015) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
+                             random=~us(trait):ID +idh(trait):Mother+us(at.level(trait,c(1))):Year,
+                             rcov=~us(trait):units, family=c("poisson",rep("gaussian",10)),
+                             prior=priorAllYearsAexpnoG,
+                             data=YearPheno,verbose=TRUE,nitt=13000,burnin=3000,thin=10)
+summary(mcmcBivAllYearsNoG)
+
+#### Based on two groups of years
+
+YearPheno$A1 <- 
+YearPheno$A2 <- 
+  
+  
+  priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=spePriornu, fix =2, alpha.mu =diag(x = Gcovvar), alpha.V = Gcovvar*1000),
+                                  G2=list(V=Mcovvar, nu=1, alpha.mu = diag(x = Mcovvar), alpha.V = Mcovvar*1000),
+                                  G3=list(V=diag(1), nu=0.001)),
+                           R=list(V=Rcovvar, nu=spePriornu, fix =2))
+
+
+  mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,A1,A2) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
+                             random=~us(trait):animal+us(trait):ID+idh(trait):Mother+us(at.level(trait,c(1))):Year,
+                             rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                             prior=priorTwoPeriodsA,
+                             pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1300000,burnin=300000,thin=1000)

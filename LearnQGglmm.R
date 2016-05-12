@@ -5,12 +5,16 @@ mcmcBLUPSFitness0 <- MCMCglmm(Fitness ~Sex*Age,
                         random=~animal+ID+Mother+Year,
                         rcov=~units,
                         prior=priorBLUPSFitness0, family= "poisson",
-                        pedigree=ped,data=YearPheno,verbose=TRUE,nitt=12000,burnin=2000,thin=10,pr=TRUE)
+                        pedigree=ped,data=YearPheno,verbose=TRUE,nitt=120000,burnin=20000,thin=100)
 summary(mcmcBLUPSFitness0)
 
+posterior.mode(as.mcmc(mcmcBLUPSFitness0$VCV[,"animal"][toosmall]))
+HPDinterval(as.mcmc(mcmcBLUPSFitness0$VCV[,"animal"][toosmall]))
+
+save(mcmcBLUPSFitness0, file="mcmcBLUPSFitness0")
 mean(YearPheno$Fitness)
 
-pred <- mcmcBLUPSFitness0$X%*% as.numeric(mcmcBLUPSFitness0$Sol[1,c("(Intercept)","SexMale","AgeJ")]) 
+pred <- mcmcBLUPSFitness0$X%*% as.numeric(mcmcBLUPSFitness0$Sol[1,c("(Intercept)","SexMale","AgeJ","SexMale:AgeJ")]) 
 
 QGmean(mu = mcmcBLUPSFitness0$Sol[1,"(Intercept)"], var = sum(mcmcBLUPSFitness0$VCV[1,]),link.inv = exp, predict=pred)
 
@@ -26,5 +30,15 @@ posterior.mode(as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))))
 mean(as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))))
 plot(type="l",as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))))
 
-HPDinterval(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))))
-posterior.mode(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))))
+HPDinterval(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))[toosmall]))
+posterior.mode(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))[toosmall]))
+mean(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))[toosmall]))
+
+plot(as.mcmc(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))[toosmall]))
+
+toosmall <- which(unlist(lapply(FitnessParam,function(x){x["var.a.obs"]}))>10^-3)
+
+posterior.mode(as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))[toosmall]))
+HPDinterval(as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))[toosmall]))
+plot(type="l",as.mcmc(unlist(lapply(FitnessParam,function(x){x["h2.obs"]}))[toosmall]))
+
