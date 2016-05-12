@@ -223,18 +223,36 @@ summary(mcmcBivAllYearsNoG)
 
 #### Based on two groups of years
 
-YearPheno$A1 <- 
-YearPheno$A2 <- 
-  
-  
-  priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=spePriornu, fix =2, alpha.mu =diag(x = Gcovvar), alpha.V = Gcovvar*1000),
-                                  G2=list(V=Mcovvar, nu=1, alpha.mu = diag(x = Mcovvar), alpha.V = Mcovvar*1000),
-                                  G3=list(V=diag(1), nu=0.001)),
-                           R=list(V=Rcovvar, nu=spePriornu, fix =2))
+vAF <- 0.1
+vAM <- posterior.mode(mcmcBLUPSA0$VCV[,"animal"])
+Gcovvar <- diag(3)*(vAM)
+Gcovvar[1,1] <- vAF
 
+vIF <- 0.1
+vIM <- ifelse(posterior.mode(mcmcBLUPSA0$VCV[,"ID"])>=0, posterior.mode(mcmcBLUPSA0$VCV[,"ID"]),mean(mcmcBLUPSA0$VCV[,"ID"]))
+Icovvar <- diag(3)*(vIM)
+Icovvar[1,1] <- vIF
+
+vMF <- 0.1
+vMM <- posterior.mode(mcmcBLUPSA0$VCV[,"Mother"])
+Mcovvar <- diag(3)*(vMM)
+Mcovvar[1,1] <- vMF
+
+vRF <- 0.1
+vRM <- posterior.mode(mcmcBLUPSA0$VCV[,"units"])
+Rcovvar <- diag(3)*(vRM)
+Rcovvar[1,1] <- vRF
+
+  priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
+                                  G2=list(V=Mcovvar, nu=1),
+                                  G3=list(V=diag(1), nu=0.001)),
+                           R=list(V=Rcovvar, nu=1))
 
   mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,A1,A2) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
-                             random=~us(trait):animal+us(trait):ID+idh(trait):Mother+us(at.level(trait,c(1))):Year,
+                             random=~us(trait):animal+idh(trait):Mother+us(at.level(trait,c(1))):Year,
                              rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
                              prior=priorTwoPeriodsA,
-                             pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1300000,burnin=300000,thin=1000)
+                             pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1300,burnin=300,thin=10)
+  
+  summary(mcmcBivTwoPeriods)
+  
