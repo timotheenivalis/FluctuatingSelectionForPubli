@@ -150,4 +150,23 @@ mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
 
 @
 
+<<>>=
+posterior.mode(BetaG1 - BetaE1)
+HPDinterval(BetaG1 - BetaE1)
+mean((BetaG1 - BetaE1)>0)*2
+
+posterior.mode(BetaG2 - BetaE2)
+HPDinterval(BetaG2 - BetaE2)
+mean((BetaG2 - BetaE2)>0)*2
+
+posterior.mode(BetaE1 - BetaE2)
+HPDinterval(BetaE1 - BetaE2)
+mean((BetaE1 - BetaE2)<0)*2
+
+posterior.mode(BetaG1 - BetaG2)
+HPDinterval(BetaG1 - BetaG2)
+mean((BetaG1 - BetaG2)>0)*2
+
+@
+
 \end{document}
