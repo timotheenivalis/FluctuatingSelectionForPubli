@@ -221,10 +221,10 @@ mcmcBivAllYearsNoG <- MCMCglmm(cbind(Fitness,A2006,A2007,A2008,A2009,A2010,A2011
                              data=YearPheno,verbose=TRUE,nitt=13000,burnin=3000,thin=10)
 summary(mcmcBivAllYearsNoG)
 
-#### Based on two groups of years
+#### Based on two groups of years #####
 
 vAF <- 0.1
-vAM <- posterior.mode(mcmcBLUPSA0$VCV[,"animal"])
+vAM <- posterior.mode(m0mcBLUPSA0$VCV[,"animal"])
 Gcovvar <- diag(3)*(vAM)
 Gcovvar[1,1] <- vAF
 
@@ -243,16 +243,82 @@ vRM <- posterior.mode(mcmcBLUPSA0$VCV[,"units"])
 Rcovvar <- diag(3)*(vRM)
 Rcovvar[1,1] <- vRF
 
-  priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
-                                  G2=list(V=Mcovvar, nu=1),
-                                  G3=list(V=diag(1), nu=0.001)),
-                           R=list(V=Rcovvar, nu=1))
+priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
+                                G2=list(V=Icovvar, nu=1),
+                                G3=list(V=Mcovvar, nu=1),
+                                G4=list(V=diag(1), nu=0.001)),
+                         R=list(V=Rcovvar, nu=1))
 
-  mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,A1,A2) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
-                             random=~us(trait):animal+idh(trait):Mother+us(at.level(trait,c(1))):Year,
-                             rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
-                             prior=priorTwoPeriodsA,
-                             pedigree=ped,data=YearPheno,verbose=TRUE,nitt=1300,burnin=300,thin=10)
-  
-  summary(mcmcBivTwoPeriods)
+mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,A1,A2) ~ trait-1+Sex+Age*(RJst+RJ2st)+at.level(trait,c(1)):(Sex+Age*(RJst+RJ2st)),
+                              random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(1))):Year,
+                              rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                              prior=priorTwoPeriodsA,
+                              pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500)
+
+summary(mcmcBivTwoPeriods)
+save(mcmcBivTwoPeriods,file="mcmcBivTwoPeriods")
+
+load("mcmcBivTwoPeriods")
+
+corGM <- mcmcBivTwoPeriods$VCV[,"traitA2:traitA1.animal"]/sqrt(mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.animal"]*mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.animal"])
+HPDinterval(corGM)
+posterior.mode(corGM)
+
+BetaG1 <-  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.animal"]/mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.animal"]
+HPDinterval(BetaG1)
+posterior.mode(BetaG1)
+
+BetaG2 <-  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.animal"]/mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.animal"]
+HPDinterval(BetaG2)
+posterior.mode(BetaG2)
+
+covE1 <- mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.ID"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.Mother"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.units"]
+plot(covE1)
+BetaE1 <- covE1 /(mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.ID"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.Mother"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.units"])
+plot(BetaE1)
+
+covE2 <- mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.ID"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.Mother"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.units"]
+plot(covE2)
+BetaE2 <- covE2 /(mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.ID"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.Mother"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.units"])
+plot(BetaE2)
+
+diffBeta1 <- BetaG1 - BetaE1
+plot(diffBeta1)
+HPDinterval(diffBeta1)
+mean(diffBeta1>0)
+
+diffBeta2 <- BetaG2 - BetaE2
+plot(diffBeta2)
+
+covP1 <- mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.animal"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.ID"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.Mother"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA1.units"]
+plot(covP1)
+BetaP1 <- covP1 /(mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.animal"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.ID"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.Mother"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA1:traitA1.units"])
+plot(BetaP1)
+
+covP2 <- mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.animal"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.ID"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.Mother"]+
+  mcmcBivTwoPeriods$VCV[,"traitFitness:traitA2.units"]
+plot(covP2)
+BetaP2 <- covP2 /(mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.animal"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.ID"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.Mother"]+
+                    mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.units"])
+plot(BetaP2)
+
+
   

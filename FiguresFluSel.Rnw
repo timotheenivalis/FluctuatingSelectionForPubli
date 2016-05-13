@@ -2,12 +2,17 @@
 
 \usepackage{booktabs}
 
+\usepackage{wasysym}
+\renewcommand{\familydefault}{\sfdefault}
+
+
 \begin{document}
 
 <<load data, echo=FALSE>>=
 load(file = "EnvSelFluA.RData")
 load(file = "EnvQGA.RData")
 library(xtable)
+library(MCMCglmm)
 @
 
 <<Plot Options, echo=FALSE>>=
@@ -131,5 +136,18 @@ hline.after=NULL#, #We don't need hline; we use booktabs
 %' abline(h=0)
 %' density(bvpairwise[,1])
 %' @
+
+<<Betas,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+par(mar=c(4, 6, 1, 1) + 0.1)
+Betas <- matrix(sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),nrow =3, byrow=FALSE)
+BetasCI <- sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)
+
+x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Postive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"))
+abline(h=0)
+arrows(x0 = x, y0=BetasCI[1,],y1=BetasCI[2,],angle = 90,code = 3)
+mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
+
+@
 
 \end{document}
