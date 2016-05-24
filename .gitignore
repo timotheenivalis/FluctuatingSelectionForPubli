@@ -25,3 +25,6 @@ figure/SelByYearPhi-1.tikz
 *.tikz
 FiguresFluSel-tikzDictionary
 *.RDataTmp
+FiguresFluSel-concordance.tex
+FiguresFluSel-tikzDictionary
+mcmcBivTwoPeriods

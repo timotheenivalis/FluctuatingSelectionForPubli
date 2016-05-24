@@ -153,6 +153,16 @@ for (i in names(yearmeanfit))
   YearPheno$FitnessYear[YearPheno$Year==i] <- YearPheno$Fitness[YearPheno$Year==i]/ yearmeanfit[i]
 }
 
+YearPheno$OS <- NA
+for(i in 1:nrow(YearPheno))
+{
+  offsp <- ped$animal[which(ped$dam==YearPheno$ID[i] | ped$sire==YearPheno$ID[i])]
+  val <- mean(YearPheno$A[which(YearPheno$ID%in%offsp & YearPheno$Age=="J" & YearPheno$Year==YearPheno$Year[i])])
+  if(!is.nan(val) & !is.na(val)){
+  YearPheno$OS[i] <- val
+  }
+}
+
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 

@@ -50,10 +50,22 @@
 \usepackage{alltt}
 
 \usepackage{booktabs}
+
+\usepackage{wasysym}
+\renewcommand{\familydefault}{\sfdefault}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: Matrix}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: coda}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: ape}}\end{kframe}
+\end{knitrout}
 
 
 
@@ -173,7 +185,7 @@ Correlation fertility viability
 \end{knitrout}
 
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Wed May 04 15:45:58 2016
+% Fri May 13 17:33:12 2016
 \begin{table}[ht]
 \centering
 \caption{} 
@@ -195,18 +207,183 @@ Correlation fertility viability
 %' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
 %' @
 %' 
-%' 
-%' <<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
-%' szgr <- 2
-%' szax <- 1.3
-%' marr <- c(4, 4, 1, 1) + 0.1
-%' par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
-%' 
-%' bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
-%' bbv$stats
-%' bbv$group
-%' abline(h=0)
-%' density(bvpairwise[,1])
-%' @
+ 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{szgr} \hlkwb{<-} \hlnum{2}
+\hlstd{szax} \hlkwb{<-} \hlnum{1.3}
+\hlstd{marr} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}
+\hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{mar}\hlstd{=marr,} \hlkwc{cex}\hlstd{=szgr,} \hlkwc{cex.lab}\hlstd{=szax ,} \hlkwc{cex.axis}\hlstd{=szax,} \hlkwc{lwd}\hlstd{=}\hlnum{2} \hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{)}
+
+\hlstd{bbv} \hlkwb{<-} \hlkwd{boxplot}\hlstd{(bvpairwise,}\hlkwc{ylab}\hlstd{=}\hlstr{"Change in breeding values (g)"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{range} \hlstd{=} \hlnum{1}\hlstd{,}\hlkwc{cex}\hlstd{=}\hlnum{1}\hlstd{)}
+\hlstd{bbv}\hlopt{$}\hlstd{stats}
+\end{alltt}
+\begin{verbatim}
+##              [,1]         [,2]         [,3]         [,4]         [,5]
+## [1,] -0.280501568 -0.257383635 -0.347173588 -0.267832000 -0.357132486
+## [2,] -0.143366410 -0.087176846 -0.178386364 -0.095028840 -0.114692786
+## [3,] -0.067520536 -0.003132208 -0.094707610  0.002214962  0.005447066
+## [4,] -0.003739138  0.086721131 -0.008337006  0.082918931  0.130138872
+## [5,]  0.134012211  0.260359089  0.161244353  0.260692898  0.371425991
+##            [,6]        [,7]         [,8]        [,9]
+## [1,] -0.8321504 -0.17794910 -0.382623528 -0.29096950
+## [2,] -0.4928537  0.06339068 -0.130565493 -0.07342106
+## [3,] -0.3192183  0.19033674 -0.004056911  0.03549705
+## [4,] -0.1519085  0.31816724  0.122591670  0.14822783
+## [5,]  0.1872504  0.57031481  0.374995899  0.36644027
+\end{verbatim}
+\begin{alltt}
+\hlstd{bbv}\hlopt{$}\hlstd{group}
+\end{alltt}
+\begin{verbatim}
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [36] 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [71] 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [106] 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+## [141] 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+## [176] 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+## [211] 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7
+## [246] 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 8 8 8 8
+## [281] 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 9 9 9 9 9 9 9
+## [316] 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+## [351] 9
+\end{verbatim}
+\begin{alltt}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/EvolDiff-1} 
+\begin{kframe}\begin{alltt}
+\hlkwd{density}\hlstd{(bvpairwise[,}\hlnum{1}\hlstd{])}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## 	density.default(x = bvpairwise[, 1])
+## 
+## Data: bvpairwise[, 1] (1000 obs.);	Bandwidth 'bw' = 0.02343
+## 
+##        x                 y           
+##  Min.   :-0.5547   Min.   :0.000192  
+##  1st Qu.:-0.3292   1st Qu.:0.018199  
+##  Median :-0.1036   Median :0.424183  
+##  Mean   :-0.1036   Mean   :1.107278  
+##  3rd Qu.: 0.1219   3rd Qu.:2.109751  
+##  Max.   : 0.3475   Max.   :3.900320
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setPar}\hlstd{()}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,} \hlnum{6}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{Betas} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),}\hlkwc{nrow} \hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{byrow}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\hlstd{BetasCI} \hlkwb{<-} \hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)}
+
+\hlstd{x} \hlkwb{<-} \hlkwd{barplot}\hlstd{(Betas,} \hlkwc{beside}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{(BetasCI),}\hlkwd{max}\hlstd{(BetasCI)),}\hlkwc{names.arg} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Postive selection years"}\hlstd{,}\hlstr{"Negative selection years"}\hlstd{),} \hlkwc{legend.text} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Phenotypic"}\hlstd{,}\hlstr{"Environmental"}\hlstd{,}\hlstr{"Genetic"}\hlstd{))}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{= x,} \hlkwc{y0}\hlstd{=BetasCI[}\hlnum{1}\hlstd{,],}\hlkwc{y1}\hlstd{=BetasCI[}\hlnum{2}\hlstd{,],}\hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlstr{"Selection gradients"}\hlstd{,} \hlkwc{line}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{cex}\hlstd{=szax}\hlopt{*}\hlstd{szgr)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/Betas-1} 
+
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{posterior.mode}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaE1)}
+\end{alltt}
+\begin{verbatim}
+##       var1 
+## -0.1234186
+\end{verbatim}
+\begin{alltt}
+\hlkwd{HPDinterval}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaE1)}
+\end{alltt}
+\begin{verbatim}
+##           lower       upper
+## var1 -0.2180723 -0.02770633
+## attr(,"Probability")
+## [1] 0.95
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{((BetaG1} \hlopt{-} \hlstd{BetaE1)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.006
+\end{verbatim}
+\begin{alltt}
+\hlkwd{posterior.mode}\hlstd{(BetaG2} \hlopt{-} \hlstd{BetaE2)}
+\end{alltt}
+\begin{verbatim}
+##         var1 
+## -0.009610168
+\end{verbatim}
+\begin{alltt}
+\hlkwd{HPDinterval}\hlstd{(BetaG2} \hlopt{-} \hlstd{BetaE2)}
+\end{alltt}
+\begin{verbatim}
+##           lower      upper
+## var1 -0.1379426 0.05755331
+## attr(,"Probability")
+## [1] 0.95
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{((BetaG2} \hlopt{-} \hlstd{BetaE2)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.424
+\end{verbatim}
+\begin{alltt}
+\hlkwd{posterior.mode}\hlstd{(BetaE1} \hlopt{-} \hlstd{BetaE2)}
+\end{alltt}
+\begin{verbatim}
+##       var1 
+## 0.07575993
+\end{verbatim}
+\begin{alltt}
+\hlkwd{HPDinterval}\hlstd{(BetaE1} \hlopt{-} \hlstd{BetaE2)}
+\end{alltt}
+\begin{verbatim}
+##           lower     upper
+## var1 0.03828845 0.1372658
+## attr(,"Probability")
+## [1] 0.95
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{((BetaE1} \hlopt{-} \hlstd{BetaE2)}\hlopt{<}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\begin{alltt}
+\hlkwd{posterior.mode}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaG2)}
+\end{alltt}
+\begin{verbatim}
+##         var1 
+## -0.003689573
+\end{verbatim}
+\begin{alltt}
+\hlkwd{HPDinterval}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaG2)}
+\end{alltt}
+\begin{verbatim}
+##            lower      upper
+## var1 -0.08005378 0.07575714
+## attr(,"Probability")
+## [1] 0.95
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{((BetaG1} \hlopt{-} \hlstd{BetaG2)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.908
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 \end{document}

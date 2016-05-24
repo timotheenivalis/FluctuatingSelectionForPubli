@@ -6,7 +6,7 @@ ped <- read.table(file = "ped.txt", header=TRUE)
 priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001),G4=list(V=0.1, nu=0.0001)),
                   R=list(V=0.1, nu=0.0001))
 
-mcmcBLUPSA0 <- MCMCglmm(A ~Sex+Age*(RJst+RJ2st),
+mcmcBLUPSA0 <- MCMCglmm(A ~Sex+Age,#*(RJst+RJ2st)
                         random=~animal+ID+Mother+Year,
                         rcov=~units,
                         prior=priorBLUPS0,
