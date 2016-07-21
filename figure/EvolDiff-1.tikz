@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.10.1 on 2016-05-13 17:33:12
+% Created by tikzDevice version 0.10.1 on 2016-07-07 17:11:23
 % !TEX encoding = UTF-8 Unicode
 \documentclass{article}
 \nonstopmode
@@ -952,6 +952,27 @@
 \begin{scope}
 \path[clip] ( 98.40, 98.40) rectangle (696.30,479.49);
 \definecolor{drawColor}{RGB}{0,0,0}
+\definecolor{fillColor}{RGB}{26,26,26}
+
+\path[draw=drawColor,line width= 0.8pt,dash pattern=on 4pt off 4pt ,line join=round,line cap=round,fill=fillColor,fill opacity=0.30] ( 89.79,357.60) --
+	(212.81,372.92) --
+	(274.33,371.53) --
+	(335.84,379.19) --
+	(397.35,399.30) --
+	(458.86,440.10) --
+	(520.37,395.43) --
+	(581.89,418.53) --
+	(704.91,383.25) --
+	(704.91,246.62) --
+	(581.89,220.07) --
+	(520.37,233.28) --
+	(458.86,193.60) --
+	(397.35,232.24) --
+	(335.84,254.33) --
+	(274.33,257.74) --
+	(212.81,261.59) --
+	( 89.79,272.65) --
+	cycle;
 
 \path[draw=drawColor,line width= 0.8pt,line join=round,line cap=round] ( 98.40,315.85) -- (696.30,315.85);
 \end{scope}

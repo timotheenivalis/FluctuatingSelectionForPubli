@@ -89,9 +89,9 @@ BetaGLMM <- c(paste(round(smmARnoCorfitness$coefficients[2,1],rounding)," (",rou
 SigmaA <- c(sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1)),
             sqrt(as.numeric(smmRnoCorrho$varcor$Year.1)),
 sqrt(as.numeric(smmRnoCorphi$varcor$Year.1)))
-SigRat <- c(sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1))/smmARnoCorfitness$coefficients[2,1],
-            sqrt(as.numeric(smmRnoCorrho$varcor$Year.1))/smmRnoCorrho$coefficients[2,1],
-sqrt(as.numeric(smmRnoCorphi$varcor$Year.1))/smmRnoCorphi$coefficients[2,1])
+SigRat <- c(smmARnoCorfitness$coefficients[2,1]/sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1)),
+            smmRnoCorrho$coefficients[2,1]/sqrt(as.numeric(smmRnoCorrho$varcor$Year.1)),
+            smmRnoCorphi$coefficients[2,1]/sqrt(as.numeric(smmRnoCorphi$varcor$Year.1)))
 
 psigmaA <- c(fitnessAanova$`Pr(>Chisq)`[2]/2, RhoAanova$`Pr(>Chisq)`[2]/2, PhiAanova$`Pr(>Chisq)`[2]/2)
 confsigma <- c(paste("[",round(CImmARnoCorfitness[2,1],rounding),";",round(CImmARnoCorfitness[2,2],rounding),"]",sep=""),
@@ -123,6 +123,14 @@ hline.after=NULL#, #We don't need hline; we use booktabs
 %' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
 %' @
 %' 
+
+Correlation between selection and evolution
+<<>>=
+posterior.mode(as.mcmc(SelToG))
+HPDinterval(as.mcmc(SelToG))
+
+
+@
  
  <<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
  szgr <- 2
@@ -131,6 +139,8 @@ hline.after=NULL#, #We don't need hline; we use booktabs
  par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
  
  bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
+ polygon(x = c(2006,2008:2014,2016,2016,2014:2008,2006) -2006, y = c(LowDrift,rev(HighDrit)),fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
+
  bbv$stats
  bbv$group
  abline(h=0)
@@ -169,4 +179,8 @@ mean((BetaG1 - BetaG2)>0)*2
 
 @
 
+
+<<concetpualplot,dev="tikz",fig.height=10,fig.width=10>>=>>=
+
+@
 \end{document}

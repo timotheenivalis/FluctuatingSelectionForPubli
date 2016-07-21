@@ -47,21 +47,46 @@ for (i in 1:nrow(BVextend))
   bvplotlist[[i]] <- cbind(plotgm0[[1]]$x,plotgm0[[1]]$fit)
 }
 plot(x=0,xlim=c(2006,2015),ylim=c(-2,2),type="n")
-trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2]-x[1,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+abline(h=0)
 
 bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 2015-2006))
 names(bvpairwise) <- 2007:2015
 for (i in 1:nrow(BVextend))
 {
   damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
-  lm(bv~1+t,data=damdat[damdat$t==2006 | damdat$t==2007,])
-  mean(damdat$bv[damdat$t==2007])-mean(damdat$bv[damdat$t==2006])
   tmeanbv <- tapply(damdat$bv,damdat$t,mean)
   bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-10]
 }
 
 boxplot(bvpairwise)
 abline(h=0)
+
+
+#### Drift simulations ####
+pmBV<-data.frame(animalID,posterior.mode(BV))
+names(pmBV)<-c("ID","pBV")
+mpmBV<-merge(x = pmBV,y = YearPheno,by="ID",all.y=TRUE, all.x = FALSE)
+plot(mpmBV$Year,mpmBV$pBV)
+
+BVdtemp <- t(sapply(X = as.numeric(mcmcBLUPSA0$VCV[,"animal"]),FUN = function(x) {rbv(pedigree = ped,G = x)} ))
+colnames(BVdtemp) <- ped[,1]
+
+BVdextend <- BVdtemp[,mpmBV$ID]# duplicates posterior distribution for ind present in multiple years
+bvdpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVdextend), ncol = 2015-2006))
+names(bvdpairwise) <- 2007:2015
+for (i in 1:nrow(BVdextend))
+{
+  damdatd<- data.frame(bv=BVdextend[i,],t=mpmBV$Year)
+  tmeanbvd <- tapply(damdatd$bv,damdatd$t,mean)
+  bvdpairwise[i,] <- tmeanbvd[-1]-tmeanbvd[-10]
+}
+str(bvdpairwise)
+HighDrit <- apply(X = bvdpairwise, MARGIN = 2, function(x){quantile(x, probs = 0.025)})
+LowDrift <- apply(X = bvdpairwise, MARGIN = 2, function(x){quantile(x, probs = 0.975)})
+
+polygon(x = c(2006,2008:2014,2016,2016,2014:2008,2006) -2006, y = c(LowDrift,rev(HighDrit)),fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
+
 
 ##### Selection gradients
 SelGRAByYear <- vector(length = 2015-2006)
@@ -78,6 +103,8 @@ for (t in 2006:2015)
   }
 }
 
+#### Correlation between selection and evolution#### 
+
 SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,SelGRAByYear[-10])})
 hist(SelToG)
 plot(as.mcmc(SelToG))
@@ -87,6 +114,19 @@ mean(SelToG<0)
 
 SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {coefficients(lm(x~1+SelGRAByYear[-10]))[2]})
 
+
+SelPhiToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x[-9],SelGRAByYear[-c(1,10)])})
+hist(SelPhiToG)
+plot(as.mcmc(SelPhiToG))
+posterior.mode(as.mcmc(SelPhiToG))
+HPDinterval(as.mcmc(SelToG))
+mean(SelToG<0)
+plot(x=2006:2014,SelAByYearPhi[-10])
+plot(x=2007:2015,y=bvpairwise[1,])
+plot(x=SelAByYearPhi[-10],y=bvpairwise[1,])
+
+rbind(SelAByYearPhi,bvpairwise[1,])
+plot(colMeans(bvpairwise),SelAByYearPhi[-c(1)])
 #### BIV ANIMAL MODEL ALL YEARS #### (SCARY) # For A ####
 
 nuVM <- 0.001

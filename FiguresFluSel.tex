@@ -185,7 +185,7 @@ Correlation fertility viability
 \end{knitrout}
 
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Fri May 13 17:33:12 2016
+% Thu Jul 07 17:11:23 2016
 \begin{table}[ht]
 \centering
 \caption{} 
@@ -207,6 +207,28 @@ Correlation fertility viability
 %' trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
 %' @
 %' 
+
+Correlation between selection and evolution
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{posterior.mode}\hlstd{(}\hlkwd{as.mcmc}\hlstd{(SelToG))}
+\end{alltt}
+\begin{verbatim}
+##     var1 
+## 0.360992
+\end{verbatim}
+\begin{alltt}
+\hlkwd{HPDinterval}\hlstd{(}\hlkwd{as.mcmc}\hlstd{(SelToG))}
+\end{alltt}
+\begin{verbatim}
+##           lower    upper
+## var1 -0.3910723 0.635243
+## attr(,"Probability")
+## [1] 0.95
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -217,6 +239,8 @@ Correlation fertility viability
 \hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{mar}\hlstd{=marr,} \hlkwc{cex}\hlstd{=szgr,} \hlkwc{cex.lab}\hlstd{=szax ,} \hlkwc{cex.axis}\hlstd{=szax,} \hlkwc{lwd}\hlstd{=}\hlnum{2} \hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{)}
 
 \hlstd{bbv} \hlkwb{<-} \hlkwd{boxplot}\hlstd{(bvpairwise,}\hlkwc{ylab}\hlstd{=}\hlstr{"Change in breeding values (g)"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{range} \hlstd{=} \hlnum{1}\hlstd{,}\hlkwc{cex}\hlstd{=}\hlnum{1}\hlstd{)}
+\hlkwd{polygon}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{2006}\hlstd{,}\hlnum{2008}\hlopt{:}\hlnum{2014}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2014}\hlopt{:}\hlnum{2008}\hlstd{,}\hlnum{2006}\hlstd{)} \hlopt{-}\hlnum{2006}\hlstd{,} \hlkwc{y} \hlstd{=} \hlkwd{c}\hlstd{(LowDrift,}\hlkwd{rev}\hlstd{(HighDrit)),}\hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.3}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+
 \hlstd{bbv}\hlopt{$}\hlstd{stats}
 \end{alltt}
 \begin{verbatim}

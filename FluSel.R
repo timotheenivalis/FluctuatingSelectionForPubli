@@ -413,3 +413,7 @@ RhoAanova <- anova(mmRIrho,mmRnoCorrho)
 
 CImmRnoCorrho <- confint(mmRnoCorrho)
 
+
+#### Dynamics of phenotype! ####
+plot(tapply(X = YearPheno$A, INDEX = YearPheno$Year, function(x){mean(x,na.rm=TRUE)}))
+plot(tapply(X = YearPheno$A, INDEX = YearPheno$Year, function(x){sd(x,na.rm=TRUE)}))
