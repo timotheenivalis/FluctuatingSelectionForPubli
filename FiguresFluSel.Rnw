@@ -181,6 +181,65 @@ mean((BetaG1 - BetaG2)>0)*2
 
 
 <<concetpualplot,dev="tikz",fig.height=10,fig.width=10>>=>>=
+setPar()
 
+nyears <- 6
+h2 <- 0.3
+
+### Graph constant
+constant_selcov <- rep(1, times=nyears)
+constant_evol <- constant_selcov * h2
+
+constant_tp <- as.matrix(rbind(constant_selcov, constant_evol))
+
+cumulative_constant <- cumsum(constant_evol)
+
+xb1 <- barplot(height = constant_tp, ylim = c(-1,2), beside = TRUE)
+abline(h=0)
+
+lines(x=seq(from=min(xb1), to=max(xb1), length.out = nyears), y=cumulative_constant)
+
+### Graph fluctuation
+
+flu_selcov <- c(1.2,0.82,0.6,0.94,1.3,0.65)
+flu_evol <- flu_selcov * h2
+
+flu_tp <- as.matrix(rbind(flu_selcov, flu_evol))
+
+cumulative_flu <- cumsum(flu_evol)
+
+xb2 <- barplot(height = flu_tp, ylim = c(-1,2), beside = TRUE)
+abline(h=0)
+
+lines(x=seq(from=min(xb2), to=max(xb2), length.out = nyears), y=cumulative_flu)
+
+### Graph reversal
+
+rev_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
+rev_evol <- rev_selcov * h2
+
+rev_tp <- as.matrix(rbind(rev_selcov, rev_evol))
+
+cumulative_rev <- cumsum(rev_evol)
+
+xb3 <- barplot(height = rev_tp, ylim = c(-1,2), beside = TRUE)
+abline(h=0)
+
+lines(x=seq(from=min(xb3), to=max(xb3), length.out = nyears), y=cumulative_rev)
+
+### Graph decoupling
+
+dec_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
+dec_evol <- 0.3+dec_selcov * h2
+
+dec_tp <- as.matrix(rbind(dec_selcov, dec_evol))
+
+cumulative_dec <- cumsum(dec_evol)
+
+xb4 <- barplot(height = dec_tp, ylim = c(-1,2), beside = TRUE)
+abline(h=0)
+
+lines(x=seq(from=min(xb4), to=max(xb4), length.out = nyears), y=cumulative_dec)
 @
+
 \end{document}
