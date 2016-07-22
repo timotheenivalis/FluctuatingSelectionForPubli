@@ -180,13 +180,21 @@ mean((BetaG1 - BetaG2)>0)*2
 @
 
 
-<<concetpualplot,dev="tikz",fig.height=10,fig.width=10>>=>>=
-setPar()
+<<concetpualplot,dev="tikz",fig.height=18,fig.width=14>>=
+mat <- matrix(c(1, 2, 3, 0, 4, 5),ncol = 2)
+layout(mat, widths = rep.int(1, ncol(mat)), heights = rep.int(1, nrow(mat)), respect = FALSE )
+
+szgr <- 2
+szax <- 1.3
+
+par(las=1, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1,
+    oma=c(0,0,0,0))
 
 nyears <- 6
 h2 <- 0.3
 
 ### Graph constant
+par(mar=c(3, 4, 3, 1) + 0.1)
 constant_selcov <- rep(1, times=nyears)
 constant_evol <- constant_selcov * h2
 
@@ -194,13 +202,18 @@ constant_tp <- as.matrix(rbind(constant_selcov, constant_evol))
 
 cumulative_constant <- cumsum(constant_evol)
 
-xb1 <- barplot(height = constant_tp, ylim = c(-1,2), beside = TRUE)
+xb1 <- barplot(height = constant_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(A)}", yaxt="n")
+axis(side=2, at = c(-1,0,1,2))
+axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
+     labels = FALSE,tick = TRUE)
+mtext(text = "Differential", side = 2, line = 2, cex=3, las=0)
 abline(h=0)
 
 lines(x=seq(from=min(xb1), to=max(xb1), length.out = nyears), y=cumulative_constant)
-
+box(which = "plot", lty = "solid")
 ### Graph fluctuation
-
+par(mar=c(3, 4, 3, 1) + 0.1)
 flu_selcov <- c(1.2,0.82,0.6,0.94,1.3,0.65)
 flu_evol <- flu_selcov * h2
 
@@ -208,13 +221,19 @@ flu_tp <- as.matrix(rbind(flu_selcov, flu_evol))
 
 cumulative_flu <- cumsum(flu_evol)
 
-xb2 <- barplot(height = flu_tp, ylim = c(-1,2), beside = TRUE)
+xb2 <- barplot(height = flu_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(B)}", yaxt="n")
+axis(side=2, at = c(-1,0,1,2))
+axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
+     labels = FALSE,tick = TRUE)
+mtext(text = "Differential", side = 2, line = 2, cex=3, las=0)
 abline(h=0)
 
 lines(x=seq(from=min(xb2), to=max(xb2), length.out = nyears), y=cumulative_flu)
+box(which = "plot", lty = "solid")
 
 ### Graph reversal
-
+par(mar=c(3, 4, 3,1) + 0.1)
 rev_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
 rev_evol <- rev_selcov * h2
 
@@ -222,13 +241,23 @@ rev_tp <- as.matrix(rbind(rev_selcov, rev_evol))
 
 cumulative_rev <- cumsum(rev_evol)
 
-xb3 <- barplot(height = rev_tp, ylim = c(-1,2), beside = TRUE)
+xb3 <- barplot(height = rev_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(C)}", yaxt="n")
+axis(side=2, at = c(-1,0,1,2))
+axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
+     labels = 1:6,tick = TRUE)
+mtext(text = "Differential", side = 2, line = 2, cex=3, las=0)
 abline(h=0)
 
 lines(x=seq(from=min(xb3), to=max(xb3), length.out = nyears), y=cumulative_rev)
+box(which = "plot", lty = "solid")
+mtext(text = "Year", side = 1, line = 2, cex=3)
 
-### Graph decoupling
+### legend
 
+
+### Graph decoupling 
+par(mar=c(3, 1, 3, 4) + 0.1)
 dec_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
 dec_evol <- 0.3+dec_selcov * h2
 
@@ -236,10 +265,33 @@ dec_tp <- as.matrix(rbind(dec_selcov, dec_evol))
 
 cumulative_dec <- cumsum(dec_evol)
 
-xb4 <- barplot(height = dec_tp, ylim = c(-1,2), beside = TRUE)
+xb4 <- barplot(height = dec_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(D)}", yaxt="n")
+axis(side=2, at = c(-1,0,1,2), labels = FALSE, tick = TRUE)
+axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
+     labels = FALSE,tick = TRUE)
+abline(h=0)
+lines(x=seq(from=min(xb4), to=max(xb4), length.out = nyears), y=cumulative_dec)
+box(which = "plot", lty = "solid")
+### Graph decoupling + flu
+par(mar=c(3, 1, 3, 4) + 0.1)
+dec_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
+dec_evol <- 0.3+dec_selcov * h2
+
+dec_tp <- as.matrix(rbind(dec_selcov, dec_evol))
+
+cumulative_dec <- cumsum(dec_evol)
+
+xb4 <- barplot(height = dec_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(E)}", yaxt="n")
+axis(side=2, at = c(-1,0,1,2), labels = FALSE, tick = TRUE)
+axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
+     labels = 1:6,tick = TRUE)
 abline(h=0)
 
 lines(x=seq(from=min(xb4), to=max(xb4), length.out = nyears), y=cumulative_dec)
+box(which = "plot", lty = "solid")
+mtext(text = "Year", side = 1, line = 2,cex = 3)
 @
 
 \end{document}

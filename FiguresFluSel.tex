@@ -170,9 +170,9 @@ Correlation fertility viability
 \hlstd{SigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
             \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
 \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)))}
-\hlstd{SigRat} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],}
-            \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],}
-\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1))}\hlopt{/}\hlstd{smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{])}
+\hlstd{SigRat} \hlkwb{<-} \hlkwd{c}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
+            \hlstd{smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
+            \hlstd{smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)))}
 
 \hlstd{psigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(fitnessAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, RhoAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, PhiAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{)}
 \hlstd{confsigma} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
@@ -185,16 +185,16 @@ Correlation fertility viability
 \end{knitrout}
 
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Thu Jul 07 17:11:23 2016
+% Fri Jul 22 13:33:15 2016
 \begin{table}[ht]
 \centering
 \caption{} 
 \label{Test_table}
 \begingroup\footnotesize
 \begin{tabular}{lrrlrlrr}
-  0.082 (0.028) & 0.167 & 0.097 & 0.036 (0.044) & 0.117 & [0.063;0.218] & 8.1E-06 & 3.241 \\ 
-  0.1 (0.034) & 0.160 & 0.117 & 0.052 (0.044) & 0.111 & [0.053;0.212] & 2.5E-04 & 2.145 \\ 
-  -0.248 (0.089) & 0.484 & 0.319 & -0.217 (0.098) & 0.109 & [0;0.425] & 3.6E-01 & -0.501 \\ 
+  0.082 (0.028) & 0.167 & 0.097 & 0.036 (0.044) & 0.117 & [0.063;0.218] & 8.1E-06 & 0.309 \\ 
+  0.1 (0.034) & 0.160 & 0.117 & 0.052 (0.044) & 0.111 & [0.053;0.212] & 2.5E-04 & 0.466 \\ 
+  -0.248 (0.089) & 0.484 & 0.319 & -0.217 (0.098) & 0.109 & [0;0.425] & 3.6E-01 & -1.998 \\ 
   \end{tabular}
 \endgroup
 \end{table}
@@ -408,6 +408,127 @@ Correlation between selection and evolution
 ## [1] 0.908
 \end{verbatim}
 \end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{mat} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{5}\hlstd{),}\hlkwc{ncol} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlkwd{layout}\hlstd{(mat,} \hlkwc{widths} \hlstd{=} \hlkwd{rep.int}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{ncol}\hlstd{(mat)),} \hlkwc{heights} \hlstd{=} \hlkwd{rep.int}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{nrow}\hlstd{(mat)),} \hlkwc{respect} \hlstd{=} \hlnum{FALSE} \hlstd{)}
+
+\hlstd{szgr} \hlkwb{<-} \hlnum{2}
+\hlstd{szax} \hlkwb{<-} \hlnum{1.3}
+
+\hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{cex}\hlstd{=szgr,} \hlkwc{cex.lab}\hlstd{=szax ,} \hlkwc{cex.axis}\hlstd{=szax,} \hlkwc{lwd}\hlstd{=}\hlnum{2} \hlstd{,}\hlkwc{pch}\hlstd{=}\hlnum{16}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,}
+    \hlkwc{oma}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{))}
+
+\hlstd{nyears} \hlkwb{<-} \hlnum{6}
+\hlstd{h2} \hlkwb{<-} \hlnum{0.3}
+
+\hlcom{### Graph constant}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{constant_selcov} \hlkwb{<-} \hlkwd{rep}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{times}\hlstd{=nyears)}
+\hlstd{constant_evol} \hlkwb{<-} \hlstd{constant_selcov} \hlopt{*} \hlstd{h2}
+
+\hlstd{constant_tp} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{rbind}\hlstd{(constant_selcov, constant_evol))}
+
+\hlstd{cumulative_constant} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(constant_evol)}
+
+\hlstd{xb1} \hlkwb{<-} \hlkwd{barplot}\hlstd{(}\hlkwc{height} \hlstd{= constant_tp,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{beside} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+               \hlkwc{main}\hlstd{=}\hlstr{"\textbackslash{}\textbackslash{}textbf\{(A)\}"}\hlstd{,} \hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{))}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),}
+     \hlkwc{labels} \hlstd{=} \hlnum{FALSE}\hlstd{,}\hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"Differential"}\hlstd{,} \hlkwc{side} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+
+\hlkwd{lines}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),} \hlkwc{y}\hlstd{=cumulative_constant)}
+\hlkwd{box}\hlstd{(}\hlkwc{which} \hlstd{=} \hlstr{"plot"}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlstr{"solid"}\hlstd{)}
+\hlcom{### Graph fluctuation}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{flu_selcov} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1.2}\hlstd{,}\hlnum{0.82}\hlstd{,}\hlnum{0.6}\hlstd{,}\hlnum{0.94}\hlstd{,}\hlnum{1.3}\hlstd{,}\hlnum{0.65}\hlstd{)}
+\hlstd{flu_evol} \hlkwb{<-} \hlstd{flu_selcov} \hlopt{*} \hlstd{h2}
+
+\hlstd{flu_tp} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{rbind}\hlstd{(flu_selcov, flu_evol))}
+
+\hlstd{cumulative_flu} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(flu_evol)}
+
+\hlstd{xb2} \hlkwb{<-} \hlkwd{barplot}\hlstd{(}\hlkwc{height} \hlstd{= flu_tp,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{beside} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+               \hlkwc{main}\hlstd{=}\hlstr{"\textbackslash{}\textbackslash{}textbf\{(B)\}"}\hlstd{,} \hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{))}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),}
+     \hlkwc{labels} \hlstd{=} \hlnum{FALSE}\hlstd{,}\hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"Differential"}\hlstd{,} \hlkwc{side} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+
+\hlkwd{lines}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb2),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb2),} \hlkwc{length.out} \hlstd{= nyears),} \hlkwc{y}\hlstd{=cumulative_flu)}
+\hlkwd{box}\hlstd{(}\hlkwc{which} \hlstd{=} \hlstr{"plot"}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlstr{"solid"}\hlstd{)}
+
+\hlcom{### Graph reversal}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{3}\hlstd{,}\hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{rev_selcov} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{0.6}\hlstd{,}\hlopt{-}\hlnum{1.1}\hlstd{,}\hlopt{-}\hlnum{0.8}\hlstd{,}\hlnum{0.9}\hlstd{,}\hlopt{-}\hlnum{0.22}\hlstd{,}\hlnum{0.5}\hlstd{)}
+\hlstd{rev_evol} \hlkwb{<-} \hlstd{rev_selcov} \hlopt{*} \hlstd{h2}
+
+\hlstd{rev_tp} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{rbind}\hlstd{(rev_selcov, rev_evol))}
+
+\hlstd{cumulative_rev} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(rev_evol)}
+
+\hlstd{xb3} \hlkwb{<-} \hlkwd{barplot}\hlstd{(}\hlkwc{height} \hlstd{= rev_tp,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{beside} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+               \hlkwc{main}\hlstd{=}\hlstr{"\textbackslash{}\textbackslash{}textbf\{(C)\}"}\hlstd{,} \hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{))}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),}
+     \hlkwc{labels} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{6}\hlstd{,}\hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"Differential"}\hlstd{,} \hlkwc{side} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+
+\hlkwd{lines}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb3),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb3),} \hlkwc{length.out} \hlstd{= nyears),} \hlkwc{y}\hlstd{=cumulative_rev)}
+\hlkwd{box}\hlstd{(}\hlkwc{which} \hlstd{=} \hlstr{"plot"}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlstr{"solid"}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"Year"}\hlstd{,} \hlkwc{side} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{3}\hlstd{)}
+
+\hlcom{### legend}
+
+
+\hlcom{### Graph decoupling }
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{dec_selcov} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{0.6}\hlstd{,}\hlopt{-}\hlnum{1.1}\hlstd{,}\hlopt{-}\hlnum{0.8}\hlstd{,}\hlnum{0.9}\hlstd{,}\hlopt{-}\hlnum{0.22}\hlstd{,}\hlnum{0.5}\hlstd{)}
+\hlstd{dec_evol} \hlkwb{<-} \hlnum{0.3}\hlopt{+}\hlstd{dec_selcov} \hlopt{*} \hlstd{h2}
+
+\hlstd{dec_tp} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{rbind}\hlstd{(dec_selcov, dec_evol))}
+
+\hlstd{cumulative_dec} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(dec_evol)}
+
+\hlstd{xb4} \hlkwb{<-} \hlkwd{barplot}\hlstd{(}\hlkwc{height} \hlstd{= dec_tp,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{beside} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+               \hlkwc{main}\hlstd{=}\hlstr{"\textbackslash{}\textbackslash{}textbf\{(D)\}"}\hlstd{,} \hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{labels} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),}
+     \hlkwc{labels} \hlstd{=} \hlnum{FALSE}\hlstd{,}\hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\hlkwd{lines}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb4),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb4),} \hlkwc{length.out} \hlstd{= nyears),} \hlkwc{y}\hlstd{=cumulative_dec)}
+\hlkwd{box}\hlstd{(}\hlkwc{which} \hlstd{=} \hlstr{"plot"}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlstr{"solid"}\hlstd{)}
+\hlcom{### Graph decoupling + flu}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{dec_selcov} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{0.6}\hlstd{,}\hlopt{-}\hlnum{1.1}\hlstd{,}\hlopt{-}\hlnum{0.8}\hlstd{,}\hlnum{0.9}\hlstd{,}\hlopt{-}\hlnum{0.22}\hlstd{,}\hlnum{0.5}\hlstd{)}
+\hlstd{dec_evol} \hlkwb{<-} \hlnum{0.3}\hlopt{+}\hlstd{dec_selcov} \hlopt{*} \hlstd{h2}
+
+\hlstd{dec_tp} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{rbind}\hlstd{(dec_selcov, dec_evol))}
+
+\hlstd{cumulative_dec} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(dec_evol)}
+
+\hlstd{xb4} \hlkwb{<-} \hlkwd{barplot}\hlstd{(}\hlkwc{height} \hlstd{= dec_tp,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1.5}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{beside} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+               \hlkwc{main}\hlstd{=}\hlstr{"\textbackslash{}\textbackslash{}textbf\{(E)\}"}\hlstd{,} \hlkwc{yaxt}\hlstd{=}\hlstr{"n"}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{c}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{),} \hlkwc{labels} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{axis}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{at} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb1),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb1),} \hlkwc{length.out} \hlstd{= nyears),}
+     \hlkwc{labels} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{6}\hlstd{,}\hlkwc{tick} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+
+\hlkwd{lines}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlkwc{from}\hlstd{=}\hlkwd{min}\hlstd{(xb4),} \hlkwc{to}\hlstd{=}\hlkwd{max}\hlstd{(xb4),} \hlkwc{length.out} \hlstd{= nyears),} \hlkwc{y}\hlstd{=cumulative_dec)}
+\hlkwd{box}\hlstd{(}\hlkwc{which} \hlstd{=} \hlstr{"plot"}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlstr{"solid"}\hlstd{)}
+\hlkwd{mtext}\hlstd{(}\hlkwc{text} \hlstd{=} \hlstr{"Year"}\hlstd{,} \hlkwc{side} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{line} \hlstd{=} \hlnum{2}\hlstd{,}\hlkwc{cex} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/concetpualplot-1} 
+
 \end{knitrout}
 
 \end{document}
