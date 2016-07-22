@@ -180,15 +180,17 @@ mean((BetaG1 - BetaG2)>0)*2
 @
 
 
-<<concetpualplot,dev="tikz",fig.height=18,fig.width=14>>=
-mat <- matrix(c(1, 2, 3, 4, 5, 6),ncol = 2)
-layout(mat, widths = rep.int(1, ncol(mat)), heights = c(1,1,1), respect = FALSE )
+<<concetpualplot,dev="tikz",fig.height=14,fig.width=16>>=
+mat <- matrix(c(1, 2, 3, 4),ncol = 2, byrow = TRUE)
+layout(mat, widths = rep.int(1, ncol(mat)), heights = c(1,1), respect = FALSE )
 
 szgr <- 2
 szax <- 1.3
 
-par(las=1, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1,
+par(las=1, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=5 ,pch=16, las=1,
     oma=c(0,0,0,0))
+
+barcol = grey(level = c(0.6,0.3))
 
 nyears <- 6
 h2 <- 0.3
@@ -203,7 +205,14 @@ constant_tp <- as.matrix(rbind(constant_selcov, constant_evol))
 cumulative_constant <- cumsum(constant_evol)
 
 xb1 <- barplot(height = constant_tp, ylim = c(-1.5,2), beside = TRUE,
-               main="\\textbf{(A)}", yaxt="n", border = NA)
+               main="\\textbf{(A)}", yaxt="n", border = NA, col = barcol )
+legend(x = "bottomleft", legend = c("Selection differential", "Genetic differential", "Evolution"),
+              bty = "o",
+       col = c(barcol,"black"),
+       lty = c(0, 0, 1), lwd = c(0, 0, 5),
+       pch = c(22, 22, NA),
+       pt.bg = c(barcol, NA),
+       pt.cex = 3, cex=1.5)
 axis(side=2, at = c(-1,0,1,2))
 axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
      labels = FALSE,tick = TRUE)
@@ -213,7 +222,8 @@ abline(h=0)
 lines(x=seq(from=min(xb1), to=max(xb1), length.out = nyears), y=cumulative_constant)
 box(which = "plot", lty = "solid")
 ### Graph fluctuation
-par(mar=c(3, 4, 2, 1) + 0.1)
+par(mar=c(3, 3, 2, 2) + 0.1)
+
 flu_selcov <- c(1.2,0.82,0.6,0.94,1.3,0.65)
 flu_evol <- flu_selcov * h2
 
@@ -222,11 +232,10 @@ flu_tp <- as.matrix(rbind(flu_selcov, flu_evol))
 cumulative_flu <- cumsum(flu_evol)
 
 xb2 <- barplot(height = flu_tp, ylim = c(-1.5,2), beside = TRUE,
-               main="\\textbf{(B)}", yaxt="n", border = NA)
-axis(side=2, at = c(-1,0,1,2))
+               main="\\textbf{(B)}", yaxt="n", border = NA, col = barcol )
+axis(side=2, at = c(-1,0,1,2), labels = FALSE, tick = TRUE)
 axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
      labels = FALSE,tick = TRUE)
-mtext(text = "Differential", side = 2, line = 2, cex=3, las=0)
 abline(h=0)
 
 lines(x=seq(from=min(xb2), to=max(xb2), length.out = nyears), y=cumulative_flu)
@@ -242,7 +251,7 @@ rev_tp <- as.matrix(rbind(rev_selcov, rev_evol))
 cumulative_rev <- cumsum(rev_evol)
 
 xb3 <- barplot(height = rev_tp, ylim = c(-1.5,2), beside = TRUE,
-               main="\\textbf{(C)}", yaxt="n", border = NA)
+               main="\\textbf{(C)}", yaxt="n", border = NA, col = barcol )
 axis(side=2, at = c(-1,0,1,2))
 axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
      labels = 1:6,tick = TRUE)
@@ -253,37 +262,9 @@ lines(x=seq(from=min(xb3), to=max(xb3), length.out = nyears), y=cumulative_rev)
 box(which = "plot", lty = "solid")
 mtext(text = "Year", side = 1, line = 2, cex=3)
 
-### legend
-par(mar=c(0, 1, 2,0) + 0.1)
-plot(1, type="n", axes = FALSE, xlab="", ylab="")
-legend(x = "topleft", legend = c("Selection differential", "Genetic differential", "Evolution"),
-              bty = "n",
-       col = c(grey(seq(0.3^2.2, 0.9^2.2, length = 2)^(1/2.2)),"black"),
-       lty = c(0, 0, 1), lwd = c(0, 0, 3),
-       pch = c(22, 22, NA),
-       pt.bg = c(grey(seq(0.3^2.2, 0.9^2.2, length = 2)^(1/2.2)),NA),
-       pt.cex = 3, cex=1.5)
-#cex=1, fill = , xjust=0.5, yjust=0.5, lty=c(0,0,1), lwd = c(0, 0, 1))
 
-### Graph decoupling 
-par(mar=c(3, 1, 2, 4) + 0.1)
-dec_selcov <- c(1.2,0.82,0.6,0.94,1.3,0.65)
-dec_evol <- h2* dec_selcov - 0.4
-
-dec_tp <- as.matrix(rbind(dec_selcov, dec_evol))
-
-cumulative_dec <- cumsum(dec_evol)
-
-xb4 <- barplot(height = dec_tp, ylim = c(-1.5,2), beside = TRUE,
-               main="\\textbf{(D)}", yaxt="n", border = NA)
-axis(side=2, at = c(-1,0,1,2), labels = FALSE, tick = TRUE)
-axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
-     labels = FALSE,tick = TRUE)
-abline(h=0)
-lines(x=seq(from=min(xb4), to=max(xb4), length.out = nyears), y=cumulative_dec)
-box(which = "plot", lty = "solid")
 ### Graph decoupling + flu
-par(mar=c(3, 1, 2, 4) + 0.1)
+par(mar=c(3, 3, 2, 2) + 0.1)
 dec_selcov <- c(0.6,-1.1,-0.8,0.9,-0.22,0.5)
 dec_evol <- 0.3+dec_selcov * h2
 
@@ -291,14 +272,14 @@ dec_tp <- as.matrix(rbind(dec_selcov, dec_evol))
 
 cumulative_dec <- cumsum(dec_evol)
 
-xb4 <- barplot(height = dec_tp, ylim = c(-1.5,2), beside = TRUE,
-               main="\\textbf{(E)}", yaxt="n", border = NA)
+xb5 <- barplot(height = dec_tp, ylim = c(-1.5,2), beside = TRUE,
+               main="\\textbf{(D)}", yaxt="n", border = NA, col = barcol )
 axis(side=2, at = c(-1,0,1,2), labels = FALSE, tick = TRUE)
 axis(side=1, at = seq(from=min(xb1), to=max(xb1), length.out = nyears), 
      labels = 1:6,tick = TRUE)
 abline(h=0)
 
-lines(x=seq(from=min(xb4), to=max(xb4), length.out = nyears), y=cumulative_dec)
+lines(x=seq(from=min(xb5), to=max(xb5), length.out = nyears), y=cumulative_dec)
 box(which = "plot", lty = "solid")
 mtext(text = "Year", side = 1, line = 2,cex = 3)
 @
