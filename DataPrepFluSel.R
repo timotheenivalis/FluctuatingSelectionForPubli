@@ -1,6 +1,6 @@
 #### Pre instructions ####
 setwd(dir = "~/thesis/Mass/FluctuatingSelectionForPubli/")
-setwd(dir = "D:/Documents/GitHub/FluctuatingSelectionForPubli/")
+setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 
 library("pedantics")
 library('lme4')
@@ -41,6 +41,8 @@ YearPheno <- data.frame(ID=as.character(Ind_unique[1]),
                         Sex="Female",
                         Age="A",
                         Mass=0,
+                        BL = 0,
+                        BMI = 0,
                         RelativeJulian=0,
                         Phi=0,
                         Rho=0,
@@ -60,6 +62,10 @@ for (i in 1:length(Ind_unique))
                                                                   RawPheno$Calendar_year==  yearsind[j])][1])
       YearPheno[count,"Mass"] <- mean(RawPheno$Weight[which(RawPheno$ID_Individual==Ind_unique[i] &
                                                               RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
+      YearPheno[count,"BL"] <- 0.001*mean(RawPheno$Body_Length[which(RawPheno$ID_Individual==Ind_unique[i] &
+                                                              RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
+      YearPheno[count,"BMI"] <-  1000*mean(RawPheno$Weight[which(RawPheno$ID_Individual==Ind_unique[i] &
+                                                              RawPheno$Calendar_year==  yearsind[j])] / RawPheno$Body_Length[which(RawPheno$ID_Individual==Ind_unique[i] & RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
       YearPheno[count,"RelativeJulian"] <- mean(RawPheno$RelativeJulian[which(RawPheno$ID_Individual==Ind_unique[i] &
                                                              RawPheno$Calendar_year==  yearsind[j])], na.rm=TRUE)
       YearPheno[count,"Rho"] <- sum(as.character(offsprings) %in% as.character(RawPheno$ID_Individual[RawPheno$Cohort==yearsind[j]]))
@@ -134,11 +140,21 @@ for (i in 1:nrow(YearPheno))
 YearPheno$A1 <- NA
 YearPheno$A2 <- NA
 
+YearPheno$BL1 <- NA
+YearPheno$BL2 <- NA
+
+YearPheno$BMI1 <- NA
+YearPheno$BMI2 <- NA
+
 for (i in 1:nrow(YearPheno))
 {
   if (YearPheno$Year[i] %in% c(2006,2007,2009,2010,2013,2014))
-  { YearPheno$A1[i] <- YearPheno$A[i]}
-  else{YearPheno$A2[i] <- YearPheno$A[i]}
+  { YearPheno$A1[i] <- YearPheno$A[i]
+  YearPheno$BL1[i] <- YearPheno$BL[i]
+  YearPheno$BMI1[i] <- YearPheno$BMI[i]}
+  else{YearPheno$A2[i] <- YearPheno$A[i]
+  YearPheno$BL2[i] <- YearPheno$BL[i]
+  YearPheno$BMI2[i] <- YearPheno$BMI[i]}
 }
 
 YearPheno$RJst <- (YearPheno$RelativeJulian - mean(YearPheno$RelativeJulian))/sd(YearPheno$RelativeJulian)
@@ -166,3 +182,6 @@ for(i in 1:nrow(YearPheno))
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 
+
+plot(YearPheno$BMI, YearPheno$FitnessYear);cor.test(YearPheno$BMI, YearPheno$FitnessYear)
+plot(YearPheno$BL, YearPheno$FitnessYear);cor.test(YearPheno$BL, YearPheno$FitnessYear)
