@@ -9,6 +9,7 @@
 \begin{document}
 
 <<load data, echo=FALSE>>=
+setwd(dir = "C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
 load(file = "EnvSelFluA.RData")
 load(file = "EnvQGA.RData")
 library(xtable)
@@ -159,6 +160,20 @@ arrows(x0 = x, y0=BetasCI[1,],y1=BetasCI[2,],angle = 90,code = 3)
 mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
 
 @
+
+<<BetasColor,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+par(mar=c(4, 6, 1, 1) + 0.1)
+Betas <- matrix(sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),nrow =3, byrow=FALSE)
+BetasCI <- sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)
+
+x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Postive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"), color = c(rgb(59,52,120,maxColorValue = 255),rgb(39,113,93,maxColorValue = 255),rgb(225,156,57,maxColorValue = 255)))
+abline(h=0)
+arrows(x0 = x, y0=BetasCI[1,],y1=BetasCI[2,],angle = 90,code = 3)
+mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
+
+@
+
 
 <<>>=
 posterior.mode(BetaG1 - BetaE1)

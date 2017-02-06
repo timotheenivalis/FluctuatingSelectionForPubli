@@ -21,6 +21,7 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -60,11 +61,17 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: Matrix}}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file 'EnvSelFluA.RData', probable reason 'No such file or directory'}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: coda}}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: ape}}\end{kframe}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file 'EnvQGA.RData', probable reason 'No such file or directory'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in library(xtable): there is no package called 'xtable'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in library(MCMCglmm): there is no package called 'MCMCglmm'}}\end{kframe}
 \end{knitrout}
 
 
@@ -75,18 +82,42 @@
 \begin{alltt}
 \hlkwd{setPar}\hlstd{()}
 \hlkwd{plot}\hlstd{(SelAByYear,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelAByYear),} \hlkwd{max}\hlstd{( CISelAByYear)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{"\textbackslash{}\textbackslash{}textbf\{(A)\} Total selection"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y, xlabel, ylabel, log): object 'SelAByYear' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelAByYear[}\hlnum{1}\hlstd{,],}
        \hlkwc{y1} \hlstd{= CISelAByYear[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrows(x0 = 2006:2015, x1 = 2006:2015, code = 3, y0 = CISelAByYear[1, : object 'CISelAByYear' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0all): object 'm0all' not found}}\begin{alltt}
 \hlstd{lowm0all} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0all): object 'm0all' not found}}\begin{alltt}
 \hlstd{highm0all} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0all)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0all): object 'm0all' not found}}\begin{alltt}
 \hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0all,lowm0all, highm0all, highm0all),}
         \hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.3}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/SelByYear-1} 
-\begin{kframe}\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y): object 'lowm0all' not found}}\begin{alltt}
 \hlcom{#points(x=2006:2015,y=unlist(coefficients(mmRnoCorfitness)$Year["StMass"]), pch=17)}
 \end{alltt}
 \end{kframe}
@@ -97,19 +128,47 @@
 \begin{alltt}
 \hlkwd{setPar}\hlstd{()}
 \hlkwd{plot}\hlstd{(SelAByYearRho,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelAByYearRho),} \hlkwd{max}\hlstd{( CISelAByYearRho)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient on $\textbackslash{}\textbackslash{}rho$"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{"\textbackslash{}\textbackslash{}textbf\{(B)\} Fertility selection"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y, xlabel, ylabel, log): object 'SelAByYearRho' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelAByYearRho[}\hlnum{1}\hlstd{,],}
        \hlkwc{y1} \hlstd{= CISelAByYearRho[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrows(x0 = 2006:2015, x1 = 2006:2015, code = 3, y0 = CISelAByYearRho[1, : object 'CISelAByYearRho' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allRho): object 'm0allRho' not found}}\begin{alltt}
 \hlstd{sm0allRho} \hlkwb{<-} \hlkwd{summary}\hlstd{(m0allRho)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in summary(m0allRho): object 'm0allRho' not found}}\begin{alltt}
 \hlstd{lowm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allRho): object 'm0allRho' not found}}\begin{alltt}
 \hlstd{highm0allRho} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allRho)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allRho): object 'm0allRho' not found}}\begin{alltt}
 \hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),}
         \hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.5}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/SelByYearRho-1} 
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y): object 'lowm0allRho' not found}}\end{kframe}
 \end{knitrout}
 
 
@@ -118,18 +177,42 @@
 \begin{alltt}
 \hlkwd{setPar}\hlstd{()}
 \hlkwd{plot}\hlstd{(SelAByYearPhi,} \hlkwc{x}\hlstd{=}\hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{( CISelAByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{),} \hlkwd{max}\hlstd{( CISelAByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{)),} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Selection gradient on $\textbackslash{}\textbackslash{}phi$"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{"\textbackslash{}\textbackslash{}textbf\{(C)\} Viability selection"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y, xlabel, ylabel, log): object 'SelAByYearPhi' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{x1} \hlstd{=} \hlnum{2006}\hlopt{:}\hlnum{2015}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{y0} \hlstd{= CISelAByYearPhi[}\hlnum{1}\hlstd{,],}
        \hlkwc{y1} \hlstd{= CISelAByYearPhi[}\hlnum{2}\hlstd{,],} \hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{length} \hlstd{=} \hlnum{0.1}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrows(x0 = 2006:2015, x1 = 2006:2015, code = 3, y0 = CISelAByYearPhi[1, : object 'CISelAByYearPhi' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{],} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{lwd}\hlstd{=}\hlnum{5}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allphi): object 'm0allphi' not found}}\begin{alltt}
 \hlstd{lowm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{+}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allphi): object 'm0allphi' not found}}\begin{alltt}
 \hlstd{highm0allphi} \hlkwb{<-} \hlkwd{coefficients}\hlstd{(m0allphi)[}\hlnum{2}\hlstd{]}\hlopt{-}\hlnum{1.96}\hlopt{*}\hlstd{sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coefficients(m0allphi): object 'm0allphi' not found}}\begin{alltt}
 \hlkwd{polygon}\hlstd{(}\hlkwc{x}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2005}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2005}\hlstd{),}\hlkwc{y}\hlstd{=}\hlkwd{c}\hlstd{(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),}
         \hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.5}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2} \hlstd{)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/SelByYearPhi-1} 
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y): object 'lowm0allphi' not found}}\end{kframe}
 \end{knitrout}
 Correlation fertility viability
 \begin{knitrout}
@@ -137,20 +220,9 @@ Correlation fertility viability
 \begin{alltt}
 \hlkwd{cor.test}\hlstd{(YearPheno}\hlopt{$}\hlstd{Phi,YearPheno}\hlopt{$}\hlstd{Rho)}
 \end{alltt}
-\begin{verbatim}
-## 
-## 	Pearson's product-moment correlation
-## 
-## data:  YearPheno$Phi and YearPheno$Rho
-## t = -1.9473, df = 1292, p-value = 0.05171
-## alternative hypothesis: true correlation is not equal to 0
-## 95 percent confidence interval:
-##  -0.1082724891  0.0003989614
-## sample estimates:
-##         cor 
-## -0.05409695
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in cor.test(YearPheno\$Phi, YearPheno\$Rho): object 'YearPheno' not found}}\end{kframe}
 \end{knitrout}
 
 \begin{knitrout}
@@ -161,44 +233,64 @@ Correlation fertility viability
 \hlstd{BetaGlm}\hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0all}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0allRho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(sm0allphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste(round(sm0all\$coefficients[2, 1], rounding), "{} ("{}, round(sm0all\$coefficients[2, : object 'sm0all' not found}}\begin{alltt}
 \hlstd{SDyears} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sd}\hlstd{(SelAByYear),}\hlkwd{sd}\hlstd{(SelAByYearRho),}\hlkwd{sd}\hlstd{(SelAByYearPhi,} \hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'SelAByYear' not found}}\begin{alltt}
 \hlstd{SEyears} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{mean}\hlstd{(SeSelAByYear),} \hlkwd{mean}\hlstd{(SeSelAByYearRho),}\hlkwd{mean}\hlstd{(SeSelAByYearPhi,}\hlkwc{na.rm}\hlstd{=T))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean(SeSelAByYear): object 'SeSelAByYear' not found}}\begin{alltt}
 \hlstd{BetaGLMM} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
             \hlkwd{paste}\hlstd{(}\hlkwd{round}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{" ("}\hlstd{,}\hlkwd{round}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding ),}\hlstr{")"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste(round(smmARnoCorfitness\$coefficients[2, 1], rounding), : object 'smmARnoCorfitness' not found}}\begin{alltt}
 \hlstd{SigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
             \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
 \hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'smmARnoCorfitness' not found}}\begin{alltt}
 \hlstd{SigRat} \hlkwb{<-} \hlkwd{c}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmARnoCorfitness}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
             \hlstd{smmRnoCorrho}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorrho}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)),}
             \hlstd{smmRnoCorphi}\hlopt{$}\hlstd{coefficients[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{]}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{as.numeric}\hlstd{(smmRnoCorphi}\hlopt{$}\hlstd{varcor}\hlopt{$}\hlstd{Year.1)))}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'smmARnoCorfitness' not found}}\begin{alltt}
 \hlstd{psigmaA} \hlkwb{<-} \hlkwd{c}\hlstd{(fitnessAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, RhoAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{, PhiAanova}\hlopt{$}\hlstd{`Pr(>Chisq)`[}\hlnum{2}\hlstd{]}\hlopt{/}\hlnum{2}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'fitnessAanova' not found}}\begin{alltt}
 \hlstd{confsigma} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmARnoCorfitness[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
                \hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorrho[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorrho[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{),}
                \hlkwd{paste}\hlstd{(}\hlstr{"["}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorphi[}\hlnum{2}\hlstd{,}\hlnum{1}\hlstd{],rounding),}\hlstr{";"}\hlstd{,}\hlkwd{round}\hlstd{(CImmRnoCorphi[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{],rounding),}\hlstr{"]"}\hlstd{,}\hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{))}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}["{}, round(CImmARnoCorfitness[2, 1], rounding), "{};"{}, round(CImmARnoCorfitness[2, : object 'CImmARnoCorfitness' not found}}\begin{alltt}
 \hlstd{TabSel} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{BetaGlm} \hlstd{= BetaGlm,} \hlkwc{B}\hlstd{=SDyears,} \hlkwc{C}\hlstd{=SEyears ,} \hlkwc{D}\hlstd{=BetaGLMM ,} \hlkwc{E}\hlstd{=SigmaA,} \hlkwc{DD} \hlstd{=confsigma,} \hlkwc{EE} \hlstd{=psigmaA,} \hlkwc{FF}\hlstd{=SigRat)}
 \end{alltt}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in data.frame(BetaGlm = BetaGlm, B = SDyears, C = SEyears, D = BetaGLMM, : object 'BetaGlm' not found}}\end{kframe}
 \end{knitrout}
 
-% latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Fri Jul 22 14:40:33 2016
-\begin{table}[ht]
-\centering
-\caption{} 
-\label{Test_table}
-\begingroup\footnotesize
-\begin{tabular}{lrrlrlrr}
-  0.082 (0.028) & 0.167 & 0.097 & 0.036 (0.044) & 0.117 & [0.063;0.218] & 8.1E-06 & 0.309 \\ 
-  0.1 (0.034) & 0.160 & 0.117 & 0.052 (0.044) & 0.111 & [0.053;0.212] & 2.5E-04 & 0.466 \\ 
-  -0.248 (0.089) & 0.484 & 0.319 & -0.217 (0.098) & 0.109 & [0;0.425] & 3.6E-01 & -1.998 \\ 
-  \end{tabular}
-\endgroup
-\end{table}
+\begin{kframe}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in print(xtable(TabSel, digits = c(rep(3, 7), -1, 3), caption = strCaption, : could not find function "{}xtable"{}}}\end{kframe}
 
 %' 
 %' <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
@@ -214,20 +306,14 @@ Correlation between selection and evolution
 \begin{alltt}
 \hlkwd{posterior.mode}\hlstd{(}\hlkwd{as.mcmc}\hlstd{(SelToG))}
 \end{alltt}
-\begin{verbatim}
-##     var1 
-## 0.360992
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}posterior.mode"{}}}\begin{alltt}
 \hlkwd{HPDinterval}\hlstd{(}\hlkwd{as.mcmc}\hlstd{(SelToG))}
 \end{alltt}
-\begin{verbatim}
-##           lower    upper
-## var1 -0.3910723 0.635243
-## attr(,"Probability")
-## [1] 0.95
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}HPDinterval"{}}}\end{kframe}
 \end{knitrout}
  
 \begin{knitrout}
@@ -239,64 +325,35 @@ Correlation between selection and evolution
 \hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{mar}\hlstd{=marr,} \hlkwc{cex}\hlstd{=szgr,} \hlkwc{cex.lab}\hlstd{=szax ,} \hlkwc{cex.axis}\hlstd{=szax,} \hlkwc{lwd}\hlstd{=}\hlnum{2} \hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{)}
 
 \hlstd{bbv} \hlkwb{<-} \hlkwd{boxplot}\hlstd{(bvpairwise,}\hlkwc{ylab}\hlstd{=}\hlstr{"Change in breeding values (g)"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Year"}\hlstd{,} \hlkwc{range} \hlstd{=} \hlnum{1}\hlstd{,}\hlkwc{cex}\hlstd{=}\hlnum{1}\hlstd{)}
-\hlkwd{polygon}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{2006}\hlstd{,}\hlnum{2008}\hlopt{:}\hlnum{2014}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2014}\hlopt{:}\hlnum{2008}\hlstd{,}\hlnum{2006}\hlstd{)} \hlopt{-}\hlnum{2006}\hlstd{,} \hlkwc{y} \hlstd{=} \hlkwd{c}\hlstd{(LowDrift,}\hlkwd{rev}\hlstd{(HighDrit)),}\hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.3}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in boxplot(bvpairwise, ylab = "{}Change in breeding values (g)"{}, xlab = "{}Year"{}, : object 'bvpairwise' not found}}\begin{alltt}
+\hlkwd{polygon}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{2006}\hlstd{,}\hlnum{2008}\hlopt{:}\hlnum{2014}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2016}\hlstd{,}\hlnum{2014}\hlopt{:}\hlnum{2008}\hlstd{,}\hlnum{2006}\hlstd{)} \hlopt{-}\hlnum{2006}\hlstd{,} \hlkwc{y} \hlstd{=} \hlkwd{c}\hlstd{(LowDrift,}\hlkwd{rev}\hlstd{(HighDrit)),}\hlkwc{fillOddEven} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{rgb}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.3}\hlstd{),} \hlkwc{lty}\hlstd{=}\hlnum{2}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in xy.coords(x, y): object 'LowDrift' not found}}\begin{alltt}
 \hlstd{bbv}\hlopt{$}\hlstd{stats}
 \end{alltt}
-\begin{verbatim}
-##              [,1]         [,2]         [,3]         [,4]         [,5]
-## [1,] -0.280501568 -0.257383635 -0.347173588 -0.267832000 -0.357132486
-## [2,] -0.143366410 -0.087176846 -0.178386364 -0.095028840 -0.114692786
-## [3,] -0.067520536 -0.003132208 -0.094707610  0.002214962  0.005447066
-## [4,] -0.003739138  0.086721131 -0.008337006  0.082918931  0.130138872
-## [5,]  0.134012211  0.260359089  0.161244353  0.260692898  0.371425991
-##            [,6]        [,7]         [,8]        [,9]
-## [1,] -0.8321504 -0.17794910 -0.382623528 -0.29096950
-## [2,] -0.4928537  0.06339068 -0.130565493 -0.07342106
-## [3,] -0.3192183  0.19033674 -0.004056911  0.03549705
-## [4,] -0.1519085  0.31816724  0.122591670  0.14822783
-## [5,]  0.1872504  0.57031481  0.374995899  0.36644027
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'bbv' not found}}\begin{alltt}
 \hlstd{bbv}\hlopt{$}\hlstd{group}
 \end{alltt}
-\begin{verbatim}
-##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-##  [36] 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-##  [71] 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-## [106] 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
-## [141] 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
-## [176] 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
-## [211] 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7
-## [246] 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 8 8 8 8
-## [281] 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 9 9 9 9 9 9 9
-## [316] 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-## [351] 9
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'bbv' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/EvolDiff-1} 
-\begin{kframe}\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
 \hlkwd{density}\hlstd{(bvpairwise[,}\hlnum{1}\hlstd{])}
 \end{alltt}
-\begin{verbatim}
-## 
-## Call:
-## 	density.default(x = bvpairwise[, 1])
-## 
-## Data: bvpairwise[, 1] (1000 obs.);	Bandwidth 'bw' = 0.02343
-## 
-##        x                 y           
-##  Min.   :-0.5547   Min.   :0.000192  
-##  1st Qu.:-0.3292   1st Qu.:0.018199  
-##  Median :-0.1036   Median :0.424183  
-##  Mean   :-0.1036   Mean   :1.107278  
-##  3rd Qu.: 0.1219   3rd Qu.:2.109751  
-##  Max.   : 0.3475   Max.   :3.900320
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in density(bvpairwise[, 1]): object 'bvpairwise' not found}}\end{kframe}
 \end{knitrout}
 
 \begin{knitrout}
@@ -305,109 +362,138 @@ Correlation between selection and evolution
 \hlkwd{setPar}\hlstd{()}
 \hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,} \hlnum{6}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
 \hlstd{Betas} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),}\hlkwc{nrow} \hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{byrow}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlstd{BetasCI} \hlkwb{<-} \hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)}
+\end{alltt}
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in match.fun(FUN): object 'posterior.mode' not found}}\begin{alltt}
+\hlstd{BetasCI} \hlkwb{<-} \hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in match.fun(FUN): object 'HPDinterval' not found}}\begin{alltt}
 \hlstd{x} \hlkwb{<-} \hlkwd{barplot}\hlstd{(Betas,} \hlkwc{beside}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{(BetasCI),}\hlkwd{max}\hlstd{(BetasCI)),}\hlkwc{names.arg} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Postive selection years"}\hlstd{,}\hlstr{"Negative selection years"}\hlstd{),} \hlkwc{legend.text} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Phenotypic"}\hlstd{,}\hlstr{"Environmental"}\hlstd{,}\hlstr{"Genetic"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in barplot(Betas, beside = TRUE, ylim = c(min(BetasCI), max(BetasCI)), : object 'Betas' not found}}\begin{alltt}
 \hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
 \hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{= x,} \hlkwc{y0}\hlstd{=BetasCI[}\hlnum{1}\hlstd{,],}\hlkwc{y1}\hlstd{=BetasCI[}\hlnum{2}\hlstd{,],}\hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrows(x0 = x, y0 = BetasCI[1, ], y1 = BetasCI[2, ], angle = 90, : object 'x' not found}}\begin{alltt}
 \hlkwd{mtext}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlstr{"Selection gradients"}\hlstd{,} \hlkwc{line}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{cex}\hlstd{=szax}\hlopt{*}\hlstd{szgr)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/Betas-1} 
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mtext(side = 2, "{}Selection gradients"{}, line = 4, las = 0, cex = szax * : plot.new has not been called yet}}\end{kframe}
 \end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setPar}\hlstd{()}
+\hlkwd{par}\hlstd{(}\hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,} \hlnum{6}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{)} \hlopt{+} \hlnum{0.1}\hlstd{)}
+\hlstd{Betas} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),}\hlkwc{nrow} \hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{byrow}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in match.fun(FUN): object 'posterior.mode' not found}}\begin{alltt}
+\hlstd{BetasCI} \hlkwb{<-} \hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{list}\hlstd{(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in match.fun(FUN): object 'HPDinterval' not found}}\begin{alltt}
+\hlstd{x} \hlkwb{<-} \hlkwd{barplot}\hlstd{(Betas,} \hlkwc{beside}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ylim}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{min}\hlstd{(BetasCI),}\hlkwd{max}\hlstd{(BetasCI)),}\hlkwc{names.arg} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Postive selection years"}\hlstd{,}\hlstr{"Negative selection years"}\hlstd{),} \hlkwc{legend.text} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Phenotypic"}\hlstd{,}\hlstr{"Environmental"}\hlstd{,}\hlstr{"Genetic"}\hlstd{),} \hlkwc{color} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwd{rgb}\hlstd{(}\hlnum{59}\hlstd{,}\hlnum{52}\hlstd{,}\hlnum{120}\hlstd{,}\hlkwc{maxColorValue} \hlstd{=} \hlnum{255}\hlstd{),}\hlkwd{rgb}\hlstd{(}\hlnum{39}\hlstd{,}\hlnum{113}\hlstd{,}\hlnum{93}\hlstd{,}\hlkwc{maxColorValue} \hlstd{=} \hlnum{255}\hlstd{),}\hlkwd{rgb}\hlstd{(}\hlnum{225}\hlstd{,}\hlnum{156}\hlstd{,}\hlnum{57}\hlstd{,}\hlkwc{maxColorValue} \hlstd{=} \hlnum{255}\hlstd{)))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in barplot(Betas, beside = TRUE, ylim = c(min(BetasCI), max(BetasCI)), : object 'Betas' not found}}\begin{alltt}
+\hlkwd{abline}\hlstd{(}\hlkwc{h}\hlstd{=}\hlnum{0}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet}}\begin{alltt}
+\hlkwd{arrows}\hlstd{(}\hlkwc{x0} \hlstd{= x,} \hlkwc{y0}\hlstd{=BetasCI[}\hlnum{1}\hlstd{,],}\hlkwc{y1}\hlstd{=BetasCI[}\hlnum{2}\hlstd{,],}\hlkwc{angle} \hlstd{=} \hlnum{90}\hlstd{,}\hlkwc{code} \hlstd{=} \hlnum{3}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrows(x0 = x, y0 = BetasCI[1, ], y1 = BetasCI[2, ], angle = 90, : object 'x' not found}}\begin{alltt}
+\hlkwd{mtext}\hlstd{(}\hlkwc{side}\hlstd{=}\hlnum{2}\hlstd{,} \hlstr{"Selection gradients"}\hlstd{,} \hlkwc{line}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{las}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{cex}\hlstd{=szax}\hlopt{*}\hlstd{szgr)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mtext(side = 2, "{}Selection gradients"{}, line = 4, las = 0, cex = szax * : plot.new has not been called yet}}\end{kframe}
+\end{knitrout}
+
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{posterior.mode}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaE1)}
 \end{alltt}
-\begin{verbatim}
-##       var1 
-## -0.1234186
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}posterior.mode"{}}}\begin{alltt}
 \hlkwd{HPDinterval}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaE1)}
 \end{alltt}
-\begin{verbatim}
-##           lower       upper
-## var1 -0.2180723 -0.02770633
-## attr(,"Probability")
-## [1] 0.95
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}HPDinterval"{}}}\begin{alltt}
 \hlkwd{mean}\hlstd{((BetaG1} \hlopt{-} \hlstd{BetaE1)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
 \end{alltt}
-\begin{verbatim}
-## [1] 0.006
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean((BetaG1 - BetaE1) > 0): object 'BetaG1' not found}}\begin{alltt}
 \hlkwd{posterior.mode}\hlstd{(BetaG2} \hlopt{-} \hlstd{BetaE2)}
 \end{alltt}
-\begin{verbatim}
-##         var1 
-## -0.009610168
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}posterior.mode"{}}}\begin{alltt}
 \hlkwd{HPDinterval}\hlstd{(BetaG2} \hlopt{-} \hlstd{BetaE2)}
 \end{alltt}
-\begin{verbatim}
-##           lower      upper
-## var1 -0.1379426 0.05755331
-## attr(,"Probability")
-## [1] 0.95
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}HPDinterval"{}}}\begin{alltt}
 \hlkwd{mean}\hlstd{((BetaG2} \hlopt{-} \hlstd{BetaE2)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
 \end{alltt}
-\begin{verbatim}
-## [1] 0.424
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean((BetaG2 - BetaE2) > 0): object 'BetaG2' not found}}\begin{alltt}
 \hlkwd{posterior.mode}\hlstd{(BetaE1} \hlopt{-} \hlstd{BetaE2)}
 \end{alltt}
-\begin{verbatim}
-##       var1 
-## 0.07575993
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}posterior.mode"{}}}\begin{alltt}
 \hlkwd{HPDinterval}\hlstd{(BetaE1} \hlopt{-} \hlstd{BetaE2)}
 \end{alltt}
-\begin{verbatim}
-##           lower     upper
-## var1 0.03828845 0.1372658
-## attr(,"Probability")
-## [1] 0.95
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}HPDinterval"{}}}\begin{alltt}
 \hlkwd{mean}\hlstd{((BetaE1} \hlopt{-} \hlstd{BetaE2)}\hlopt{<}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
 \end{alltt}
-\begin{verbatim}
-## [1] 0
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean((BetaE1 - BetaE2) < 0): object 'BetaE1' not found}}\begin{alltt}
 \hlkwd{posterior.mode}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaG2)}
 \end{alltt}
-\begin{verbatim}
-##         var1 
-## -0.003689573
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}posterior.mode"{}}}\begin{alltt}
 \hlkwd{HPDinterval}\hlstd{(BetaG1} \hlopt{-} \hlstd{BetaG2)}
 \end{alltt}
-\begin{verbatim}
-##            lower      upper
-## var1 -0.08005378 0.07575714
-## attr(,"Probability")
-## [1] 0.95
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}HPDinterval"{}}}\begin{alltt}
 \hlkwd{mean}\hlstd{((BetaG1} \hlopt{-} \hlstd{BetaG2)}\hlopt{>}\hlnum{0}\hlstd{)}\hlopt{*}\hlnum{2}
 \end{alltt}
-\begin{verbatim}
-## [1] 0.908
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in mean((BetaG1 - BetaG2) > 0): object 'BetaG1' not found}}\end{kframe}
 \end{knitrout}
 
 
