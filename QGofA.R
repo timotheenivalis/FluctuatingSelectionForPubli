@@ -1,7 +1,7 @@
 library(MCMCglmm)
 library(MASS)
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
-ped <- read.table(file = "ped.txt", header=TRUE)
+ped <- read.table(file = "C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/ped.txt", header=TRUE)
 
 priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001),G4=list(V=0.1, nu=0.0001)),
                   R=list(V=0.1, nu=0.0001))
@@ -360,5 +360,24 @@ BetaP2 <- covP2 /(mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.animal"]+
                     mcmcBivTwoPeriods$VCV[,"traitA2:traitA2.units"])
 plot(BetaP2)
 
+################################################
+###### Cor G mass /A ####
 
-  
+priorcorG <- list(G=list(G1=list(V=diag(2), nu=1),
+                                G2=list(V=diag(2), nu=1),
+                                G3=list(V=diag(2), nu=1),
+                                G4=list(V=diag(2), nu=1)),
+                         R=list(V=diag(2), nu=1))
+
+mcmcBivCorG <- MCMCglmm(cbind(Mass,A1) ~ trait-1+Sex+Age,
+                              random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(trait):Year,
+                              rcov=~us(trait):units,
+                              prior=priorcorG, family =c("gaussian", "gaussian"),
+                              pedigree=ped,data=YearPheno,verbose=TRUE,nitt=13000,burnin=3000,thin=10)
+summary(mcmcBivCorG)
+
+plot(mcmcBivCorG$VCV[,"traitA1:traitMass.animal"]/sqrt(mcmcBivCorG$VCV[,"traitMass:traitMass.animal"]*mcmcBivCorG$VCV[,"traitA1:traitA1.animal"]))
+posterior.mode(mcmcBivCorG$VCV[,"traitA1:traitMass.animal"]/sqrt(mcmcBivCorG$VCV[,"traitMass:traitMass.animal"]*mcmcBivCorG$VCV[,"traitA1:traitA1.animal"]))
+HPDinterval(as.mcmc(mcmcBivCorG$VCV[300:1000,"traitA1:traitMass.animal"]/sqrt(mcmcBivCorG$VCV[300:1000,"traitMass:traitMass.animal"]*mcmcBivCorG$VCV[300:1000,"traitA1:traitA1.animal"])))
+
+posterior.mode(mcmcBivCorG$VCV[,"traitA1:traitMass.animal"]/sqrt(mcmcBivCorG$VCV[,"traitMass:traitMass.animal"]*mcmcBivCorG$VCV[,"traitA1:traitA1.animal"]))
