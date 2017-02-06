@@ -226,9 +226,21 @@ library(MASS)
 ############################################################################################################
 ######################################### Asymptotic mass analysis #########################################
 ############################################################################################################
+setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 library(MASS)
 library(lme4)
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
+
+head(YearPheno)
+
+repetM <- lmer(formula = Mass ~ 1 + Sex + RelativeJulian + I(RelativeJulian^2) + (1|ID) + (1|Year), data=YearPheno[YearPheno$Age=="A",])
+summary(repetM)
+
+6.76/(11.2+6.76)
+7.1/(7.1+10.8)
+9.5/(9.5+11.3)
+getME(object = repetM, "Lambda")
+vcov(repetM)
 
 SelAByYear <- vector(length = 2015-2006)
 SeSelAByYear <- vector(length = 2015-2006)
