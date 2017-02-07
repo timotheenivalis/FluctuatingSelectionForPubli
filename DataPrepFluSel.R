@@ -158,12 +158,17 @@ for (i in 1:nrow(YearPheno))
 {
   if (YearPheno$Year[i] %in% c(2006,2007,2009,2010,2013,2014))
   { YearPheno$A1[i] <- YearPheno$A[i]
-  YearPheno$BL1[i] <- YearPheno$BL[i]
-  YearPheno$BMI1[i] <- YearPheno$BMI[i]}
-  else{YearPheno$A2[i] <- YearPheno$A[i]
-  YearPheno$BL2[i] <- YearPheno$BL[i]
-  YearPheno$BMI2[i] <- YearPheno$BMI[i]}
-}
+  } else{YearPheno$A2[i] <- YearPheno$A[i]
+  }
+  
+  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2009, 2013, 2014))
+    {YearPheno$BL1[i] <- YearPheno$BL[i]
+    YearPheno$BMI1[i] <- YearPheno$BMI[i]
+    }else{
+      YearPheno$BL2[i] <- YearPheno$BL[i]
+      YearPheno$BMI2[i] <- YearPheno$BMI[i]
+      }
+  }
 
 YearPheno$RJst <- (YearPheno$RelativeJulian - mean(YearPheno$RelativeJulian))/sd(YearPheno$RelativeJulian)
 YearPheno$RJ2st <- (YearPheno$RelativeJulian^2 - mean(YearPheno$RelativeJulian^2))/sd(YearPheno$RelativeJulian^2)
