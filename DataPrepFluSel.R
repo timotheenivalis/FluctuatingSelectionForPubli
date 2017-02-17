@@ -154,6 +154,12 @@ YearPheno$BL2 <- NA
 YearPheno$BMI1 <- NA
 YearPheno$BMI2 <- NA
 
+YearPheno$BMIPhi1 <- NA
+YearPheno$BMIPhi2 <- NA
+
+YearPheno$BMIRho1 <- NA
+YearPheno$BMIRho2 <- NA
+
 for (i in 1:nrow(YearPheno))
 {
   if (YearPheno$Year[i] %in% c(2006,2007,2009,2010,2013,2014))
@@ -161,13 +167,25 @@ for (i in 1:nrow(YearPheno))
   } else{YearPheno$A2[i] <- YearPheno$A[i]
   }
   
-  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2009, 2013, 2014))
+  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2009, 2013, 2014))#positive selection
     {YearPheno$BL1[i] <- YearPheno$BL[i]
     YearPheno$BMI1[i] <- YearPheno$BMI[i]
     }else{
       YearPheno$BL2[i] <- YearPheno$BL[i]
       YearPheno$BMI2[i] <- YearPheno$BMI[i]
-      }
+    }
+  if (YearPheno$Year[i] %in% c(2007, 2008, 2011, 2013, 2014))#positive selection
+  {
+  YearPheno$BMIPhi1[i] <- YearPheno$BMI[i]
+  }else{
+    YearPheno$BMIPhi2[i] <- YearPheno$BMI[i]
+  }
+  if (YearPheno$Year[i] %in% c(2006, 2007, 2009, 2012, 2014))#positive selection
+  {
+  YearPheno$BMIRho1[i] <- YearPheno$BMI[i]
+  }else{
+    YearPheno$BMIRho2[i] <- YearPheno$BMI[i]
+  }
   }
 
 YearPheno$RJst <- (YearPheno$RelativeJulian - mean(YearPheno$RelativeJulian))/sd(YearPheno$RelativeJulian)

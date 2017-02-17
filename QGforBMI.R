@@ -1,3 +1,5 @@
+
+setwd("C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
 library(MCMCglmm)
 library(MASS)
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
@@ -185,7 +187,7 @@ priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
                                 G4=list(V=diag(1), nu=0.001)),
                          R=list(V=Rcovvar, nu=1))
 
-mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,BMI1,BMI2) ~ trait-1+at.level(trait,c(1)):(Sex*Age+Age*RJst)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst),
+mcmcBivTwoPeriods <- MCMCglmm(cbind(Fitness,BMI1,BMI2) ~ trait-1+at.level(trait,c(1)):(Sex*Age+RJst)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst),
                               random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(1))):Year,
                               rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
                               prior=priorTwoPeriodsA,
@@ -210,6 +212,7 @@ plot(BEBMI1 -BEBMI2)
 
 ###SURVIVAL
 
+
 vAF <- 0.1
 vAM <- posterior.mode(mcmcBLUPSBMI0$VCV[,"animal"])
 Gcovvar <- diag(3)*(vAM)
@@ -233,15 +236,26 @@ Rcovvar[3,3] <- 1
 priorTwoPeriodsPHI <- list(G=list(G1=list(V=Gcovvar, nu=1),
                                 G2=list(V=Icovvar, nu=1),
                                 G3=list(V=Mcovvar, nu=1),
-                                G4=list(V=diag(1), nu=0.001)),
+                                G4=list(V=diag(3), nu=1)),
                          R=list(V=Rcovvar, nu=1, fix=3))
 
-mcmcBivTwoPeriodsPHI <- MCMCglmm(cbind(BMI1,BMI2,Phi) ~ trait-1+at.level(trait,c(1)):(Sex*Age)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst),
+mcmcBivTwoPeriodsPHI <- MCMCglmm(cbind(BMIPhi1,BMIPhi2,Phi) ~ trait-1+at.level(trait,c(3)):(Sex*Age+RJst)+at.level(trait,c(1:2)):(Sex*Age+Age*RJst),
                               random=~us(trait):animal+us(trait):ID+us(trait):Mother+idh(trait):Year,
                               rcov=~us(trait):units, family=c(rep("gaussian",2), "categorical"),
                               prior=priorTwoPeriodsPHI,
                               pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500)
 
 summary(mcmcBivTwoPeriodsPHI)
+save.image("~/thesis/Mass/FluctuatingSelectionForPubli/EnvQGBMI.RData")
+
+
+###Repro
+mcmcBivTwoPeriodsRHO <- MCMCglmm(cbind(Rho,BMIRho1,BMIRho2) ~ trait-1+at.level(trait,c(1)):(Sex*Age+RJst)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst),
+                              random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(1))):Year,
+                              rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                              prior=priorTwoPeriodsA,
+                              pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500)
+
+summary(mcmcBivTwoPeriods)
 save.image("~/thesis/Mass/FluctuatingSelectionForPubli/EnvQGBMI.RData")
 

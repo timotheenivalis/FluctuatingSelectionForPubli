@@ -1,3 +1,4 @@
+library(lme4)
 setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
 head(YearPheno)
@@ -6,9 +7,9 @@ repetBMI_A <- lmer(formula =BMI ~ 1 + (1|ID) + (1|Year), data=YearPheno[YearPhen
 summary(repetBMI_A)
 576.11/(576.11+508.32)#R2 in adults
 
-repetBMI <- lmer(formula =BMI ~ 1 + Age + (1|ID) + (1|Year), data=YearPheno)
+repetBMI <- lmer(formula =BMI ~ 1 + Age * RelativeJulian+ Age*I(RelativeJulian^2) + (1|ID) + (1|Year), data=YearPheno)
 summary(repetBMI)
-505.86/(505.86+753.02)#R2 at all ages
+434.78/(434.78+789.91)#R2 at all ages
 
 repetBMIst <- lmer(formula =BMIst ~ 1 + Age + (1|ID) + (1|Year), data=YearPheno)
 summary(repetBMIst)
