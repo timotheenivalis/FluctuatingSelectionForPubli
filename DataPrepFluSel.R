@@ -195,6 +195,22 @@ for(i in 1:nrow(YearPheno))
 }
 
 
+## New fitness measures
+#Zygotes
+YearPheno$PhiZ <- YearPheno$Phi
+YearPheno$RhoZ <- NA
+for(i in 1:nrow(YearPheno))
+{
+  focalyear <- YearPheno$Year[i]
+  nextrepro <- YearPheno$Rho[YearPheno$ID==YearPheno$ID[i] & YearPheno$Year==(focalyear+1)]
+  YearPheno$RhoZ[i]<- ifelse(length(nextrepro)==0, 0, nextrepro)
+}
+
+YearPheno$FitnessZ <- YearPheno$RhoZ + 2*YearPheno$PhiZ
+
+#Recruits
+
+
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
 
 hist(YearPheno$BMI[YearPheno$Year==2006])
