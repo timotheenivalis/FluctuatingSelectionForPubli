@@ -1,7 +1,10 @@
 library(MCMCglmm)
 library(MASS)
+setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
 ped <- read.table(file = "ped.txt", header=TRUE)
+
+
 
 summary(lmer(formula =BMI ~ 1 + Sex *Age+Age*RJst+(1|ID) + (1|Year), data=YearPheno, REML=FALSE))
 
