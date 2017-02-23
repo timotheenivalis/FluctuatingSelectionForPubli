@@ -1,3 +1,4 @@
+library(lme4)
 setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
 head(YearPheno)
@@ -6,9 +7,9 @@ repetBMI_A <- lmer(formula =BMI ~ 1 + (1|ID) + (1|Year), data=YearPheno[YearPhen
 summary(repetBMI_A)
 576.11/(576.11+508.32)#R2 in adults
 
-repetBMI <- lmer(formula =BMI ~ 1 + Age + (1|ID) + (1|Year), data=YearPheno)
+repetBMI <- lmer(formula =BMI ~ 1 + Age * RelativeJulian+ Age*I(RelativeJulian^2) + (1|ID) + (1|Year), data=YearPheno)
 summary(repetBMI)
-505.86/(505.86+753.02)#R2 at all ages
+434.78/(434.78+789.91)#R2 at all ages
 
 repetBMIst <- lmer(formula =BMIst ~ 1 + Age + (1|ID) + (1|Year), data=YearPheno)
 summary(repetBMIst)
@@ -21,7 +22,7 @@ SeSelAByYear <- vector(length = 2015-2006)
 CISelAByYear <- matrix(NA,nrow=2,ncol=2015-2005)
 for (t in 2006:2015)
 {
-  m0 <- glm(Fitness ~ 1 + BMIst + Sex * Age , data=YearPheno[YearPheno$Year==t,], family=quasipoisson)
+  m0 <- glm(Fitness ~ 1 + BMIst + Sex * Age + Age*RJst, data=YearPheno[YearPheno$Year==t,], family=quasipoisson, na.action = "na.omit")
   SelAByYear[t-2005] <- coefficients(m0)[2]
   sm0<-summary(m0)
   SeSelAByYear[t-2005] <- sm0$coefficients[2,2]
@@ -42,10 +43,10 @@ polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2)
 
 
-mmARRfitness <- glmer(Fitness ~ 1 + BMIst + Sex *  Age +(1+BMIst|Year),
+mmARRfitness <- glmer(Fitness ~ 1 + BMIst + Sex *  Age  + Age*RJst +(1+BMIst|Year),
                       data=YearPheno, family=poisson, na.action = "na.omit")
-mmARIfitness <- glmer(Fitness ~ 1 + BMIst + Sex * Age  +(1|Year), data=YearPheno, family=poisson, na.action = "na.omit")
-mmARnoCorfitness <- glmer(Fitness ~ 1 + BMIst + Sex *  Age  +(1|Year) + (0+BMIst|Year),
+mmARIfitness <- glmer(Fitness ~ 1 + BMIst + Sex * Age  + Age*RJst +(1|Year), data=YearPheno, family=poisson, na.action = "na.omit")
+mmARnoCorfitness <- glmer(Fitness ~ 1 + BMIst + Sex *  Age  + Age*RJst +(1|Year) + (0+BMIst|Year),
                           data=YearPheno, family=poisson, na.action = "na.omit")
 
 summary(mmARRfitness)
@@ -64,7 +65,7 @@ CISelAByYearPhi <- matrix(NA,nrow=2,ncol=2015-2005)
 
 for (t in 2006:2014)
 {
-  m0 <- glm(Phi ~ 1 + BMIst + Sex *Age , data=YearPheno[YearPheno$Year==t,], family=binomial)
+  m0 <- glm(Phi ~ 1 + BMIst + Sex *Age  + Age*RJst , data=YearPheno[YearPheno$Year==t,], family=binomial, na.action = "na.omit")
   SelAByYearPhi[t-2005] <- coefficients(m0)[2]
   CISelAByYearPhi[,t-2005]<-as.numeric(confint(m0,parm="BMIst"))
   sm0<-summary(m0)
@@ -76,7 +77,7 @@ plot(SelAByYearPhi, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gr
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhi[1,],
        y1 = CISelAByYearPhi[2,], angle = 90,length = 0.1)
-m0allphi <- glm(Phi ~ 1 + BMIst + Sex *Age , data=YearPheno[YearPheno$Year<2015,], family=binomial)
+m0allphi <- glm(Phi ~ 1 + BMIst + Sex *Age + Age*RJst, data=YearPheno[YearPheno$Year<2015,], family=binomial, na.action = "na.omit")
 abline(h=coefficients(m0allphi)[2], lty=2)
 sm0allphi <- summary(m0allphi)
 lowm0allphi <- coefficients(m0allphi)[2]+1.96*sm0allphi$coefficients[2,2]
@@ -84,8 +85,8 @@ highm0allphi <- coefficients(m0allphi)[2]-1.96*sm0allphi$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
 
-mmRIphi <- glmer(Phi ~ 1 + BMIst + Sex * Age +(1|Year), data=YearPheno, family=binomial)
-mmRnoCorphi <- glmer(Phi ~ 1 + BMIst + Sex * Age + (1|Year) + (0+BMIst|Year), data=YearPheno, family=binomial)
+mmRIphi <- glmer(Phi ~ 1 + BMIst + Sex * Age + Age*RJst +(1|Year), data=YearPheno, family=binomial, na.action = "na.omit")
+mmRnoCorphi <- glmer(Phi ~ 1 + BMIst + Sex * Age + Age*RJst+  (1|Year) + (0+BMIst|Year), data=YearPheno, family=binomial, na.action = "na.omit")
 smmRnoCorphi <- summary(mmRnoCorphi)
 CImmRnoCorphi <- confint(mmRnoCorphi)
 
@@ -98,7 +99,7 @@ SeSelAByYearRho <- vector(length = 2015-2005)
 CISelAByYearRho <- matrix(NA,nrow=2,ncol=2015-2005)
 for (t in 2006:2015)
 {
-  m0 <- glm(Rho ~ 1 + BMIst + Sex , data=YearPheno[YearPheno$Year==t & YearPheno$Age=="A",], family=quasipoisson)
+  m0 <- glm(Rho ~ 1 + BMIst + Sex + RJst, data=YearPheno[YearPheno$Year==t & YearPheno$Age=="A",], family=quasipoisson, na.action = "na.omit")
   CISelAByYearRho[,t-2005]<-as.numeric(confint(m0,parm="BMIst"))
   SelAByYearRho[t-2005] <- coefficients(m0)[2]
   sm0<-summary(m0)
@@ -108,7 +109,7 @@ plot(SelAByYearRho, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gr
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearRho[1,],
        y1 = CISelAByYearRho[2,], angle = 90,length = 0.1)
-m0allRho <- glm(Rho ~ 1 + BMIst + Sex , data=YearPheno[YearPheno$Age=="A",], family=quasipoisson)
+m0allRho <- glm(Rho ~ 1 + BMIst + Sex +RJst, data=YearPheno[YearPheno$Age=="A",], family=quasipoisson, na.action = "na.omit")
 abline(h=coefficients(m0allRho)[2], lty=2)
 sm0allRho <- summary(m0allRho)
 lowm0allRho <- coefficients(m0allRho)[2]+1.96*sm0allRho$coefficients[2,2]
@@ -116,9 +117,9 @@ highm0allRho <- coefficients(m0allRho)[2]-1.96*sm0allRho$coefficients[2,2]
 polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2)
 
-summary(glm(Rho ~ 1 + BMIst + Sex  , data=YearPheno[YearPheno$Age=="A",], family=poisson))
-mmRIrho <- glmer(Rho ~ 1  + BMIst + Sex  +(1|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson)
-mmRnoCorrho <- glmer(Rho ~ 1  + BMIst + Sex  +(1|Year)+(0+BMIst|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson)
+summary(glm(Rho ~ 1 + BMIst + Sex  +RJst, data=YearPheno[YearPheno$Age=="A",], family=poisson, na.action = "na.omit"))
+mmRIrho <- glmer(Rho ~ 1  + BMIst + Sex  +(1|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson, na.action = "na.omit")
+mmRnoCorrho <- glmer(Rho ~ 1  + BMIst + Sex  +(1|Year)+(0+BMIst|Year), data=YearPheno[YearPheno$Age=="A",], family=poisson, na.action = "na.omit")
 
 var(SelAByYear)
 var(SelAByYearRho+SelAByYearPhi, na.rm = T)
