@@ -299,4 +299,7 @@ box(which = "plot", lty = "solid")
 mtext(text = "Year", side = 1, line = 2,cex = 3)
 @
 
+<<zygotetozygote,dev="tikz",fig.height=14,fig.width=16>>=
+@
+
 \end{document}
