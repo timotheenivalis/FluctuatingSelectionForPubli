@@ -240,3 +240,4 @@ plot(YearPheno$BMI[YearPheno$Year==2006], YearPheno$FitnessYear[YearPheno$Year==
 plot(YearPheno$BMI, YearPheno$FitnessYear);cor.test(YearPheno$BMI, YearPheno$FitnessYear)
 
 plot(YearPheno$BL, YearPheno$FitnessYear);cor.test(YearPheno$BL, YearPheno$FitnessYear)
+
