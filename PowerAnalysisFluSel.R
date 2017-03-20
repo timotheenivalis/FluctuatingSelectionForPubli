@@ -1,10 +1,10 @@
 library(lme4)
-setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
+#setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
 
 
 #### Global options ####
-nbsimuls <- 5 # number of replicates for every scenario
+nbsimuls <- 500 # number of replicates for every scenario
 SD_Beta_Levels <- c(0, 0.1, 0.5, 1, 2, 4) #levels of standard deviation over median value for selection
 realindnumb <- tapply(YearPheno$ID, YearPheno$Year, function(x){length(unique(x))}) # the sample size per-year
 realindnumbRho <- tapply(YearPheno$ID[YearPheno$Phi==1], YearPheno$Year[YearPheno$Phi==1], function(x){length(unique(x))}) # the sample size per-year for reproduction
@@ -24,7 +24,7 @@ for (vsr in 1:length(SDSel_fitness))
   
   for (j in 1:nbsimuls)
   {
-    nyears <- length(realindnumb)
+    nyears <- 10
     nindyear <- realindnumb
     inddata <- c(NA, NA, NA)
     for (i in 1:nyears)
@@ -64,7 +64,7 @@ for (vsr in 1:length(SDSel_rho))
   
   for (j in 1:nbsimuls)
   {
-    nyears <- length(realindnumbRho)
+    nyears <- 10
     nindyear <- realindnumb
     inddata <- c(NA, NA, NA)
     for (i in 1:nyears)
@@ -120,8 +120,8 @@ for (vsr in 1:length(SDSel_phi))
     inddata <- inddata[!is.na(inddata[,1]),]
     inddata <- as.data.frame(inddata)
     
-    mfull <- glmer(formula = phi ~ phen + (1+phen|year), data=inddata, family=poisson)
-    mnull <- glmer(formula = phi ~ phen + (1|year), data=inddata, family=poisson)
+    mfull <- glmer(formula = phi ~ phen + (1+phen|year), data=inddata, family=binomial)
+    mnull <- glmer(formula = phi ~ phen + (1|year), data=inddata, family=binomial)
     amn<-anova(mfull, mnull)
     pvalues[j] <- amn$`Pr(>Chisq)`[2]
   }
@@ -129,3 +129,6 @@ for (vsr in 1:length(SDSel_phi))
 }
 
 plot(x=SD_Beta_Levels, y=unlist(lapply(fitnesspv, function(x){mean(x<0.075)}))) #1.5 df
+
+
+save.image(file = "PowerAnalysisSelection.RData")
