@@ -4,7 +4,7 @@ library(MCMCglmm)
 library(MASS)
 setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 YearPheno <- read.table(file = "YearPheno.txt", header=T)
-ped <- read.table(file = "ped.txt", header=TRUE)
+ped <- read.table(file = "ped.txt", header=TRUE, stringsAsFactors = FALSE)
 
 
 
@@ -262,3 +262,90 @@ mcmcBivTwoPeriodsRHO <- MCMCglmm(cbind(Rho,BMIRho1,BMIRho2) ~ trait-1+at.level(t
 summary(mcmcBivTwoPeriods)
 save.image("~/thesis/Mass/FluctuatingSelectionForPubli/EnvQGBMI.RData")
 
+
+#### MODEL WITH GENETIC GROUPS ####
+library(MCMCglmm)
+library(nadiv)
+
+ped <- read.table(file = "ped.txt", header=TRUE, stringsAsFactors = FALSE)
+
+pedgg <- ped
+pedgg$GG <- NA
+nonePar <- which(is.na( pedgg$dam) & is.na(pedgg$sire))
+firstGen <- c(grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN05"), grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN06"))
+
+pedgg$GG[nonePar[nonePar %in% firstGen]] <- "base"
+pedgg$GG[nonePar[!nonePar %in% firstGen]] <- "Imm"
+
+pedgg[nonePar, 2:3] <- as.character(pedgg[nonePar, "GG"])
+
+pedgg[is.na(pedgg[,2]),2] <- "Imm"
+pedgg[is.na(pedgg[,3]),3] <- "Imm"
+
+Qgg <- ggcontrib(pedigree = pedgg[,1:3], ggroups = c("base", "Imm"))
+
+plot(Qgg[,1])
+points(Qgg[,2], col="red")
+
+
+YearPheno$GGImm <- NA
+for (i in 1:nrow(YearPheno))
+{
+  YearPheno$GGImm[i] <- Qgg[YearPheno$animal[i],2]
+}
+
+priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001),G4=list(V=0.1, nu=0.0001)),
+                  R=list(V=0.1, nu=0.0001))
+
+
+mcmcBLUPSBMI0_GG <- MCMCglmm(BMI ~Sex*Age+Age*RJst + GGImm,
+                          random=~animal+ID+Mother+Year,
+                          rcov=~units,
+                          prior=priorBLUPS0,
+                          pedigree=ped,data=YearPheno,verbose=TRUE,nitt=120000,burnin=20000,thin=100,pr=TRUE)
+summary(mcmcBLUPSBMI0_GG)
+
+BV<-mcmcBLUPSBMI0_GG$Sol[,grep(pattern = "animal*",x = colnames(mcmcBLUPSBMI0_GG$Sol))]
+animalID<-substr(x = colnames(BV),start = 8,stop=nchar(colnames(BV)))
+colnames(BV) <- animalID
+
+pmBV<-data.frame(animalID,posterior.mode(BV))
+names(pmBV)<-c("ID","pBV")
+mpmBV<-merge(x = pmBV,y = YearPheno,by="ID",all.y=TRUE, all.x = FALSE)
+plot(mpmBV$Year,mpmBV$pBV)
+
+BVextend <- BV[,mpmBV$ID]# duplicates posterior distribution for ind present in multiple years
+
+lmBV<-as.mcmc(apply(BVextend,MARGIN = 1,function(x){coef(lm(x~1+mpmBV$Year))[2]}))
+
+
+library(mgcv)
+
+bvplotlist <- list()
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  gm0 <- gam(bv~1+s(t),data=damdat)
+  plotgm0 <- plot.gam(gm0,n = 20)
+  bvplotlist[[i]] <- cbind(plotgm0[[1]]$x,plotgm0[[1]]$fit)
+}
+plot(x=0,xlim=c(2006,2016),ylim=c(-5,5),type="n")
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2]-x[1,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+abline(h=0)
+
+plot(x=0,xlim=c(2006,2016),ylim=c(-5,5),type="n")
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+abline(h=0)
+
+boxplot(bvpairwise)
+abline(h=0)
+
+bvchange <- vector()
+for(i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  bvchange[i] <- mean(damdat$bv[damdat$t==2014])-mean(damdat$bv[damdat$t==2006])
+}
+plot(as.mcmc(bvchange))
+HPDinterval(as.mcmc(bvchange))
+mean(as.mcmc(bvchange)>0)
