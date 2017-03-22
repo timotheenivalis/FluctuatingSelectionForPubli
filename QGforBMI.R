@@ -349,3 +349,15 @@ for(i in 1:nrow(BVextend))
 plot(as.mcmc(bvchange))
 HPDinterval(as.mcmc(bvchange))
 mean(as.mcmc(bvchange)>0)
+
+bvrebound <- vector()
+bvrebounddiff <- vector()
+for(i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  lmrebound <- lm(bv ~ 1 + t + I(t^2), data=damdat)
+  bvrebound[i] <- coefficients(lmrebound)[3]
+  bvrebounddiff[i] <- mean(damdat$bv[damdat$t==2016])-mean(damdat$bv[damdat$t==2014])
+}
+plot(bvrebounddiff)
+mean(bvrebounddiff<0)

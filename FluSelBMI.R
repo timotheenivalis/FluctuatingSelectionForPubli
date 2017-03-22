@@ -144,13 +144,16 @@ plot(tapply(X = YearPheno$BMI, INDEX = YearPheno$Year, function(x){sd(x,na.rm=TR
 ################################################################################################%
 ################################### ZYGOTE SELECTION ############################################
 ################################################################################################%
-
+library(lme4)
+setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
+YearPheno <- read.table(file = "YearPheno.txt", header=T)
+head(YearPheno)
 ######### Selection #####
 
-ZSelAByYear <- vector(length = 2016-2006)
-ZSeSelAByYear <- vector(length = 2016-2006)
-ZCISelAByYear <- matrix(NA,nrow=2,ncol=2016-2005)
-for (t in 2006:2016)
+ZSelAByYear <- vector(length = 2015-2006)
+ZSeSelAByYear <- vector(length = 2015-2006)
+ZCISelAByYear <- matrix(NA,nrow=2,ncol=2015-2005)
+for (t in 2006:2015)
 {
   Zm0 <- glm(FitnessZ ~ 1 + BMIst + Sex * Age , data=YearPheno[YearPheno$Year==t,], family=quasipoisson)
   ZSelAByYear[t-2005] <- coefficients(Zm0)[2]
@@ -160,9 +163,9 @@ for (t in 2006:2016)
     ZCISelAByYear[,t-2005] <- c(ZSelAByYear[t-2005]-1.96*ZSeSelAByYear[t-2005],ZSelAByYear[t-2005]+1.96*ZSeSelAByYear[t-2005])
   }
 }
-plot(ZSelAByYear, x=2006:2016, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
+plot(ZSelAByYear, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
 abline(h=0)
-arrows(x0 = 2006:2016,x1 = 2006:2016,code = 3, y0 = ZCISelAByYear[1,],
+arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = ZCISelAByYear[1,],
        y1 = ZCISelAByYear[2,], angle = 90,length = 0.1)
 Zm0all <- glm(FitnessZ ~ 1 + BMIst + Sex +Age , data=YearPheno, family=quasipoisson)
 abline(h=coefficients(Zm0all)[2], lty=2)
@@ -184,15 +187,17 @@ anova(ZmmARRfitness,ZmmARnoCorfitness)
 anova(ZmmARRfitness,ZmmARIfitness)
 
 ZsmmARnoCorfitness <- summary(ZmmARnoCorfitness)
-ZfitnessAanova <- anova(ZmmARIfitness,ZmmARnoCorfitness)
+ZfitnessAanova <- anova(ZmmARIfitness,ZmmARRfitness)
+ZfitnessAanova$`Pr(>Chisq)`*0.75
 
 ZCImmARnoCorfitness <- confint(ZmmARnoCorfitness)
+ZCImmARRfitness <- confint(ZmmARRfitness)
 
 ##### Fitness components ####
 #### AD + Juv survival #### SAME AS BEFORE
-SelAByYearPhi <- vector(length = 2016-2005)
-SeSelAByYearPhi <- vector(length = 2016-2005)
-CISelAByYearPhi <- matrix(NA,nrow=2,ncol=2016-2005)
+SelAByYearPhi <- vector(length = 2015-2005)
+SeSelAByYearPhi <- vector(length = 2015-2005)
+CISelAByYearPhi <- matrix(NA,nrow=2,ncol=2015-2005)
 
 for (t in 2006:2015)
 {
@@ -202,11 +207,10 @@ for (t in 2006:2015)
   sm0<-summary(m0)
   SeSelAByYearPhi[t-2005] <- sm0$coefficients[2,2]
 }
-SelAByYearPhi[11] <- NA
-SeSelAByYearPhi[11] <- NA
+
 var(SelAByYearPhi, na.rm = TRUE)
 
-plot(SelAByYearPhi, x=2006:2016, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
+plot(SelAByYearPhi, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhi[1,],
        y1 = CISelAByYearPhi[2,], angle = 90,length = 0.1)
@@ -227,9 +231,9 @@ PhiAanova <- anova(mmRIphi,mmRnoCorphi)
 
 #####  RHO ######
 
-ZSelAByYearRho <- vector(length = 2016-2005)
-ZSeSelAByYearRho <- vector(length = 2016-2005)
-ZCISelAByYearRho <- matrix(NA,nrow=2,ncol=2016-2005)
+ZSelAByYearRho <- vector(length = 2015-2005)
+ZSeSelAByYearRho <- vector(length = 2015-2005)
+ZCISelAByYearRho <- matrix(NA,nrow=2,ncol=2015-2005)
 for (t in 2006:2015)
 {
 
@@ -239,8 +243,7 @@ for (t in 2006:2015)
   sm0<-summary(m0)
   ZSeSelAByYearRho[t-2005] <- sm0$coefficients[2,2]
 }
-ZSelAByYearRho[11] <- NA
-plot(ZSelAByYearRho, x=2006:2016, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
+plot(ZSelAByYearRho, x=2006:2015, ylim=c(-2,2), xlab="Year", ylab = "Selection gradient")
 abline(h=0)
 arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = ZCISelAByYearRho[1,],
        y1 = ZCISelAByYearRho[2,], angle = 90,length = 0.1)
@@ -264,3 +267,5 @@ ZRhoAanovaNoCore <- anova(ZmmRIrho,ZmmRnoCorrho)
 ZRhoAanova <- anova(ZmmRIrho,ZmmRrho)
 
 ZCImmRnoCorrho <- confint(ZmmRnoCorrho)
+
+

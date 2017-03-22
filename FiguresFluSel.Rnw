@@ -2,6 +2,8 @@
 
 \usepackage{booktabs}
 
+\usepackage{amsmath}%
+\usepackage{commath}
 \usepackage{wasysym}
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -9,9 +11,12 @@
 \begin{document}
 
 <<load data, echo=FALSE>>=
-setwd(dir = "C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
-load(file = "EnvSelFluA.RData")
-load(file = "EnvQGA.RData")
+#setwd(dir = "C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
+setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
+load(file = "EnvSelFluBMI.RData")
+load(file = "EnvQGBMI_GG.RData")
+load(file = "PowerAnalysisSelection.RData")
+
 library(xtable)
 library(MCMCglmm)
 @
@@ -29,50 +34,50 @@ par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 ,pch=16, las=1
 
 <<SelByYear,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelAByYear, x=2006:2015, ylim=c(min( CISelAByYear), max( CISelAByYear)), xlab="Year", ylab = "Selection gradient", main = "\\textbf{(A)} Total selection")
+
+plot(ZSelAByYear, x=2007:(length(ZSelAByYear)+2006), ylim=c(min( ZCISelAByYear), max( ZCISelAByYear)), xlab="Year", ylab = "Selection gradient", main = "\\textbf{(A)} Total selection")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYear[1,],
-       y1 = CISelAByYear[2,], angle = 90,length = 0.1)
+arrows(x0 = 2007:(length(ZSelAByYear)+2006),x1 = 2007:(length(ZSelAByYear)+2006),code = 3, y0 = ZCISelAByYear[1,],
+       y1 = ZCISelAByYear[2,], angle = 90,length = 0.1)
 abline(h=coefficients(m0all)[2], lty=2, lwd=5)
-lowm0all <- coefficients(m0all)[2]+1.96*sm0all$coefficients[2,2]
-highm0all <- coefficients(m0all)[2]-1.96*sm0all$coefficients[2,2]
-polygon(x=c(2005,2016,2016,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
+lowm0all <- coefficients(Zm0all)[2]+1.96*Zsm0all$coefficients[2,2]
+highm0all <- coefficients(Zm0all)[2]-1.96*Zsm0all$coefficients[2,2]
+polygon(x=c(2005,2017,2017,2005),y=c(lowm0all,lowm0all, highm0all, highm0all),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
 #points(x=2006:2015,y=unlist(coefficients(mmRnoCorfitness)$Year["StMass"]), pch=17)
 @
 
 <<SelByYearRho,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelAByYearRho, x=2006:2015, ylim=c(min( CISelAByYearRho), max( CISelAByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$", main = "\\textbf{(B)} Fertility selection")
+
+plot(ZSelAByYearRho, x=2007:(length(ZSelAByYear)+2006), ylim=c(min( ZCISelAByYearRho), max( ZCISelAByYearRho)), xlab="Year", ylab = "Selection gradient on $\\rho$", main = "\\textbf{(B)} Fertility selection")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearRho[1,],
-       y1 = CISelAByYearRho[2,], angle = 90,length = 0.1)
-abline(h=coefficients(m0allRho)[2], lty=2, lwd=5)
-sm0allRho <- summary(m0allRho)
-lowm0allRho <- coefficients(m0allRho)[2]+1.96*sm0allRho$coefficients[2,2]
-highm0allRho <- coefficients(m0allRho)[2]-1.96*sm0allRho$coefficients[2,2]
-polygon(x=c(2005,2016,2016,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),
+arrows(x0 = 2007:(length(ZSelAByYear)+2006),x1 = 2007:(length(ZSelAByYear)+2006),code = 3, y0 = ZCISelAByYearRho[1,],
+       y1 = ZCISelAByYearRho[2,], angle = 90,length = 0.1)
+abline(h=coefficients(Zm0allRho)[2], lty=2, lwd=5)
+sm0allRho <- summary(Zm0allRho)
+lowm0allRho <- coefficients(Zm0allRho)[2]+1.96*Zsm0allRho$coefficients[2,2]
+highm0allRho <- coefficients(Zm0allRho)[2]-1.96*Zsm0allRho$coefficients[2,2]
+polygon(x=c(2005,2017,2017,2005),y=c(lowm0allRho,lowm0allRho, highm0allRho, highm0allRho),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2)
 @
 
 
 <<SelByYearPhi,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
-plot(SelAByYearPhi, x=2006:2015, ylim=c(min( CISelAByYearPhi, na.rm=TRUE), max( CISelAByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$", main = "\\textbf{(C)} Viability selection")
+
+plot(SelAByYearPhi, x=2007:(length(ZSelAByYear)+2006), ylim=c(min( CISelAByYearPhi, na.rm=TRUE), max( CISelAByYearPhi, na.rm=TRUE)), xlab="Year", ylab = "Selection gradient on $\\phi$", main = "\\textbf{(C)} Viability selection")
 abline(h=0)
-arrows(x0 = 2006:2015,x1 = 2006:2015,code = 3, y0 = CISelAByYearPhi[1,],
+arrows(x0 = 2007:(length(SelAByYear)+2006),x1 = 2007:(length(SelAByYear)+2006),code = 3, y0 = CISelAByYearPhi[1,],
        y1 = CISelAByYearPhi[2,], angle = 90,length = 0.1)
 abline(h=coefficients(m0allphi)[2], lty=2, lwd=5)
 lowm0allphi <- coefficients(m0allphi)[2]+1.96*sm0allphi$coefficients[2,2]
 highm0allphi <- coefficients(m0allphi)[2]-1.96*sm0allphi$coefficients[2,2]
-polygon(x=c(2005,2016,2016,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
+polygon(x=c(2005,2017,2017,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, highm0allphi),
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
 
 @
-Correlation fertility viability
-<<>>=
-cor.test(YearPheno$Phi,YearPheno$Rho)
-@
+
 
 <<>>=
 
@@ -125,30 +130,51 @@ hline.after=NULL#, #We don't need hline; we use booktabs
 %' @
 %' 
 
+ <<EvolSmooth,dev="tikz",fig.height=7,fig.width=10>>=
+setPar()
+plot(x=0,xlim=c(2006,2016),ylim=c(-5,5),type="n", xlab="Year",ylab="Mean breeding values for BMI")
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+abline(h=0)
+@
+
+
+Genetic change from 2006 to 2014 and from 2014 to 2016
+<<Genetic trends>>=
+HPDinterval(as.mcmc(bvchange), prob = 0.95)
+posterior.mode(as.mcmc(bvchange))
+mean(as.mcmc(bvchange)>0)
+
+HPDinterval(as.mcmc(bvrebounddiff))
+posterior.mode(as.mcmc(bvrebounddiff))
+mean(bvrebounddiff<0)
+@
+
 Correlation between selection and evolution
 <<>>=
 posterior.mode(as.mcmc(SelToG))
 HPDinterval(as.mcmc(SelToG))
 
-
 @
  
- <<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
- szgr <- 2
- szax <- 1.3
- marr <- c(4, 4, 1, 1) + 0.1
- par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
+ % 
+ % <<EvolDiff,dev="tikz",fig.height=7,fig.width=10>>=
+ % szgr <- 2
+ % szax <- 1.3
+ % marr <- c(4, 4, 1, 1) + 0.1
+ % par(las=1,mar=marr, cex=szgr, cex.lab=szax , cex.axis=szax, lwd=2 , las=1)
+ % 
+ % bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
+ % polygon(x = c(2006,2008:2014,2016,2016,2014:2008,2006) -2006, y = c(LowDrift,rev(HighDrit)),fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
+ % 
+ % bbv$stats
+ % bbv$group
+ % abline(h=0)
+ % density(bvpairwise[,1])
+ % @
+ % 
+
  
- bbv <- boxplot(bvpairwise,ylab="Change in breeding values (g)", xlab="Year", range = 1,cex=1)
- polygon(x = c(2006,2008:2014,2016,2016,2014:2008,2006) -2006, y = c(LowDrift,rev(HighDrit)),fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.3), lty=2)
-
- bbv$stats
- bbv$group
- abline(h=0)
- density(bvpairwise[,1])
- @
-
-<<Betas,dev="tikz",fig.height=7,fig.width=10>>=
+ <<Betas,dev="tikz",fig.height=7,fig.width=10>>=
 setPar()
 par(mar=c(4, 6, 1, 1) + 0.1)
 Betas <- matrix(sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),nrow =3, byrow=FALSE)
@@ -299,7 +325,22 @@ box(which = "plot", lty = "solid")
 mtext(text = "Year", side = 1, line = 2,cex = 3)
 @
 
-<<zygotetozygote,dev="tikz",fig.height=14,fig.width=16>>=
+
+<<PowerFluSelTotal,dev="tikz",fig.height=7,fig.width=10 >>=
+setPar()
+plot(x=SD_Beta_Levels, y=unlist(lapply(fitnesspv, function(x){mean(x<0.075)})), ylim=c(0,1), type="b", lty=2, xlab = "$\\abs{\\beta_{z}^\\prime}/\\sigma_{\\zeta}$", ylab = "Power") #1.5 df
+highPowerCIfitvar <- unlist(lapply(fitnesspv, function(x){mean(x<0.075)}))+unlist(lapply(fitnesspv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
+lowPowerCIfitvar <- unlist(lapply(fitnesspv, function(x){mean(x<0.075)}))-unlist(lapply(fitnesspv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
+arrows(x0=SD_Beta_Levels, y0=lowPowerCIfitvar, y1 = highPowerCIfitvar, code=3, angle = 90, length=0.1)
+
+yest <- 0.5
+points(x=attr(summary(ZmmARRfitness)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmARRfitness)$coefficients["BMIst",1]), y=yest, pch=16)
+CIfitvar <- ZCImmARRfitness[".sig03",]/abs(summary(ZmmARRfitness)$coefficients["BMIst",1])
+arrows(y0 = yest, x0=CIfitvar[1], x1=CIfitvar[2], code = 3, angle = 90)
 @
 
+<<PowerFluSelRho,dev="tikz",fig.height=7,fig.width=10 >>=
+setPar()
+plot(x=SD_Beta_Levels, y=unlist(lapply(rhopv, function(x){mean(x<0.075)})), xlab="") #1.5 df
+@
 \end{document}
