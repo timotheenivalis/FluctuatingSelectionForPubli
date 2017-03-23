@@ -167,20 +167,20 @@ for (i in 1:nrow(YearPheno))
   } else{YearPheno$A2[i] <- YearPheno$A[i]
   }
   
-  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2009, 2013, 2014))#positive selection
+  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2013, 2014, 2015))#positive selection
     {YearPheno$BL1[i] <- YearPheno$BL[i]
     YearPheno$BMI1[i] <- YearPheno$BMI[i]
     }else{
       YearPheno$BL2[i] <- YearPheno$BL[i]
       YearPheno$BMI2[i] <- YearPheno$BMI[i]
     }
-  if (YearPheno$Year[i] %in% c(2007, 2008, 2011, 2013, 2014))#positive selection
+  if (YearPheno$Year[i] %in% c(2006, 2007, 2008, 2011, 2013, 2014, 2015))#positive selection
   {
   YearPheno$BMIPhi1[i] <- YearPheno$BMI[i]
   }else{
     YearPheno$BMIPhi2[i] <- YearPheno$BMI[i]
   }
-  if (YearPheno$Year[i] %in% c(2006, 2007, 2009, 2012, 2014))#positive selection
+  if (YearPheno$Year[i] %in% c(2006, 2008, 2009, 2012))#positive selection
   {
   YearPheno$BMIRho1[i] <- YearPheno$BMI[i]
   }else{

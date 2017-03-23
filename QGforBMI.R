@@ -361,3 +361,17 @@ for(i in 1:nrow(BVextend))
 }
 plot(bvrebounddiff)
 mean(bvrebounddiff<0)
+
+
+
+bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 2015-2006))
+names(bvpairwise) <- 2007:2015
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  tmeanbv <- tapply(damdat$bv,damdat$t,mean)
+  bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-10]
+}
+
+boxplot(bvpairwise)
+abline(h=0)

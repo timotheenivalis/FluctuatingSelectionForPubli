@@ -1,0 +1,54 @@
+%%%Simulation Parameters%%%
+RunNumber=2
+Pause=Final
+SamplingSeed=123456
+
+%%%Population Parameters%%%
+%Demography%
+Clonal=false
+MendelianSegregation=false
+NoExtinction=false
+InitialAdultMales=20
+InitialAdultFemales=20
+
+JuvenileMales= 20
+% 63,68,49,56,32,13,14,41,37,29 
+JuvenileFemales= 20
+ % 56,59,28,60,28,6,20,35,41,29 
+
+%Trait distribution%
+VAz=10
+VEz=0
+
+
+%Fitness Function Repro%
+MeanReproIntercept=2. 
+VarReproLatentIntercept=0.
+
+MeanReproSlopeA= 1.
+VarReproSlopeA=0.
+QuadraticReproSlopeA =0. 
+
+%Fitness Function Survival%
+
+VarSurvivalLatentIntercept=0.5 	
+SurvivalInterceptAdultMale = 0.5
+SurvivalInterceptAdultFemale = 0. 
+SurvivalInterceptJuvenileMale = 1.
+SurvivalInterceptJuvenileFemale = 1. 
+
+MeanSurvivalSlopeA = 0. 
+VarSurvivalSlopeA = 0. 
+QuadraticSurvivalSlopeA = 0.
+MaxAge = 4
+
+
+%%%Monitoring Parameters%%%
+MonitoringDuration=3
+
+%%%Writing Parameters%%%
+WriteInput=true
+WritePedigree=true
+WriteCaptures=true
+WriteEvolSel=true
+
