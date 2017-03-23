@@ -267,5 +267,6 @@ ZRhoAanovaNoCore <- anova(ZmmRIrho,ZmmRnoCorrho)
 ZRhoAanova <- anova(ZmmRIrho,ZmmRrho)
 
 ZCImmRnoCorrho <- confint(ZmmRnoCorrho)
+ZCImmRrho <- confint(ZmmRrho)
 
 
