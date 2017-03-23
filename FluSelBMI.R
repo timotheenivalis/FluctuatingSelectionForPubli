@@ -223,9 +223,13 @@ polygon(x=c(2005,2017,2017,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, high
         fillOddEven = TRUE, col=rgb(0.1,0.1,0.1,0.5), lty=2 )
 
 mmRIphi <- glmer(Phi ~ 1 + BMIst + Sex * Age +(1|Year), data=YearPheno, family=binomial)
+mmRphi <- glmer(Phi ~ 1 + BMIst + Sex * Age +(1+BMIst|Year), data=YearPheno, family=binomial)
 mmRnoCorphi <- glmer(Phi ~ 1 + BMIst + Sex * Age + (1|Year) + (0+BMIst|Year), data=YearPheno, family=binomial)
+summary(mmRphi)
 smmRnoCorphi <- summary(mmRnoCorphi)
 CImmRnoCorphi <- confint(mmRnoCorphi)
+
+CImmRphi <- confint(mmRphi)
 
 PhiAanova <- anova(mmRIphi,mmRnoCorphi)
 

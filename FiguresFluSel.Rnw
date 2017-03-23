@@ -13,10 +13,10 @@
 <<load data, echo=FALSE>>=
 #setwd(dir = "C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
 setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
-load(file = "EnvSelFluBMI.RData")
+
 load(file = "EnvQGBMI_GG.RData")
 load(file = "PowerAnalysisSelection.RData")
-
+load(file = "EnvSelFluBMI.RData")
 library(xtable)
 library(MCMCglmm)
 @
@@ -328,20 +328,20 @@ mtext(text = "Year", side = 1, line = 2,cex = 3)
 
 <<PowerFluSelTotal,dev="tikz",fig.height=7,fig.width=10 >>=
 setPar()
-plot(x=SD_Beta_Levels, y=unlist(lapply(fitnesspv, function(x){mean(x<0.075)})), ylim=c(0,1), type="b", lty=2, xlab = "$\\abs{\\beta_{z}^\\prime}/\\sigma_{\\zeta}$", ylab = "Power") #1.5 df
+plot(x=SD_Beta_Levels, y=unlist(lapply(fitnesspv, function(x){mean(x<0.075)})), ylim=c(0,1), type="b", lty=2, xlab="$\\sigma_{\\zeta}/\\abs{\\beta_{z}^\\prime}$", ylab = "Power") #1.5 df
 highPowerCIfitvar <- unlist(lapply(fitnesspv, function(x){mean(x<0.075)}))+unlist(lapply(fitnesspv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
 lowPowerCIfitvar <- unlist(lapply(fitnesspv, function(x){mean(x<0.075)}))-unlist(lapply(fitnesspv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
 arrows(x0=SD_Beta_Levels, y0=lowPowerCIfitvar, y1 = highPowerCIfitvar, code=3, angle = 90, length=0.1)
 
 yest <- 0.5
-points(x=attr(summary(ZmmARRfitness)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmARRfitness)$coefficients["BMIst",1]), y=yest, pch=16)
+points(x=attr(summary(ZmmARRfitness)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmARRfitness)$coefficients["BMIst",1]), y=yest, pch=17, cex=2)
 CIfitvar <- ZCImmARRfitness[".sig03",]/abs(summary(ZmmARRfitness)$coefficients["BMIst",1])
 arrows(y0 = yest, x0=CIfitvar[1], x1=CIfitvar[2], code = 3, angle = 90)
 @
 
 <<PowerFluSelRho,dev="tikz",fig.height=7,fig.width=10 >>=
 setPar()
-plot(x=SD_Beta_Levels, y=unlist(lapply(rhopv, function(x){mean(x<0.075)})), xlab="$\\abs{\\beta_{z}^\\prime}/\\sigma_{\\zeta}$", ylab = "Power", type = "b", lty=2) #1.5 df
+plot(x=SD_Beta_Levels, y=unlist(lapply(rhopv, function(x){mean(x<0.075)})), xlab="$\\sigma_{\\zeta}/\\abs{\\beta_{z}^\\prime}$", ylab = "Power", type = "b", lty=2) #1.5 df
 
 
 highPowerCIfitvar <- unlist(lapply(rhopv, function(x){mean(x<0.075)}))+unlist(lapply(rhopv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
@@ -353,12 +353,36 @@ lowPowerCIfitvar[whexcess] <- lowPowerCIfitvar[whexcess]-ciexcess
 arrows(x0=SD_Beta_Levels, y0=lowPowerCIfitvar, y1 = highPowerCIfitvar, code=3, angle = 90, length=0.1)
 
 yest <- 0.5
-points(x=attr(summary(ZmmRrho)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmRrho)$coefficients["BMIst",1]), y=yest, pch=16)
+points(x=attr(summary(ZmmRrho)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmRrho)$coefficients["BMIst",1]), y=yest, pch=17, cex=2)
 CIfitvar <- ZCImmRrho[".sig03",]/abs(summary(ZmmRrho)$coefficients["BMIst",1])
 arrows(y0 = yest, x0=CIfitvar[1], x1=CIfitvar[2], code = 3, angle = 90)
 
+
+
+attr(summary(ZmmRrho)$varcor[[1]], "stddev")["BMIst"]/abs(summary(ZmmRrho)$coefficients["BMIst",1])
 @
 
+
+
+<<PowerFluSelPhi,dev="tikz",fig.height=7,fig.width=10 >>=
+setPar()
+plot(x=SD_Beta_Levels, y=unlist(lapply(phipv, function(x){mean(x<0.075)})), xlab="$\\sigma_{\\zeta}/\\abs{\\beta_{z}^\\prime}$", ylab = "Power", type = "b", lty=2) #1.5 df
+
+
+highPowerCIfitvar <- unlist(lapply(phipv, function(x){mean(x<0.075)}))+unlist(lapply(phipv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
+whexcess <- which(highPowerCIfitvar>1)
+ciexcess <- highPowerCIfitvar[whexcess]-1
+highPowerCIfitvar[whexcess] <- highPowerCIfitvar[whexcess]-ciexcess
+lowPowerCIfitvar <- unlist(lapply(phipv, function(x){mean(x<0.075)}))-unlist(lapply(phipv, function(x){1.96*sd(x<0.075)/sqrt(500)}))
+lowPowerCIfitvar[whexcess] <- lowPowerCIfitvar[whexcess]-ciexcess
+arrows(x0=SD_Beta_Levels, y0=lowPowerCIfitvar, y1 = highPowerCIfitvar, code=3, angle = 90, length=0.1)
+
+yest <- 0.5
+points(x=attr(summary(mmRphi)$varcor[[1]], "stddev")["BMIst"]/abs(summary(mmRphi)$coefficients["BMIst",1]), y=yest, pch=17, cex=2)
+CIfitvar <- CImmRphi[".sig03",]/abs(summary(mmRphi)$coefficients["BMIst",1])
+arrows(y0 = yest, x0=CIfitvar[1], x1=CIfitvar[2], code = 3, angle = 90)
+
+@
 
 
 \end{document}
