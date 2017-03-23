@@ -140,7 +140,7 @@ for (t in 2006:2015)
 
 #### Correlation between selection and evolution#### 
 
-SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,SelGRAByYear[-10])})
+SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,ZSelAByYear)})
 hist(SelToG)
 plot(as.mcmc(SelToG))
 posterior.mode(as.mcmc(SelToG))
@@ -267,32 +267,6 @@ save.image("~/thesis/Mass/FluctuatingSelectionForPubli/EnvQGBMI.RData")
 library(MCMCglmm)
 library(nadiv)
 
-ped <- read.table(file = "ped.txt", header=TRUE, stringsAsFactors = FALSE)
-
-pedgg <- ped
-pedgg$GG <- NA
-nonePar <- which(is.na( pedgg$dam) & is.na(pedgg$sire))
-firstGen <- c(grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN05"), grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN06"))
-
-pedgg$GG[nonePar[nonePar %in% firstGen]] <- "base"
-pedgg$GG[nonePar[!nonePar %in% firstGen]] <- "Imm"
-
-pedgg[nonePar, 2:3] <- as.character(pedgg[nonePar, "GG"])
-
-pedgg[is.na(pedgg[,2]),2] <- "Imm"
-pedgg[is.na(pedgg[,3]),3] <- "Imm"
-
-Qgg <- ggcontrib(pedigree = pedgg[,1:3], ggroups = c("base", "Imm"))
-
-plot(Qgg[,1])
-points(Qgg[,2], col="red")
-
-
-YearPheno$GGImm <- NA
-for (i in 1:nrow(YearPheno))
-{
-  YearPheno$GGImm[i] <- Qgg[YearPheno$animal[i],2]
-}
 
 priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001),G4=list(V=0.1, nu=0.0001)),
                   R=list(V=0.1, nu=0.0001))
@@ -337,6 +311,15 @@ plot(x=0,xlim=c(2006,2016),ylim=c(-5,5),type="n")
 trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
 abline(h=0)
 
+bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 2016-2006))
+names(bvpairwise) <- 2007:2016
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  tmeanbv <- tapply(damdat$bv,damdat$t,mean)
+  bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-11]
+}
+
 boxplot(bvpairwise)
 abline(h=0)
 
@@ -363,15 +346,62 @@ plot(bvrebounddiff)
 mean(bvrebounddiff<0)
 
 
+#### Correlation selection evolution ####
+SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,ZSelAByYear)})
+hist(SelToG)
+plot(as.mcmc(SelToG))
+posterior.mode(as.mcmc(SelToG))
+HPDinterval(as.mcmc(SelToG))
+mean(SelToG<0)
 
-bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 2015-2006))
-names(bvpairwise) <- 2007:2015
-for (i in 1:nrow(BVextend))
+SelDiffYear <- vector(length = 2015-2006)
+for (t in 2006:2015)
 {
-  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
-  tmeanbv <- tapply(damdat$bv,damdat$t,mean)
-  bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-10]
+  m0 <- glm(FitnessZ ~ 1 + BMIst + Sex *Age , data=YearPheno[YearPheno$Year==t,], family=quasipoisson, na.action = "na.omit")
+  SelDiffYear[t-2005] <- coefficients(m0)[2]*var(YearPheno[YearPheno$Year==t,"BMIst"], na.rm = TRUE)
 }
 
-boxplot(bvpairwise)
-abline(h=0)
+SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,SelDiffYear)})
+hist(SelToG)
+plot(as.mcmc(SelToG))
+posterior.mode(as.mcmc(SelToG))
+HPDinterval(as.mcmc(SelToG))
+mean(SelToG<0)
+
+
+vAF <- 0.1
+vAM <- posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"animal"])
+Gcovvar <- diag(3)*(vAM)
+Gcovvar[1,1] <- vAF
+
+vIF <- 0.1
+vIM <- ifelse(posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"ID"])>=0, posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"ID"]),mean(mcmcBLUPSBMI0$VCV[,"ID"]))
+Icovvar <- diag(3)*(vIM)
+Icovvar[1,1] <- vIF
+
+vMF <- 0.1
+vMM <- ifelse(posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"Mother"])>=0, posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"Mother"]),mean(mcmcBLUPSBMI0_GG$VCV[,"Mother"]))
+Mcovvar <- diag(3)*(vMM)
+Mcovvar[1,1] <- vMF
+
+vRF <- 0.1
+vRM <- posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"units"])
+Rcovvar <- diag(3)*(vRM)
+Rcovvar[1,1] <- vRF
+
+priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
+                                G2=list(V=Icovvar, nu=1),
+                                G3=list(V=Mcovvar, nu=1),
+                                G4=list(V=diag(1), nu=0.001)),
+                         R=list(V=Rcovvar, nu=1))
+
+mcmcBivTwoPeriods_GG <- MCMCglmm(cbind(FitnessZ,BMI1,BMI2) ~ trait-1+at.level(trait,c(1)):(Sex*Age+RJst + GGImm)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst + GGImm),
+                              random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(1))):Year,
+                              rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                              prior=priorTwoPeriodsA,
+                              pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500)
+
+summary(mcmcBivTwoPeriods_GG)
+plot(mcmcBivTwoPeriods_GG)
+
+save(mcmcBivTwoPeriods_GG, file = "mcmcBivTwoPeriods_GG")

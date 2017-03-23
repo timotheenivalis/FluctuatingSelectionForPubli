@@ -5,6 +5,7 @@ setwd(dir = "/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/")
 library("pedantics")
 library('lme4')
 library('tidyr')
+library('nadiv')
 
 #### Load data ####
 RawPheno <- read.table(file = "ForFluctuatingSelectionRaw.txt",header=TRUE )
@@ -227,6 +228,34 @@ for(i in 1:nrow(YearPheno))
 YearPheno$FitnessZ <- YearPheno$RhoZ + 2*YearPheno$PhiZ
 
 #Recruits
+
+# Genetic groups ####
+ped <- read.table(file = "ped.txt", header=TRUE, stringsAsFactors = FALSE)
+
+pedgg <- ped
+pedgg$GG <- NA
+nonePar <- which(is.na( pedgg$dam) & is.na(pedgg$sire))
+firstGen <- c(grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN05"), grep(x = substr(pedgg$animal,start = 1, stop=4), pattern = "CN06"))
+
+pedgg$GG[nonePar[nonePar %in% firstGen]] <- "base"
+pedgg$GG[nonePar[!nonePar %in% firstGen]] <- "Imm"
+
+pedgg[nonePar, 2:3] <- as.character(pedgg[nonePar, "GG"])
+
+pedgg[is.na(pedgg[,2]),2] <- "Imm"
+pedgg[is.na(pedgg[,3]),3] <- "Imm"
+
+Qgg <- ggcontrib(pedigree = pedgg[,1:3], ggroups = c("base", "Imm"))
+
+plot(Qgg[,1])
+points(Qgg[,2], col="red")
+
+
+YearPheno$GGImm <- NA
+for (i in 1:nrow(YearPheno))
+{
+  YearPheno$GGImm[i] <- Qgg[YearPheno$animal[i],2]
+}
 
 
 write.table(x = YearPheno, file = "YearPheno.txt",quote = FALSE, row.names = FALSE)
