@@ -1,0 +1,16 @@
+#!/bin/bash
+for VA in 1 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0
+do
+	echo "c $VA"
+	mkdir "tryh2eq$VA"
+	cp Volator "tryh2eq$VA/Volator"
+	cp InputVolator.txt "tryh2eq$VA/InputVolator.txt"
+
+	perl -pi -e "s/VAz=10/VAz=$VA/g" "tryh2eq$VA/InputVolator.txt"
+	VE=$(perl -e "print 1-$VA")
+	perl -pi -e "s/VEz=0/VEz=$VE/g" "tryh2eq$VA/InputVolator.txt"
+	
+	cd "tryh2eq$VA"
+	./Volator
+	cd ..
+done
