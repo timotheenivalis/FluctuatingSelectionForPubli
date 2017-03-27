@@ -385,4 +385,22 @@ arrows(y0 = yest, x0=CIfitvar[1], x1=CIfitvar[2], code = 3, angle = 90)
 @
 
 
+<<H2Test,dev="tikz",fig.height=7,fig.width=10>>=
+## With various h2 ####
+setPar()
+h2values <- seq(0.1,1,0.1)
+foldernames <- paste0("/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/IBSimulations/tryh2eq",h2values)
+slopeSE<- data.frame(h2 =h2values, slope=NA,SE=NA)
+for (i in 1:length(foldernames))
+{
+  evolsel <- read.table(file = paste0(foldernames[i],"/EvolSel.txt"), header=TRUE)
+  slm <- summary(lm(DeltaBV ~ Sel, data=evolsel))
+  slopeSE[i,2:3] <- slm$coefficients['Sel',c(1,2)]
+}
+
+plot(slopeSE[,1], slopeSE[,2], xlab="Simulated $h^2$", ylab="R/S")
+arrows(x0=slopeSE[,1], y0 = slopeSE[,2]+1.96*slopeSE[,3], y1=slopeSE[,2]-1.96*slopeSE[,3],code = 3, angle=90)
+abline(a = 0, b=1, lty=2)
+@
+
 \end{document}

@@ -405,3 +405,66 @@ summary(mcmcBivTwoPeriods_GG)
 plot(mcmcBivTwoPeriods_GG)
 
 save(mcmcBivTwoPeriods_GG, file = "mcmcBivTwoPeriods_GG")
+
+
+load("mcmcBivTwoPeriods_GG")
+
+corGM <- mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI1.animal"]/sqrt(mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.animal"]*mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.animal"])
+HPDinterval(as.mcmc(corGM))
+posterior.mode(corGM)
+
+BetaG1 <-  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.animal"]/mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.animal"]
+HPDinterval(BetaG1)
+posterior.mode(BetaG1)
+
+BetaG2 <-  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.animal"]/mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.animal"]
+HPDinterval(BetaG2)
+posterior.mode(BetaG2)
+
+covE1 <- mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.ID"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.Mother"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.units"]
+plot(covE1)
+BetaE1 <- covE1 /(mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.ID"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.Mother"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.units"])
+plot(BetaE1)
+
+covE2 <- mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.ID"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.Mother"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.units"]
+plot(covE2)
+BetaE2 <- covE2 /(mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.ID"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.Mother"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.units"])
+plot(BetaE2)
+
+diffBeta1 <- BetaG1 - BetaE1
+plot(diffBeta1)
+HPDinterval(diffBeta1)
+mean(diffBeta1>0)
+
+diffBeta2 <- BetaG2 - BetaE2
+plot(diffBeta2)
+
+covP1 <- mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.animal"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.ID"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.Mother"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI1.units"]
+plot(covP1)
+BetaP1 <- covP1 /(mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.animal"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.ID"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.Mother"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI1:traitBMI1.units"])
+plot(BetaP1)
+
+covP2 <- mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.animal"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.ID"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.Mother"]+
+  mcmcBivTwoPeriods_GG$VCV[,"traitFitnessZ:traitBMI2.units"]
+plot(covP2)
+BetaP2 <- covP2 /(mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.animal"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.ID"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.Mother"]+
+                    mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.units"])
+plot(BetaP2)
