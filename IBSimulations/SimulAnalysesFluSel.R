@@ -81,6 +81,7 @@ mean(es$Beta)
 
 #### Analysing power to detect flu evol
 library(pedantics)
+  library(MCMCglmm)
 ALLcaptures <- read.table(file = "ForBetaPower/Captures.txt", header=TRUE)
 ALLevolsel <- read.table(file = "ForBetaPower/EvolSel.txt", header=TRUE)
 ALLPedigree <- read.table(file = "ForBetaPower/Pedigree.txt", header=TRUE)
@@ -88,7 +89,6 @@ Pedigree <- ALLPedigree[ALLPedigree$RUN==1, -1]
 names(Pedigree) <- c("animal", "dam", "sire")
 Pedigree[Pedigree==0] <- NA
 ped<-orderPed(Pedigree)
-pedigreeStats(ped)
 
 
 captures <- ALLcaptures[ALLcaptures$RUN==1,]
@@ -120,17 +120,81 @@ cov(captures$Z2, captures$fitness, use = "complete.obs")
 cov(captures$BVZ[captures$Year %in% YearSelOverMedian], captures$fitness[captures$Year %in% YearSelOverMedian], use = "complete.obs")
 cov(captures$BVZ[! captures$Year %in% YearSelOverMedian], captures$fitness[! captures$Year %in% YearSelOverMedian], use = "complete.obs")
 
-priorTwoPeriodsZ <- list(G=list(G1=list(V=diag(3), nu=100),
-                                G2=list(V=diag(3), nu=100),
-                                G3=list(V=diag(3), nu=100)),
-                         R=list(V=diag(3), nu=100))
-
+priorTwoPeriodsZEXP <- list(G=list(G1=list(V=diag(3), nu=1, alpha.mu=rep(0,3), alpha.V=diag(3)),
+                                G2=list(V=diag(3), nu=4, alpha.mu=rep(0,3), alpha.V=diag(3)),
+                                G3=list(V=diag(3), nu=4, alpha.mu=rep(0,3), alpha.V=diag(3))),
+                         R=list(V=diag(3), nu=4))
+priorTwoPeriodsZ <- list(G=list(G1=list(V=diag(3), nu=4),
+                                G2=list(V=diag(3), nu=4),
+                                G3=list(V=diag(3), nu=4)),
+                         R=list(V=diag(3), nu=4))
 mcmcTwoPZ<- MCMCglmm(cbind(fitness,Z1,Z2) ~ trait-1+at.level(trait,c(1)):(Sex*Age),
                                  random=~us(trait):animal+us(trait):ID+idh(trait):Year,
-                                 rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                                 rcov=~us(trait):units, family=c("gaussian",rep("gaussian",2)),
                                  prior=priorTwoPeriodsZ,
-                                 pedigree=ped,data=captures,verbose=TRUE,nitt=13500,burnin=3500,thin=10)
+                                 pedigree=ped,data=captures,verbose=TRUE,nitt=55000,burnin=5000,thin=100)
 summary(mcmcTwoPZ)
 plot(mcmcTwoPZ)
 
 autocorr(mcmcTwoPZ$VCV)
+
+
+#### Univariate models####
+
+priorBLUPS0<-list(G=list(G1=list(V=0.1, nu=0.0001),G2=list(V=0.1, nu=0.0001),G3=list(V=0.1, nu=0.0001)),
+                  R=list(V=0.1, nu=0.0001))
+
+
+mcmcBLUPSBMI0 <- MCMCglmm(pheno ~1,
+                          random=~animal+ID+Year,
+                          rcov=~units,
+                          prior=priorBLUPS0,
+                          pedigree=ped,data=captures,verbose=TRUE,nitt=12000,burnin=2000,thin=10,pr=TRUE)
+summary(mcmcBLUPSBMI0)
+autocorr(mcmcBLUPSBMI0$VCV)
+
+BV<-mcmcBLUPSBMI0$Sol[,grep(pattern = "animal*",x = colnames(mcmcBLUPSBMI0$Sol))]
+animalID<-substr(x = colnames(BV),start = 8,stop=nchar(colnames(BV)))
+colnames(BV) <- animalID
+
+pmBV<-data.frame(animalID,posterior.mode(BV))
+names(pmBV)<-c("ID","pBV")
+mpmBV<-merge(x = pmBV,y = captures,by="ID",all.y=TRUE, all.x = FALSE)
+plot(mpmBV$Year,mpmBV$pBV)
+
+BVextend <- BV[,mpmBV$ID]# duplicates posterior distribution for ind present in multiple years
+
+lmBV<-as.mcmc(apply(BVextend,MARGIN = 1,function(x){coef(lm(x~1+mpmBV$Year))[2]}))
+
+
+library(mgcv)
+
+bvplotlist <- list()
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  gm0 <- gam(bv~1+s(t),data=damdat)
+  plotgm0 <- plot.gam(gm0,n = 20)
+  bvplotlist[[i]] <- cbind(plotgm0[[1]]$x,plotgm0[[1]]$fit)
+}
+plot(x=0,ylim=c(-1,1),type="n")
+trashidontwantyou<-lapply(bvplotlist, function(x){lines(x[,1],x[,2]-x[1,2], col=rgb(0.1,0.1,0.1,alpha = 0.1))})
+abline(h=0)
+
+bvpairwise <- as.data.frame(matrix(NA, nrow= nrow(BVextend), ncol = 10))
+names(bvpairwise) <- 1:10
+for (i in 1:nrow(BVextend))
+{
+  damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  tmeanbv <- tapply(damdat$bv,damdat$t,mean)
+  bvpairwise[i,] <- tmeanbv[-1]-tmeanbv[-11]
+}
+
+boxplot(bvpairwise)
+abline(h=0)
+
+evolOver <- as.mcmc(rowMeans(bvpairwise[,which(1:10 %in% YearSelOverMedian)]))
+evolUnder <- as.mcmc(rowMeans(bvpairwise[,which(! 1:10 %in% YearSelOverMedian)]))
+
+plot(evolOver-evolUnder)
+HPDinterval(evolOver-evolUnder)

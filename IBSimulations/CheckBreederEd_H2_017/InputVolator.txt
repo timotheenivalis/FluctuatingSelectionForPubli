@@ -1,5 +1,5 @@
 %%%Simulation Parameters%%%
-RunNumber=100
+RunNumber=1000
 Pause=Final
 SamplingSeed=123456
 
@@ -11,11 +11,11 @@ NoExtinction=false
 InitialAdultMales=20
 InitialAdultFemales=44
 
-JuvenileMales= 63,68,49,56,32,13,14,41,37,29 
-JuvenileFemales= 56,59,28,60,28,6,20,35,41,29 
+JuvenileMales= 63,68,49,56,32,13,14,41,37,29,28 
+JuvenileFemales= 56,59,28,60,28,6,20,35,41,30,35
 
 %Trait distribution%
-VAz=1.17
+VAz=0.17
 VEz=0.83
 
 
@@ -42,7 +42,7 @@ MaxAge = 4
 
 
 %%%Monitoring Parameters%%%
-MonitoringDuration=10
+MonitoringDuration=11
 
 %%%Writing Parameters%%%
 WriteInput=true
