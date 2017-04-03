@@ -11,10 +11,14 @@ repetBMI <- lmer(formula =BMI ~ 1 + Age * RelativeJulian+ Age*I(RelativeJulian^2
 summary(repetBMI)
 434.78/(434.78+789.91)#R2 at all ages
 
-repetBMIst <- lmer(formula =BMIst ~ 1 + Age + (1|ID) + (1|Year), data=YearPheno)
+unique(YearPheno$ID)
+repetBMIst <- lmer(formula =BMIst ~ 1 + (1|ID) + (1|Year), data=YearPheno[YearPheno$Age=="J",])
 summary(repetBMIst)
-0.11986/(0.11986+0.23844)
+0.28271/(0.28271+0.10540)
 
+repetAst <- lmer(formula =Mass ~ 1 + (1|ID) + (1|Year), data=YearPheno[YearPheno$Age=="J",])
+summary(repetAst)
+14.179/(14.179+8.648)
 ######### Selection #####
 
 SelAByYear <- vector(length = 2016-2006)
