@@ -83,26 +83,27 @@ polygon(x=c(2005,2017,2017,2005),y=c(lowm0allphi,lowm0allphi, highm0allphi, high
 
 rounding <- 3
 
-BetaGlm<- c(paste(round(sm0all$coefficients[2,1],rounding)," (",round(sm0all$coefficients[2,2],rounding ),")",sep=""),
-            paste(round(sm0allRho$coefficients[2,1],rounding)," (",round(sm0allRho$coefficients[2,2],rounding ),")",sep=""),
+BetaGlm<- c(paste(round(Zsm0all$coefficients[2,1],rounding)," (",round(Zsm0all$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(Zsm0allRho$coefficients[2,1],rounding)," (",round(Zsm0allRho$coefficients[2,2],rounding ),")",sep=""),
             paste(round(sm0allphi$coefficients[2,1],rounding)," (",round(sm0allphi$coefficients[2,2],rounding ),")",sep=""))
 
-SDyears <- c(sd(SelAByYear),sd(SelAByYearRho),sd(SelAByYearPhi, na.rm=TRUE))
-SEyears <- c(mean(SeSelAByYear), mean(SeSelAByYearRho),mean(SeSelAByYearPhi,na.rm=T))
-BetaGLMM <- c(paste(round(smmARnoCorfitness$coefficients[2,1],rounding)," (",round(smmARnoCorfitness$coefficients[2,2],rounding ),")",sep=""),
-            paste(round(smmRnoCorrho$coefficients[2,1],rounding)," (",round(smmRnoCorrho$coefficients[2,2],rounding ),")",sep=""),
-            paste(round(smmRnoCorphi$coefficients[2,1],rounding)," (",round(smmRnoCorphi$coefficients[2,2],rounding ),")",sep=""))
-SigmaA <- c(sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1)),
-            sqrt(as.numeric(smmRnoCorrho$varcor$Year.1)),
-sqrt(as.numeric(smmRnoCorphi$varcor$Year.1)))
-SigRat <- c(smmARnoCorfitness$coefficients[2,1]/sqrt(as.numeric(smmARnoCorfitness$varcor$Year.1)),
-            smmRnoCorrho$coefficients[2,1]/sqrt(as.numeric(smmRnoCorrho$varcor$Year.1)),
-            smmRnoCorphi$coefficients[2,1]/sqrt(as.numeric(smmRnoCorphi$varcor$Year.1)))
+SDyears <- c(sd(ZSelAByYear),sd(ZSelAByYearRho),sd(SelAByYearPhi, na.rm=TRUE))
+SEyears <- c(mean(ZSeSelAByYear), mean(ZSeSelAByYearRho),mean(SeSelAByYearPhi,na.rm=T))
+BetaGLMM <- c(paste(round(summary(ZmmARRfitness)$coefficients[2,1],rounding)," (",round(summary(ZmmARRfitness)$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(summary(ZmmRrho)$coefficients[2,1],rounding)," (",round(summary(ZmmRrho)$coefficients[2,2],rounding ),")",sep=""),
+            paste(round(summary(mmRphi)$coefficients[2,1],rounding)," (",round(summary(mmRphi)$coefficients[2,2],rounding ),")",sep=""))
+SigmaA <- c(as.numeric(attr(summary(ZmmARRfitness)$varcor$Year, which = "stddev")["BMIst"]),
+            as.numeric(attr(summary(ZmmRrho)$varcor$Year, which = "stddev")["BMIst"]),
+as.numeric(attr(summary(mmRphi)$varcor$Year, which = "stddev")["BMIst"]))
 
-psigmaA <- c(fitnessAanova$`Pr(>Chisq)`[2]/2, RhoAanova$`Pr(>Chisq)`[2]/2, PhiAanova$`Pr(>Chisq)`[2]/2)
-confsigma <- c(paste("[",round(CImmARnoCorfitness[2,1],rounding),";",round(CImmARnoCorfitness[2,2],rounding),"]",sep=""),
-               paste("[",round(CImmRnoCorrho[2,1],rounding),";",round(CImmRnoCorrho[2,2],rounding),"]",sep=""),
-               paste("[",round(CImmRnoCorphi[2,1],rounding),";",round(CImmRnoCorphi[2,2],rounding),"]",sep=""))
+SigRat <- 1/abs(c(summary(ZmmARRfitness)$coefficients[2,1]/(as.numeric(attr(summary(ZmmARRfitness)$varcor$Year, which = "stddev")["BMIst"])),
+            summary(ZmmRrho)$coefficients[2,1]/(as.numeric(attr(summary(ZmmRrho)$varcor$Year, which = "stddev")["BMIst"])),
+            summary(mmRphi)$coefficients[2,1]/(as.numeric(attr(summary(mmRphi)$varcor$Year, which = "stddev")["BMIst"]))))
+
+psigmaA <- c(ZfitnessAanova$`Pr(>Chisq)`[2]*0.75, ZRhoAanova$`Pr(>Chisq)`[2]*0.75, anova(mmRIphi,mmRphi)$`Pr(>Chisq)`[2]*0.75)
+confsigma <- c(paste("[",round(ZCImmARRfitness[3,1],rounding),";",round(ZCImmARRfitness[3,2],rounding),"]",sep=""),
+               paste("[",round(ZCImmRrho[3,1],rounding),";",round(ZCImmRrho[3,2],rounding),"]",sep=""),
+               paste("[",round(CImmRphi[3,1],rounding),";",round(CImmRphi[3,2],rounding),"]",sep=""))
 
 TabSel <- data.frame(BetaGlm = BetaGlm, B=SDyears, C=SEyears , D=BetaGLMM , E=SigmaA, DD =confsigma, EE =psigmaA, FF=SigRat)
 @
@@ -180,7 +181,7 @@ par(mar=c(4, 6, 1, 1) + 0.1)
 Betas <- matrix(sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),nrow =3, byrow=FALSE)
 BetasCI <- sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)
 
-x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Postive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"))
+x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Positive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"))
 abline(h=0)
 arrows(x0 = x, y0=BetasCI[1,],y1=BetasCI[2,],angle = 90,code = 3)
 mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
@@ -193,7 +194,7 @@ par(mar=c(4, 6, 1, 1) + 0.1)
 Betas <- matrix(sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), posterior.mode),nrow =3, byrow=FALSE)
 BetasCI <- sapply(X = list(BetaP1, BetaE1, BetaG1, BetaP2, BetaE2, BetaG2), HPDinterval)
 
-x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Postive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"), color = c(rgb(59,52,120,maxColorValue = 255),rgb(39,113,93,maxColorValue = 255),rgb(225,156,57,maxColorValue = 255)))
+x <- barplot(Betas, beside=TRUE, ylim=c(min(BetasCI),max(BetasCI)),names.arg = c("Positive selection years","Negative selection years"), legend.text = c("Phenotypic","Environmental","Genetic"), color = c(rgb(59,52,120,maxColorValue = 255),rgb(39,113,93,maxColorValue = 255),rgb(225,156,57,maxColorValue = 255)))
 abline(h=0)
 arrows(x0 = x, y0=BetasCI[1,],y1=BetasCI[2,],angle = 90,code = 3)
 mtext(side=2, "Selection gradients", line=4, las=0, cex=szax*szgr)
