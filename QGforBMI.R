@@ -1,4 +1,3 @@
-
 setwd("C:/Users/Thimothee Admin/Documents/thesis/Mass/FluctuatingSelectionForPubli/")
 library(MCMCglmm)
 library(MASS)
@@ -28,6 +27,7 @@ h2A <- mcmcBLUPSBMI0$VCV[,"animal"]/(mcmcBLUPSBMI0$VCV[,"animal"]+mcmcBLUPSBMI0$
 plot(h2A)
 posterior.mode(h2A)
 HPDinterval(h2A)
+mean(h2A)
 posterior.mode(mcmcBLUPSBMI0$VCV[,"animal"])
 HPDinterval(mcmcBLUPSBMI0$VCV[,"animal"])
 
@@ -75,6 +75,8 @@ for (i in 1:nrow(BVextend))
 
 boxplot(bvpairwise)
 abline(h=0)
+
+
 
 bvchange <- vector()
 for(i in 1:nrow(BVextend))
@@ -279,6 +281,15 @@ mcmcBLUPSBMI0_GG <- MCMCglmm(BMI ~Sex*Age+Age*RJst + GGImm,
                           pedigree=ped,data=YearPheno,verbose=TRUE,nitt=120000,burnin=20000,thin=100,pr=TRUE)
 summary(mcmcBLUPSBMI0_GG)
 
+posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"animal"])
+HPDinterval(mcmcBLUPSBMI0_GG$VCV[,"animal"])
+
+h2A <- mcmcBLUPSBMI0_GG$VCV[,"animal"]/(mcmcBLUPSBMI0_GG$VCV[,"animal"]+mcmcBLUPSBMI0_GG$VCV[,"ID"]+mcmcBLUPSBMI0_GG$VCV[,"Mother"]+mcmcBLUPSBMI0_GG$VCV[,"units"])
+plot(h2A)
+posterior.mode(h2A)
+HPDinterval(h2A)
+mean(h2A)
+
 BV<-mcmcBLUPSBMI0_GG$Sol[,grep(pattern = "animal*",x = colnames(mcmcBLUPSBMI0_GG$Sol))]
 animalID<-substr(x = colnames(BV),start = 8,stop=nchar(colnames(BV)))
 colnames(BV) <- animalID
@@ -323,6 +334,16 @@ for (i in 1:nrow(BVextend))
 boxplot(bvpairwise)
 abline(h=0)
 
+YearSelOverMedian <- c(2006, 2007, 2008, 2013, 2014, 2015)
+
+
+evolOver <- as.mcmc(rowMeans(bvpairwise[,which(2006:2015 %in% YearSelOverMedian)]))
+evolUnder <- as.mcmc(rowMeans(bvpairwise[,which(! 2006:2015 %in% YearSelOverMedian)]))
+
+plot(evolOver-evolUnder)
+HPDinterval(evolOver-evolUnder)
+
+
 bvchange <- vector()
 for(i in 1:nrow(BVextend))
 {
@@ -330,6 +351,7 @@ for(i in 1:nrow(BVextend))
   bvchange[i] <- mean(damdat$bv[damdat$t==2014])-mean(damdat$bv[damdat$t==2006])
 }
 plot(as.mcmc(bvchange))
+posterior.mode(bvchange)
 HPDinterval(as.mcmc(bvchange))
 mean(as.mcmc(bvchange)>0)
 
@@ -344,7 +366,40 @@ for(i in 1:nrow(BVextend))
 }
 plot(bvrebounddiff)
 mean(bvrebounddiff<0)
+posterior.mode(bvrebounddiff)
+HPDinterval(as.mcmc(bvrebounddiff))
 
+
+#### Drift simulations ####
+pmBV<-data.frame(animalID,posterior.mode(BV))
+names(pmBV)<-c("ID","pBV")
+mpmBV<-merge(x = pmBV,y = YearPheno,by="ID",all.y=TRUE, all.x = FALSE)
+plot(mpmBV$Year,mpmBV$pBV)
+
+BVdtemp <- t(sapply(X = as.numeric(mcmcBLUPSBMI0_GG$VCV[,"animal"]),FUN = function(x) {rbv(pedigree = ped,G = x, ggroups =as.factor(pedgg$GG), gmeans = matrix(data = c(0, -9), nrow = 2))} ))
+colnames(BVdtemp) <- ped[,1]
+
+pedgg$GG[is.na(pedgg$GG)] <- "base"
+as.factor(pedgg$GG)
+
+BVdextend <- BVdtemp[,mpmBV$ID]# duplicates posterior distribution for ind present in multiple years
+bvdpairwise614 <-vector(length = nrow(BVdextend))
+bvdpairwise1416 <-vector(length = nrow(BVdextend))
+for (i in 1:nrow(BVdextend))
+{
+  damdatd<- data.frame(bv=BVdextend[i,],t=mpmBV$Year)
+  tmeanbvd <- tapply(damdatd$bv,damdatd$t,mean)
+  bvdpairwise614[i] <- tmeanbvd[8]-tmeanbvd[1]
+  bvdpairwise1416[i] <- tmeanbvd[11]-tmeanbvd[8]
+}
+plot(bvdpairwise614)
+plot(bvdpairwise1416)
+
+mean(bvdpairwise614 < bvchange)
+mean(bvdpairwise1416 > bvrebound)
+
+plot(as.mcmc(bvdpairwise614-bvchange))
+plot(bvdpairwise1416-bvrebound)
 
 #### Correlation selection evolution ####
 SelToG <- apply(bvpairwise,MARGIN = 1, FUN = function(x) {cor(x,ZSelAByYear)})
@@ -368,6 +423,15 @@ posterior.mode(as.mcmc(SelToG))
 HPDinterval(as.mcmc(SelToG))
 mean(SelToG<0)
 
+### Evol Slope On Sel
+SlopeSelToG <- as.mcmc(apply(bvpairwise,MARGIN = 1, FUN = function(x) {coefficients(lm(x~ZSelAByYear))[2]}))
+plot(SlopeSelToG)
+posterior.mode(SlopeSelToG)
+HPDinterval(SlopeSelToG)
+mean(SlopeSelToG<0)
+
+SlopeSelToG <- as.mcmc(apply(bvpairwise,MARGIN = 1, FUN = function(x) {coefficients(lm(x~SelDiffYear))[2]}))
+#############
 
 vAF <- 0.1
 vAM <- posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"animal"])
@@ -468,3 +532,22 @@ BetaP2 <- covP2 /(mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.animal"]+
                     mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.Mother"]+
                     mcmcBivTwoPeriods_GG$VCV[,"traitBMI2:traitBMI2.units"])
 plot(BetaP2)
+
+
+
+##### Let's combine MultiVar with BLUPs analysis to get Sel and Evol jointly####
+
+priorTwoPeriodsA <- list(G=list(G1=list(V=diag(2), nu=3),
+                                G2=list(V=diag(2), nu=3),
+                                G3=list(V=diag(2), nu=3),
+                                G4=list(V=diag(2), nu=3)),
+                         R=list(V=diag(2), nu=3))
+
+mcmcBivTwoPeriods_GG <- MCMCglmm(cbind(FitnessZ,BMI) ~ trait-1+at.level(trait,c(1)):(Sex*Age+RJst + GGImm)+at.level(trait,c(2)):(Sex*Age+Age*RJst + GGImm),
+                                 random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(trait):Year,
+                                 rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
+                                 prior=priorTwoPeriodsA,
+                                 pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500, pr=TRUE)
+
+
+##### Fitness Model #####

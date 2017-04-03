@@ -235,7 +235,7 @@ CImmRnoCorphi <- confint(mmRnoCorphi)
 
 CImmRphi <- confint(mmRphi)
 
-PhiAanova <- anova(mmRIphi,mmRnoCorphi)
+PhiAanova <- anova(mmRIphi,mmRphi)
 
 #####  RHO ######
 
