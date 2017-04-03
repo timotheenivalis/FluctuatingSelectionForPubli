@@ -155,7 +155,7 @@ ZSeSelAByYear <- vector(length = 2015-2006)
 ZCISelAByYear <- matrix(NA,nrow=2,ncol=2015-2005)
 for (t in 2006:2015)
 {
-  Zm0 <- glm(FitnessZ ~ 1 + BMIst + Sex * Age , data=YearPheno[YearPheno$Year==t,], family=quasipoisson)
+  Zm0 <- glm(FitnessZ ~ 1 + BMIst + Sex * Age , data=YearPheno[YearPheno$Year==t,], family=quasipoisson, na.action = "na.exclude")
   ZSelAByYear[t-2005] <- coefficients(Zm0)[2]
   Zsm0<-summary(Zm0)
   ZSeSelAByYear[t-2005] <- Zsm0$coefficients[2,2]
@@ -187,7 +187,7 @@ anova(ZmmARRfitness,ZmmARnoCorfitness)
 anova(ZmmARRfitness,ZmmARIfitness)
 
 ZsmmARnoCorfitness <- summary(ZmmARnoCorfitness)
-ZfitnessAanova <- anova(ZmmARIfitness,ZmmARRfitness)
+ZfitnessAanova <- anova(ZmmARRfitness,ZmmARIfitness)
 ZfitnessAanova$`Pr(>Chisq)`*0.75
 
 ZCImmARnoCorfitness <- confint(ZmmARnoCorfitness)
