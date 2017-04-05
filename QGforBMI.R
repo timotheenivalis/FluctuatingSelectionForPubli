@@ -345,26 +345,33 @@ HPDinterval(evolOver-evolUnder)
 
 
 bvchange <- vector()
+bvslope <- vector()
 for(i in 1:nrow(BVextend))
 {
   damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
+  bvslope[i] <- coefficients(lm(bv ~ 1 + t, data=damdat[damdat$t<=2014,]))[2]
   bvchange[i] <- mean(damdat$bv[damdat$t==2014])-mean(damdat$bv[damdat$t==2006])
 }
+plot(as.mcmc(bvslope))
 plot(as.mcmc(bvchange))
 posterior.mode(bvchange)
 HPDinterval(as.mcmc(bvchange))
 mean(as.mcmc(bvchange)>0)
 
 bvrebound <- vector()
+bvreboundslope <- vector()
 bvrebounddiff <- vector()
 for(i in 1:nrow(BVextend))
 {
   damdat<- data.frame(bv=BVextend[i,],t=mpmBV$Year)
   lmrebound <- lm(bv ~ 1 + t + I(t^2), data=damdat)
   bvrebound[i] <- coefficients(lmrebound)[3]
+  bvreboundslope[i] <- coefficients(lm(bv ~ 1 + t, data=damdat[damdat$t>=2014,]))[2]
   bvrebounddiff[i] <- mean(damdat$bv[damdat$t==2016])-mean(damdat$bv[damdat$t==2014])
 }
-plot(bvrebounddiff)
+plot(as.mcmc(bvreboundslope))
+mean(bvreboundslope<0)
+plot(as.mcmc(bvrebounddiff))
 mean(bvrebounddiff<0)
 posterior.mode(bvrebounddiff)
 HPDinterval(as.mcmc(bvrebounddiff))
@@ -453,11 +460,11 @@ vRM <- posterior.mode(mcmcBLUPSBMI0_GG$VCV[,"units"])
 Rcovvar <- diag(3)*(vRM)
 Rcovvar[1,1] <- vRF
 
-priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=1),
-                                G2=list(V=Icovvar, nu=1),
-                                G3=list(V=Mcovvar, nu=1),
+priorTwoPeriodsA <- list(G=list(G1=list(V=Gcovvar, nu=4),
+                                G2=list(V=Icovvar, nu=4),
+                                G3=list(V=Mcovvar, nu=4),
                                 G4=list(V=diag(1), nu=0.001)),
-                         R=list(V=Rcovvar, nu=1))
+                         R=list(V=Rcovvar, nu=4))
 
 mcmcBivTwoPeriods_GG <- MCMCglmm(cbind(FitnessZ,BMI1,BMI2) ~ trait-1+at.level(trait,c(1)):(Sex*Age+RJst + GGImm)+at.level(trait,c(2:3)):(Sex*Age+Age*RJst + GGImm),
                               random=~us(trait):animal+us(trait):ID+us(trait):Mother+us(at.level(trait,c(1))):Year,

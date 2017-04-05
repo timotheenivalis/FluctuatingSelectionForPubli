@@ -78,10 +78,10 @@ es <- read.table(file = "EvolSel.txt", header=TRUE)
 mean(es$DeltaBV)/mean(es$Sel)
 mean(es$Beta)
 
-
 #### Analysing power to detect flu evol
 library(pedantics)
   library(MCMCglmm)
+setwd("/home/timothee/Documents/GitHub/FluctuatingSelectionForPubli/IBSimulations/")
 ALLcaptures <- read.table(file = "ForBetaPower/Captures.txt", header=TRUE)
 ALLevolsel <- read.table(file = "ForBetaPower/EvolSel.txt", header=TRUE)
 ALLPedigree <- read.table(file = "ForBetaPower/Pedigree.txt", header=TRUE)
@@ -90,9 +90,9 @@ names(Pedigree) <- c("animal", "dam", "sire")
 Pedigree[Pedigree==0] <- NA
 ped<-orderPed(Pedigree)
 
-
-captures <- ALLcaptures[ALLcaptures$RUN==1,]
-evolsel <- ALLevolsel[ALLevolsel$RUN==1,]
+runnb <- 3
+captures <- ALLcaptures[ALLcaptures$RUN==runnb,]
+evolsel <- ALLevolsel[ALLevolsel$RUN==runnb,]
 
 plot(evolsel$Sel)
 evolsel$Sel>0
@@ -116,6 +116,8 @@ for (i in 1:nrow(captures))
 cov(captures$Z1, captures$fitness, use = "complete.obs")
 cov(captures$Z2, captures$fitness, use = "complete.obs")
 
+summary(glm(fitness ~ Z1 + Sex*Age, data = captures, family = poisson))
+summary(glm(fitness ~ Z2+ Sex*Age, data = captures, family = poisson))
 
 cov(captures$BVZ[captures$Year %in% YearSelOverMedian], captures$fitness[captures$Year %in% YearSelOverMedian], use = "complete.obs")
 cov(captures$BVZ[! captures$Year %in% YearSelOverMedian], captures$fitness[! captures$Year %in% YearSelOverMedian], use = "complete.obs")
@@ -124,20 +126,54 @@ priorTwoPeriodsZEXP <- list(G=list(G1=list(V=diag(3), nu=1, alpha.mu=rep(0,3), a
                                 G2=list(V=diag(3), nu=4, alpha.mu=rep(0,3), alpha.V=diag(3)),
                                 G3=list(V=diag(3), nu=4, alpha.mu=rep(0,3), alpha.V=diag(3))),
                          R=list(V=diag(3), nu=4))
-priorTwoPeriodsZ <- list(G=list(G1=list(V=diag(3), nu=4),
+priorTwoPeriodsZ <- list(G=list(G1=list(V=matrix(data = c(0.4,0.01,-0.12,0.01,0.8,0.7,-0.12,0.7,0.9), nrow = 3, byrow = TRUE), nu=4),
                                 G2=list(V=diag(3), nu=4),
                                 G3=list(V=diag(3), nu=4)),
-                         R=list(V=diag(3), nu=4))
+                         R=list(V=diag(c(5.2,0.06,0.05)), nu=4, fix=2))
 mcmcTwoPZ<- MCMCglmm(cbind(fitness,Z1,Z2) ~ trait-1+at.level(trait,c(1)):(Sex*Age),
                                  random=~us(trait):animal+us(trait):ID+idh(trait):Year,
-                                 rcov=~us(trait):units, family=c("gaussian",rep("gaussian",2)),
+                                 rcov=~us(trait):units, family=c("poisson",rep("gaussian",2)),
                                  prior=priorTwoPeriodsZ,
-                                 pedigree=ped,data=captures,verbose=TRUE,nitt=55000,burnin=5000,thin=100)
+                                 pedigree=ped,data=captures,verbose=TRUE,nitt=110000,burnin=10000,thin=1000)
 summary(mcmcTwoPZ)
 plot(mcmcTwoPZ)
 
 autocorr(mcmcTwoPZ$VCV)
 
+corGM <- mcmcTwoPZ$VCV[,"traitZ2:traitZ1.animal"]/sqrt(mcmcTwoPZ$VCV[,"traitZ1:traitZ1.animal"]*mcmcTwoPZ$VCV[,"traitZ2:traitZ2.animal"])
+HPDinterval(as.mcmc(corGM))
+posterior.mode(corGM)
+
+BetaG1 <-  mcmcTwoPZ$VCV[,"traitfitness:traitZ1.animal"]/mcmcTwoPZ$VCV[,"traitZ1:traitZ1.animal"]
+HPDinterval(BetaG1)
+posterior.mode(BetaG1)
+
+BetaG2 <-  mcmcTwoPZ$VCV[,"traitfitness:traitZ2.animal"]/mcmcTwoPZ$VCV[,"traitZ2:traitZ2.animal"]
+HPDinterval(BetaG2)
+posterior.mode(BetaG2)
+
+
+priorTwoPeriodsZ1 <- list(G=list(G1=list(V=matrix(data = c(0.4,0.01,0.01,0.8), nrow = 2, byrow = TRUE), nu=3),
+                                G2=list(V=diag(2), nu=3),
+                                G3=list(V=diag(2), nu=3)),
+                         R=list(V=diag(c(5.2,0.06)), nu=3))
+mcmcTwoPZ1<- MCMCglmm(cbind(fitness,Z1) ~ trait-1+at.level(trait,c(1)):(Sex*Age),
+                     random=~us(trait):animal+us(trait):ID+idh(trait):Year,
+                     rcov=~us(trait):units, family=c("poisson",rep("gaussian",1)),
+                     prior=priorTwoPeriodsZ1,
+                     pedigree=ped,data=captures,verbose=TRUE,nitt=11000,burnin=1000,thin=100)
+summary(mcmcTwoPZ1)
+
+priorTwoPeriodsZ2 <- list(G=list(G1=list(V=matrix(data = c(0.4,0.01,0.01,0.9), nrow = 2, byrow = TRUE), nu=3),
+                                 G2=list(V=diag(2), nu=3),
+                                 G3=list(V=diag(2), nu=3)),
+                          R=list(V=diag(c(5.2,0.06)), nu=3))
+mcmcTwoPZ2<- MCMCglmm(cbind(fitness,Z2) ~ trait-1+at.level(trait,c(1)):(Sex*Age),
+                      random=~us(trait):animal+us(trait):ID+idh(trait):Year,
+                      rcov=~us(trait):units, family=c("poisson",rep("gaussian",1)),
+                      prior=priorTwoPeriodsZ1,
+                      pedigree=ped,data=captures,verbose=TRUE,nitt=11000,burnin=1000,thin=100)
+summary(mcmcTwoPZ2)
 
 #### Univariate models####
 
