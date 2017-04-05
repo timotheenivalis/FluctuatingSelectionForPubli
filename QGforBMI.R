@@ -557,4 +557,51 @@ mcmcBivTwoPeriods_GG <- MCMCglmm(cbind(FitnessZ,BMI) ~ trait-1+at.level(trait,c(
                                  pedigree=ped,data=YearPheno,verbose=TRUE,nitt=650000,burnin=150000,thin=500, pr=TRUE)
 
 
-##### Fitness Model #####
+##### Sex Difference models #####
+priorSexBMI <- list(G=list(G1=list(V=diag(2), nu=3),
+                           G2=list(V=diag(2), nu=3),
+                           G3=list(V=diag(2), nu=3),
+                           G4=list(V=diag(2), nu=3)),
+                    R=list(V=diag(2), nu=3))
+YearPheno$BMIF <- ifelse(YearPheno$Sex=="Female", YearPheno$BMI, NA)
+YearPheno$BMIM <- ifelse(YearPheno$Sex=="Male", YearPheno$BMI, NA)
+
+mcmcBivSex_GG <- MCMCglmm(cbind(BMIF, BMIM) ~ trait-1+at.level(trait,c(1,2)):(Age*RJst + GGImm),
+                                 random=~us(trait):animal+idh(trait):ID+idh(trait):Mother+idh(trait):Year,
+                                 rcov=~idh(trait):units, family=c(rep("gaussian",2)),
+                                 prior=priorSexBMI,
+                                 pedigree=ped,data=YearPheno,verbose=TRUE,nitt=65000,burnin=5000,thin=50)
+summary(mcmcBivSex_GG)
+plot(mcmcBivSex_GG)
+
+diffsex <- (mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"] - mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIF.animal"])/mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"]
+plot(diffsex)
+mean(diffsex>0)
+HPDinterval(diffsex)
+posterior.mode(diffsex)
+
+corsex <- mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIM.animal"] /sqrt(mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIF.animal"]* mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"])
+
+plot(corsex)
+posterior.mode(corsex)
+HPDinterval(corsex)
+
+h2males <- mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"] / (mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"]+mcmcBivSex_GG$VCV[,"traitBMIM.ID"] + mcmcBivSex_GG$VCV[,"traitBMIM.Mother"]+ mcmcBivSex_GG$VCV[,"traitBMIM.units"])
+h2females <- mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIF.animal"] / (mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIF.animal"]+mcmcBivSex_GG$VCV[,"traitBMIF.ID"] + mcmcBivSex_GG$VCV[,"traitBMIF.Mother"]+ mcmcBivSex_GG$VCV[,"traitBMIF.units"])
+
+plot(h2males)
+plot(h2females)
+
+plot((h2males - h2females)/h2males)
+
+VPF <- (mcmcBivSex_GG$VCV[,"traitBMIF:traitBMIF.animal"]+mcmcBivSex_GG$VCV[,"traitBMIF.ID"] + mcmcBivSex_GG$VCV[,"traitBMIF.Mother"]+ mcmcBivSex_GG$VCV[,"traitBMIF.units"])
+VPM <- (mcmcBivSex_GG$VCV[,"traitBMIM:traitBMIM.animal"]+mcmcBivSex_GG$VCV[,"traitBMIM.ID"] + mcmcBivSex_GG$VCV[,"traitBMIM.Mother"]+ mcmcBivSex_GG$VCV[,"traitBMIM.units"])
+
+plot((VPM-VPF)/VPM)
+HPDinterval((VPM-VPF)/VPM)
+posterior.mode((VPM-VPF)/VPM)
+
+var(YearPheno$BMIF, na.rm = TRUE)
+var(YearPheno$BMIM, na.rm = TRUE)
+
+var.test(x = YearPheno$BMIF, YearPheno$BMIM)
